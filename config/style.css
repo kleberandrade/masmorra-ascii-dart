@@ -1,0 +1,643 @@
+/* EPUB Stylesheet - Fiction / Technology Aesthetic */
+/* Optimized for readability and professional appearance */
+
+/* Base Styles */
+body {
+    margin: 5% 8%;
+    text-align: justify;
+    font-family: Georgia, "Times New Roman", serif;
+    line-height: 1.7;
+    font-size: 1.1em;
+    color: #1a1a1a;
+    max-width: 100%;
+    word-wrap: break-word;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Cinzel", serif;
+    color: #3e2723;
+    margin-top: 2em;
+    /* Reduced from 2.5em */
+    margin-bottom: 1em;
+    /* Reduced from 1.5em */
+    font-weight: 600;
+    line-height: 1.2;
+    page-break-after: avoid;
+}
+
+/* Reduced spacing when heading follows a paragraph */
+p+h2,
+p+h3,
+p+h4 {
+    margin-top: 1.5em;
+}
+
+/* Chapter Title (h1) */
+h1 {
+    text-align: center;
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+    padding: 1.1em 0;
+    margin-top: 2.5em;
+    /* Keep Chapter title spacing */
+    margin-bottom: 0.6em;
+    font-variant: small-caps;
+    font-size: 1.65em;
+    letter-spacing: 0.08em;
+    page-break-before: always;
+    page-break-after: avoid;
+    orphans: 3;
+    widows: 3;
+}
+
+/* Unnumbered chapters (dedication, preface, etc.) */
+h1.unnumbered {
+    text-align: center;
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+    padding: 1.1em 0;
+    margin-top: 2.5em;
+    margin-bottom: 1.2em;
+    font-variant: small-caps;
+    font-size: 1.65em;
+    letter-spacing: 0.08em;
+    page-break-before: always;
+}
+
+/* Section Title (h2) */
+h2 {
+    text-align: right;
+    font-style: normal;
+    color: #444;
+    margin-top: 1.5em;
+    /* Adjusted specific H2 margin */
+    margin-bottom: 1em;
+    font-size: 1.4em;
+    font-weight: 500;
+    page-break-after: avoid;
+}
+
+/* Subsection (h3) */
+h3 {
+    text-align: left;
+    color: #333;
+    margin-top: 1.5em;
+    margin-bottom: 0.8em;
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+/* Chapter number styling (if used) */
+.chapter-number {
+    display: block;
+    text-align: center;
+    font-size: 0.9em;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    margin-bottom: 0.8em;
+    color: #666;
+}
+
+/* Paragraphs */
+p {
+    text-indent: 1.5em;
+    margin-bottom: 0;
+    margin-top: 0;
+    orphans: 2;
+    widows: 2;
+}
+
+/* First paragraph after heading has no indent */
+h1+p,
+h2+p,
+h3+p,
+h4+p,
+h5+p,
+h6+p {
+    text-indent: 0;
+}
+
+/* Paragraphs after blockquotes, lists, etc. */
+blockquote+p,
+ul+p,
+ol+p,
+pre+p {
+    text-indent: 1.5em;
+}
+
+/* Blockquotes (Epigraphs - italic narrative text) */
+blockquote {
+    border-left: 3px solid #999;
+    padding: 0.5em 1.5em;
+    margin: 1.5em 2em;
+    font-style: italic;
+    color: #555;
+    background: transparent;
+}
+
+blockquote::before {
+    content: none;
+}
+
+blockquote p {
+    text-indent: 0;
+    margin-bottom: 0.5em;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* Dica box (green tip box for ::: dica divs) */
+.dica {
+    background-color: #e8f5e9;
+    border: 2px solid #2e7d32;
+    border-radius: 8px;
+    padding: 1em;
+    margin: 1.5em 0;
+    font-style: normal;
+    color: #333;
+    position: relative;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.dica::before {
+    content: "\1F4A1  Dica do Mestre";
+    display: block;
+    font-weight: bold;
+    color: #1b5e20;
+    margin-bottom: 0.5em;
+    font-family: sans-serif;
+    border-bottom: 1px solid #a5d6a7;
+    padding-bottom: 0.5em;
+}
+
+.dica p {
+    text-indent: 0;
+    margin-bottom: 0.8em;
+}
+
+.dica p:last-child {
+    margin-bottom: 0;
+}
+
+/* Code and Code Blocks */
+code {
+    font-family: "Courier New", Courier, monospace;
+    background-color: #1a1a1a;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-size: 0.9em;
+    color: #e8e8e8;
+    /* Ensure inline code breaks if needed */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+pre {
+    background-color: #0d0d0d;
+    color: #e8e8e8;
+    padding: 1em;
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+
+    /* Force wrapping - reinforced */
+    white-space: pre-wrap !important;
+    white-space: -moz-pre-wrap !important;
+    white-space: -pre-wrap !important;
+    white-space: -o-pre-wrap !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    word-break: break-all !important;
+
+    font-family: "Courier New", Courier, monospace;
+    font-size: 0.65em;
+    line-height: 1.35;
+    margin: 1.5em 0;
+    position: relative;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    page-break-inside: auto;
+    max-width: 100%;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+    color: inherit;
+    font-size: 1em;
+    /* Inherit wrapping */
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    word-break: break-all !important;
+}
+
+/* Specific Pandoc overrides — terminal */
+div.sourceCode {
+    background-color: #0d0d0d;
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+    margin: 1.5em 0;
+    padding: 0;
+    overflow-x: auto;
+}
+
+div.sourceCode pre {
+    margin: 0;
+    border: none;
+    box-shadow: none;
+}
+
+div.sourceCode pre,
+div.sourceCode code,
+div.sourceCode span {
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    word-break: break-all !important;
+    max-width: 100%;
+}
+
+/* Scene break (hr) — sem decorador (asteriscos removidos) */
+hr {
+    border: 0;
+    text-align: center;
+    height: 2em;
+    margin: 2.5em 0;
+    page-break-inside: avoid;
+}
+
+hr::after {
+    content: " ";
+}
+
+/* Lists */
+ul,
+ol {
+    margin: 1.5em 0;
+    padding-left: 2em;
+}
+
+li {
+    margin-bottom: 0.5em;
+    line-height: 1.7;
+}
+
+li p {
+    text-indent: 0;
+    margin-bottom: 0.5em;
+}
+
+/* Links */
+a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #6633cc;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1.5em auto;
+    page-break-inside: avoid;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+    page-break-inside: avoid;
+}
+
+th,
+td {
+    padding: 0.5em;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background-color: #f5f5f5;
+    font-weight: 600;
+}
+
+/* Emphasis */
+em {
+    font-style: italic;
+}
+
+strong {
+    font-weight: 600;
+}
+
+/* Horizontal Rules (alternative scene breaks) */
+hr.scene-break {
+    border: 0;
+    text-align: center;
+    height: 2em;
+    margin: 2.5em 0;
+}
+
+hr.scene-break::after {
+    content: " ";
+}
+
+/* Page breaks */
+.page-break {
+    page-break-before: always;
+}
+
+.no-break {
+    page-break-inside: avoid;
+}
+
+/* Print styles (for PDF export from EPUB) */
+@media print {
+    body {
+        margin: 2cm;
+    }
+
+    h1 {
+        page-break-before: always;
+    }
+
+    p {
+        orphans: 3;
+        widows: 3;
+    }
+}
+
+/* Dark mode support (for e-readers that support it) */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1a1a1a;
+        color: #e0e0e0;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        color: #e0e0e0;
+    }
+
+    code {
+        background-color: #0d0d0d;
+        color: #e8e8e8;
+    }
+
+    pre {
+        background-color: #000000;
+        border-color: #555;
+        color: #e8e8e8;
+    }
+
+    div.sourceCode {
+        background-color: #000000;
+        border-color: #555;
+    }
+
+    blockquote {
+        border-left-color: #666;
+        color: #ccc;
+    }
+
+    hr::after {
+        color: #999;
+    }
+}
+
+/* Cataloging-in-Publication (CIP) Box */
+.cip-box {
+    max-width: 80%;
+    margin: 2em auto;
+    padding: 1em;
+    border: 1px solid #757575;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 0.7em;
+    text-align: justify;
+    background-color: #fff;
+    color: #333;
+}
+
+.cip-title {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+
+/* Table of Contents (EPUB) */
+nav#toc,
+div#TOC {
+    font-weight: normal;
+}
+
+nav#toc a,
+div#TOC a {
+    font-weight: normal;
+    text-decoration: none;
+    color: #000;
+}
+
+nav#toc li,
+div#TOC li {
+    margin-bottom: 0.5em;
+}
+
+/* Part Pages (EPUB) — folhas pretas alinhadas ao PDF */
+.part-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 75vh;
+    padding: 0 5%;
+    margin: 0;
+    background: #000000;
+    color: #ffffff;
+    text-align: center !important;
+    page-break-before: always;
+    page-break-after: avoid;
+}
+
+.part-title {
+    font-family: "Cinzel", serif;
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 0.5em;
+    border-bottom: 2px solid #ffffff;
+    padding-bottom: 0.2em;
+    display: inline-block;
+}
+
+.part-subtitle {
+    font-family: "Georgia", serif;
+    font-size: 1.5em;
+    font-style: italic;
+    color: #e0e0e0;
+    margin-top: 0.5em;
+    margin-bottom: 5em;
+    text-align: center !important;
+    text-align-last: center;
+}
+
+.part-intro {
+    font-family: "Georgia", serif;
+    font-size: 0.9em;
+    color: #cccccc;
+    font-style: italic;
+    max-width: 80%;
+    margin: 0 auto;
+    line-height: 1.8;
+    text-align: center !important;
+    text-indent: 0 !important;
+}
+
+/* EPUB Frontmatter Styles (Title Page & Copyright) */
+.epub-title-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    height: 80vh;
+    padding: 0 5%;
+    margin: 0;
+    box-sizing: border-box;
+    /* Prevent padding from increasing width */
+    page-break-after: always;
+}
+
+.epub-title-page p {
+    text-indent: 0 !important;
+    margin-left: 0 !important;
+}
+
+/* Hide ghost headers generated by empty metadata title */
+h1:empty {
+    display: none !important;
+}
+
+.main-title {
+    font-family: "Cinzel", serif;
+    font-size: 2em;
+    font-weight: bold;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    border-top: 2px solid #333;
+    /* Framed look */
+    border-bottom: 2px solid #333;
+    padding: 0.5em 0;
+    width: 100%;
+    /* Ensure lines span width */
+}
+
+.subtitle {
+    font-family: "Georgia", serif;
+    font-size: 1.2em;
+    /* Reduced */
+    font-style: italic;
+    color: #555;
+    margin-bottom: 2em;
+    max-width: 90%;
+    /* Ensure wrapping */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.author {
+    font-size: 1.2em;
+    /* Reduced */
+    font-weight: bold;
+    margin-bottom: 2em;
+}
+
+.publisher-info {
+    margin-top: auto;
+    font-size: 1.1em;
+}
+
+.epub-copyright-page {
+    font-size: 0.85em;
+    text-align: center;
+    page-break-before: always;
+}
+
+.credits {
+    margin-bottom: 3em;
+}
+
+.credits p {
+    margin: 0.2em 0;
+    text-indent: 0;
+}
+
+.cip-container {
+    max-width: 85%;
+    margin: 2em auto;
+    text-align: left;
+}
+
+.cip-rule {
+    border: none;
+    border-top: 1px solid #000;
+    height: 1px;
+    margin: 1em 0;
+}
+
+.cip-content p {
+    text-indent: 0;
+    margin-bottom: 0.5em;
+    font-size: 0.8em;
+}
+
+.cip-header {
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+.legal-text {
+    margin-top: 3em;
+    font-size: 0.8em;
+}
+
+.legal-text p {
+    text-indent: 0;
+    margin-bottom: 1em;
+}
+
+.disclaimer-caps {
+    text-transform: uppercase;
+}
+
+.rights-reserved {
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 2em;
+    margin-bottom: 2em;
+}

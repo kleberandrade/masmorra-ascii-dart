@@ -1,0 +1,14 @@
+# Locks gerados localmente nos steps (cada máquina pode correr pub get)
+steps/**/pubspec.lock
+
+# Artefactos locais Dart (não versionar no repo público de código)
+**/.dart_tool/
+**/build/
+.packages
+.pub-cache/
+.pub/
+
+# IDE / SO
+.DS_Store
+*.swp
+.idea/

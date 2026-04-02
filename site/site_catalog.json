@@ -1,0 +1,123 @@
+{
+  "chapters": [
+    "Capítulo 1 - Seu primeiro programa Dart",
+    "Capítulo 2 - Conversando com o terminal",
+    "Capítulo 3 - Decisões e repetições",
+    "Capítulo 4 - Null safety, o escudo contra crashes",
+    "Capítulo 5 - Coleções, o inventário do herói",
+    "Capítulo 6 - Arte ASCII e StringBuffer",
+    "Capítulo 7 - O game loop, o coração do jogo",
+    "Capítulo 8 - Classes: dando vida ao jogador",
+    "Capítulo 9 - Construtores e encapsulamento",
+    "Capítulo 10 - Herança: a família dos inimigos",
+    "Capítulo 11 - Mixins: poderes compartilhados",
+    "Capítulo 12 - Enums e o parser de comandos",
+    "Capítulo 13 - Ouro, Armas e Inventário",
+    "Capítulo 14 - Combate por turnos",
+    "Capítulo 15 - Da Sala ao Tile: Pensando em 2D",
+    "Capítulo 16 - TelaAscii: O Buffer de Renderização",
+    "Capítulo 17 - Aleatoriedade com Propósito",
+    "Capítulo 18 - Geração Procedural: Cavernas e Corredores",
+    "Capítulo 19 - Campo de Visão e a Névoa de Guerra",
+    "Capítulo 20 - Entidades no Mapa: Inimigos, Itens, Escadas",
+    "Capítulo 21 - Dungeon Crawl: Juntando Tudo",
+    "Capítulo 22 - Economia: Preços, Drops e Balanceamento",
+    "Capítulo 23 - A Loja do Mercador: UI e Fluxo",
+    "Capítulo 24 - Generics e Pattern Matching: Sistema de Eventos",
+    "Capítulo 25 - Progressão: XP, Níveis e Habilidades",
+    "Capítulo 26 - Múltiplos Andares e o Boss Final",
+    "Capítulo 27 - Dungeon Run Completo: A Jornada Épica",
+    "Capítulo 28 - Refatoração Guiada: Code Smells e Limpeza Estrutural",
+    "Capítulo 29 - Testes Unitários com package:test",
+    "Capítulo 30 - Async, Await e o Tempo na Masmorra",
+    "Capítulo 31 - Persistência em JSON",
+    "Capítulo 32 - Organização de Projeto: lib/, test/, pubspec.yaml",
+    "Capítulo 33 - Testes Golden e HUD ASCII Polido",
+    "Capítulo 34 - Strategy e Command: Inimigos que Pensam",
+    "Capítulo 35 - Factory e Observer: O Mundo Reage",
+    "Capítulo 36 - Máquinas de Estado: Patrulha, Alerta e Perseguição",
+    "Capítulo 37 - Síntese: O Jogo Completo, Polido e Pronto"
+  ],
+  "parts": [
+    {
+      "number": 1,
+      "title": "A Primeira Tocha",
+      "subtitle": "Caps. 1–7",
+      "description": "Fundamentos Dart, terminal, null safety, coleções, arte ASCII e o primeiro game loop."
+    },
+    {
+      "number": 2,
+      "title": "Sangue, Ouro e Aço",
+      "subtitle": "Caps. 8–14",
+      "description": "Classes, herança, mixins, enums, sealed classes, parser de comandos e combate por turnos."
+    },
+    {
+      "number": 3,
+      "title": "A Masmorra Desperta",
+      "subtitle": "Caps. 15–21",
+      "description": "Grids 2D, buffer de renderização, geração procedural, campo de visão e dungeon crawl."
+    },
+    {
+      "number": 4,
+      "title": "O Mercador e a Escada",
+      "subtitle": "Caps. 22–27",
+      "description": "Economia, loja, generics, pattern matching, progressão XP, múltiplos andares e boss final."
+    },
+    {
+      "number": 5,
+      "title": "A Forja do Código",
+      "subtitle": "Caps. 28–32",
+      "description": "Refatoração, testes unitários, async/await, persistência em JSON e testes golden."
+    },
+    {
+      "number": 6,
+      "title": "A Mente dos Monstros",
+      "subtitle": "Caps. 33–37",
+      "description": "Design patterns (Strategy, Command, Factory, Observer), máquinas de estado e síntese do jogo completo."
+    }
+  ],
+  "resources": [
+    {
+      "title": "Referência Rápida de Dart",
+      "subtitle": "Apêndice A — consulta rápida da linguagem.",
+      "path": "livro/pos-textual/apendice-a-dart-cheatsheet.md",
+      "iconHint": "menu_book"
+    },
+    {
+      "title": "MUD em Rede",
+      "subtitle": "Apêndice B — extensão opcional multiplayer.",
+      "path": "livro/pos-textual/apendice-b-mud-rede.md",
+      "iconHint": "lan"
+    },
+    {
+      "title": "Achievements do Aventureiro",
+      "subtitle": "Apêndice C — conquistas e metas para desbloquear.",
+      "path": "livro/pos-textual/apendice-c-achievements.md",
+      "iconHint": "emoji_events"
+    },
+    {
+      "title": "Glossário",
+      "subtitle": "Apêndice D — termos técnicos e mapa masmorra ↔ código.",
+      "path": "livro/pos-textual/apendice-d-glossario.md",
+      "iconHint": "list_alt"
+    },
+    {
+      "title": "Epílogo",
+      "subtitle": "A última descida — reflexão sobre a jornada.",
+      "path": "livro/pos-textual/epilogo.md",
+      "iconHint": "auto_stories"
+    },
+    {
+      "title": "Sobre o Autor",
+      "subtitle": "Kleber de Oliveira Andrade — trajetória e contato.",
+      "path": "livro/pos-textual/sobre-o-autor.md",
+      "iconHint": "person"
+    },
+    {
+      "title": "Notas do Autor",
+      "subtitle": "Como o livro funciona, para quem é e onde encontrar as soluções.",
+      "path": "livro/pre-textual/notas-do-autor.md",
+      "iconHint": "assignment"
+    }
+  ]
+}

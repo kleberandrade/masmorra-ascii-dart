@@ -1,0 +1,9 @@
+name: step_20_entidades
+description: Capítulo 20 - Entidades no mapa (inimigos, itens, escadas)
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.11.0 <4.0.0'
+
+dev_dependencies:
+  lints: ^3.0.0

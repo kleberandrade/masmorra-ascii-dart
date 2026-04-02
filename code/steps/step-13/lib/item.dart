@@ -1,0 +1,94 @@
+class Item {
+  final String id;
+  final String nome;
+  final String descricao;
+  final int preco;
+  final int peso;
+
+  Item({
+    required this.id,
+    required this.nome,
+    required this.descricao,
+    required this.preco,
+    required this.peso,
+  });
+
+  @override
+  String toString() => '$nome (id: $id, preço: $preco ouro, peso: $peso)';
+}
+
+class Arma extends Item {
+  final int dano;
+  final String tipo;
+
+  Arma({
+    required String id,
+    required String nome,
+    required String descricao,
+    required int preco,
+    required int peso,
+    required this.dano,
+    required this.tipo,
+  }) : super(
+    id: id,
+    nome: nome,
+    descricao: descricao,
+    preco: preco,
+    peso: peso,
+  );
+
+  @override
+  String toString() => '$nome ($tipo, +$dano dano)';
+}
+
+class Armadura extends Item {
+  final int defesa;
+  final String localizacao;
+
+  Armadura({
+    required String id,
+    required String nome,
+    required String descricao,
+    required int preco,
+    required int peso,
+    required this.defesa,
+    required this.localizacao,
+  }) : super(
+    id: id,
+    nome: nome,
+    descricao: descricao,
+    preco: preco,
+    peso: peso,
+  );
+
+  @override
+  String toString() => '$nome (+$defesa DEF em $localizacao)';
+}
+
+final espadaDeBronze = Arma(
+  id: 'espada-bronze',
+  nome: 'Espada de Bronze',
+  descricao: 'Uma arma comum, de metal maleável',
+  preco: 200,
+  peso: 3,
+  dano: 8,
+  tipo: 'cortante',
+);
+
+final pocaoDeVida = Item(
+  id: 'pocao-vida',
+  nome: 'Poção de Vida',
+  descricao: 'Recupera 20 HP',
+  preco: 50,
+  peso: 1,
+);
+
+final camisaDeCouro = Armadura(
+  id: 'camisa-couro',
+  nome: 'Camisa de Couro',
+  descricao: 'Proteção básica, elegante e prática',
+  preco: 100,
+  peso: 2,
+  defesa: 3,
+  localizacao: 'peito',
+);

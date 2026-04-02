@@ -1,0 +1,9 @@
+```{=latex}
+\hypersetup{linkcolor=black}
+\addcontentsline{toc}{chapter}{Sumário}
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\markboth{}{}
+```

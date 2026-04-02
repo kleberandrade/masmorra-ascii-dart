@@ -1,0 +1,12 @@
+name: masmorra_ascii
+description: Capítulo 25 - Progressão, XP, níveis e habilidades
+version: 0.25.0
+
+environment:
+  sdk: '>=3.11.0 <4.0.0'
+
+dependencies:
+
+dev_dependencies:
+  lints: ^3.0.0
+  test: ^1.25.0

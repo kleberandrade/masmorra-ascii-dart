@@ -1,0 +1,9 @@
+name: step_17_aleatoriedade
+description: Capítulo 17 - Aleatoriedade com sementes e classe Rolador
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.11.0 <4.0.0'
+
+dev_dependencies:
+  lints: ^3.0.0

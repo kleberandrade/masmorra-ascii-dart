@@ -1,0 +1,9 @@
+name: step_16_tela_ascii
+description: Capítulo 16 - TelaAscii como renderizador separado
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.11.0 <4.0.0'
+
+dev_dependencies:
+  lints: ^3.0.0

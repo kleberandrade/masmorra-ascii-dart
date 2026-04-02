@@ -1,0 +1,10 @@
+include: package:lints/recommended.yaml
+
+linter:
+  rules:
+    - camel_case_types
+    - constant_identifier_names
+    - empty_constructor_bodies
+    - prefer_const_constructors
+    - prefer_final_fields
+    - prefer_null_aware_operators

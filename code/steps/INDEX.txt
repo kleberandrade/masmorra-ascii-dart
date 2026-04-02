@@ -1,0 +1,140 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║              MASMORRA ASCII - CAPÍTULOS 22-28 (PARTE IV)                  ║
+║                    Projetos Dart Compiláveis                              ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+📚 ÍNDICE DE STEPS
+
+Step 22: Economia
+  └─ Tema: Drops, preços, balanceamento
+  └─ Arquivo-chave: economia.dart, entrada_saque.dart
+  └─ Conceitos: Loot tables, constantes, simulação
+  └─ Execução: dart run (simulação de 100 corridas)
+  └─ Arquivos: 7
+
+Step 23: A Loja do Mercador
+  └─ Tema: Interface ASCII, compra/venda
+  └─ Arquivo-chave: mercador.dart, loja_renderer.dart
+  └─ Conceitos: ItemVenda, validação, restocking
+  └─ Execução: dart run (interativo: buy/sell/exit)
+  └─ Arquivos: 7
+
+Step 24: Generics e Pattern Matching
+  └─ Tema: Sistema de eventos com generics
+  └─ Arquivo-chave: barramento_eventos.dart, evento_jogo.dart
+  └─ Conceitos: Sealed classes, pattern matching, subscrição
+  └─ Execução: dart run (eventos filtrados)
+  └─ Arquivos: 4
+
+Step 25: Progressão
+  └─ Tema: XP, níveis, habilidades
+  └─ Arquivo-chave: tabela_progressao.dart, habilidade.dart
+  └─ Conceitos: Fórmula quadrática, desbloqueamento por marco
+  └─ Execução: dart run (simulação de level ups)
+  └─ Arquivos: 4
+
+Step 26: Múltiplos Andares e Boss
+  └─ Tema: 5 andares, chefão com fases
+  └─ Arquivo-chave: chefao.dart, gerenciador_andares.dart
+  └─ Conceitos: Fases dinâmicas, escalação, estados de jogo
+  └─ Execução: dart run (andares e combate)
+  └─ Arquivos: 6
+
+Step 27: Dungeon Run Completo (MARCO IV)
+  └─ Tema: Jogo completo com menu principal
+  └─ Arquivo-chave: menu_principal.dart, criacao_personagem.dart
+  └─ Conceitos: Menu interativo, seleção de dificuldade
+  └─ Execução: dart run (jogo executável)
+  └─ Arquivos: 3
+
+Step 28: Refatoração (Código Limpo)
+  └─ Tema: Organização em diretórios temáticos
+  └─ Arquivo-chave: lib/config/, lib/modelos/, lib/sistemas/, lib/ui/
+  └─ Conceitos: SRP, constantes, separação de responsabilidades
+  └─ Execução: dart analyze (zero warnings) + dart run
+  └─ Arquivos: 8
+
+════════════════════════════════════════════════════════════════════════════
+
+📊 ESTATÍSTICAS
+
+Total de Arquivos .dart:     39
+Total de Linhas de Código:   ~2.500
+Classes Criadas:             25+
+Enums:                       6
+Sealed Classes:              5
+READMEs Detalhados:          7
+
+════════════════════════════════════════════════════════════════════════════
+
+🚀 COMO COMPILAR
+
+Passo a passo para qualquer step:
+
+  cd step-XX
+  dart pub get           (primeira vez)
+  dart analyze           (verificar erros)
+  dart format .          (formatar código)
+  dart run               (executar)
+
+════════════════════════════════════════════════════════════════════════════
+
+📖 DOCUMENTAÇÃO
+
+README.md (pasta steps) → Índice de todos os steps e solução final em masmorra_ascii/
+QUICKSTART-15-21.md / QUICKSTART-29-36.md → Guias rápidos por faixa de capítulos
+STEPS-29-36.md → Detalhe dos steps 29–36
+
+════════════════════════════════════════════════════════════════════════════
+
+✨ CARACTERÍSTICAS
+
+✓ Código em Português (português-br)
+✓ Padrão camelCase e PascalCase
+✓ Zero dependências externas (Dart puro)
+✓ SDK: >=3.11.0 <4.0.0
+✓ Compilável imediatamente
+✓ Sem erros ou warnings (dart analyze)
+✓ Teste incluído em pubspec.yaml
+✓ Análise de código incluído em pubspec.yaml
+
+════════════════════════════════════════════════════════════════════════════
+
+🎮 MARCOS DA HISTÓRIA
+
+Step 22-23: Economia + Loja
+Step 24-25: Eventos + Progressão
+Step 26-27: Boss + Jogo Completo (MARCO IV)
+Step 28:    Refatoração e Código Limpo
+
+════════════════════════════════════════════════════════════════════════════
+
+💡 PRÓXIMAS ETAPAS (Step 29+)
+
+Step 29: Testes unitários
+Step 30: Persistência (save/load)
+Step 31: Organização profissional
+Step 32: Golden tests e HUD polido
+Step 33-35: Design patterns
+Step 36: Marco VI no livro; código final em ../masmorra_ascii/
+
+════════════════════════════════════════════════════════════════════════════
+
+🔗 NAVEGAÇÃO RÁPIDA
+
+Step-22: cd step-22 && dart run          (Economia)
+Step-23: cd step-23 && dart run          (Loja)
+Step-24: cd step-24 && dart run          (Eventos)
+Step-25: cd step-25 && dart run          (Progressão)
+Step-26: cd step-26 && dart run          (Boss)
+Step-27: cd step-27 && dart run          (Jogo Completo)
+Step-28: cd step-28 && dart analyze      (Refatoração)
+
+════════════════════════════════════════════════════════════════════════════
+
+Desenvolvido com ❤️ em Dart 3.11.0+
+
+Para mais informações, veja README.md na pasta steps.
+

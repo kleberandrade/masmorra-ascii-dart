@@ -1,0 +1,96 @@
+{
+  "parts": [
+    {
+      "number": 1,
+      "title": "A Primeira Tocha",
+      "subtitle": "Caps. 1–7",
+      "description": "Fundamentos Dart, terminal, null safety, coleções, arte ASCII e o primeiro game loop.",
+      "firstChapter": 1,
+      "lastChapter": 7
+    },
+    {
+      "number": 2,
+      "title": "Sangue, Ouro e Aço",
+      "subtitle": "Caps. 8–14",
+      "description": "Classes, herança, mixins, enums, sealed classes, parser de comandos e combate por turnos.",
+      "firstChapter": 8,
+      "lastChapter": 14
+    },
+    {
+      "number": 3,
+      "title": "A Masmorra Desperta",
+      "subtitle": "Caps. 15–21",
+      "description": "Grids 2D, buffer de renderização, geração procedural, campo de visão e dungeon crawl.",
+      "firstChapter": 15,
+      "lastChapter": 21
+    },
+    {
+      "number": 4,
+      "title": "O Mercador e a Escada",
+      "subtitle": "Caps. 22–27",
+      "description": "Economia, loja, generics, pattern matching, progressão XP, múltiplos andares e boss final.",
+      "firstChapter": 22,
+      "lastChapter": 27
+    },
+    {
+      "number": 5,
+      "title": "A Forja do Código",
+      "subtitle": "Caps. 28–32",
+      "description": "Refatoração, testes unitários, async/await, persistência em JSON e testes golden.",
+      "firstChapter": 28,
+      "lastChapter": 32
+    },
+    {
+      "number": 6,
+      "title": "A Mente dos Monstros",
+      "subtitle": "Caps. 33–37",
+      "description": "Design patterns (Strategy, Command, Factory, Observer), máquinas de estado e síntese do jogo completo.",
+      "firstChapter": 33,
+      "lastChapter": 37
+    }
+  ],
+  "resources": [
+    {
+      "title": "Referência Rápida de Dart",
+      "subtitle": "Apêndice A — consulta rápida da linguagem.",
+      "path": "livro/pos-textual/apendice-a-dart-cheatsheet.md",
+      "iconHint": "menu_book"
+    },
+    {
+      "title": "MUD em Rede",
+      "subtitle": "Apêndice B — extensão opcional multiplayer.",
+      "path": "livro/pos-textual/apendice-b-mud-rede.md",
+      "iconHint": "lan"
+    },
+    {
+      "title": "Achievements do Aventureiro",
+      "subtitle": "Apêndice C — conquistas e metas para desbloquear.",
+      "path": "livro/pos-textual/apendice-c-achievements.md",
+      "iconHint": "emoji_events"
+    },
+    {
+      "title": "Glossário",
+      "subtitle": "Apêndice D — termos técnicos e mapa masmorra ↔ código.",
+      "path": "livro/pos-textual/apendice-d-glossario.md",
+      "iconHint": "list_alt"
+    },
+    {
+      "title": "Epílogo",
+      "subtitle": "A última descida — reflexão sobre a jornada.",
+      "path": "livro/pos-textual/epilogo.md",
+      "iconHint": "auto_stories"
+    },
+    {
+      "title": "Sobre o Autor",
+      "subtitle": "Kleber de Oliveira Andrade — trajetória e contato.",
+      "path": "livro/pos-textual/sobre-o-autor.md",
+      "iconHint": "person"
+    },
+    {
+      "title": "Notas do Autor",
+      "subtitle": "Como o livro funciona, para quem é e onde encontrar as soluções.",
+      "path": "livro/pre-textual/notas-do-autor.md",
+      "iconHint": "assignment"
+    }
+  ]
+}

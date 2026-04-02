@@ -1,0 +1,412 @@
+% Professional A5 PDF Configuration for Pandoc/XeLaTeX
+% Optimized for fiction books with clean typography
+
+% Page Geometry (A5: 148mm × 210mm)
+\usepackage[
+    paperwidth=148mm,
+    paperheight=210mm,
+    inner=20mm,      % Margem interna (binding)
+    outer=15mm,      % Margem externa
+    top=25mm,        % Margem superior
+    bottom=20mm,     % Margem inferior
+    footskip=10mm,   % Espaço para rodapé
+    bindingoffset=5mm
+]{geometry}
+
+% Page color for part divider pages (black)
+\usepackage{xcolor}
+
+% Force images to fit within linewidth (text block) and center them
+\usepackage[export]{adjustbox}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio,center}
+
+% Prevent indentation for images strictly
+\usepackage{etoolbox}
+\pretocmd{\includegraphics}{\noindent}{}{}
+
+% Typography
+\usepackage{fontspec}
+\setmainfont{Georgia}[
+    Ligatures=TeX,
+    Numbers=OldStyle
+]
+% Sans para H2/H3 (titlesec usa \sffamily): cobre ≠, → e símbolos que LM Sans não tem.
+\setsansfont{texgyreheros-regular.otf}[
+    BoldFont=texgyreheros-bold.otf,
+    ItalicFont=texgyreheros-italic.otf,
+    BoldItalicFont=texgyreheros-bolditalic.otf,
+    Scale=MatchLowercase
+]
+% Mono: Courier New não tem ✓ ✗ ★ → em muitos sistemas; DejaVu Sans Mono cobre o livro.
+\setmonofont{DejaVuSansMono.ttf}[
+    BoldFont=DejaVuSansMono-Bold.ttf,
+    ItalicFont=DejaVuSansMono-Oblique.ttf,
+    BoldItalicFont=DejaVuSansMono-BoldOblique.ttf,
+    Scale=0.85
+]
+% Georgia não cobre setas, blocos de arte ASCII e alguns símbolos; DejaVu Sans
+% vem no TeX Live e preenche esses glifos no texto corrido.
+\usepackage{newunicodechar}
+% Carregar por arquivo (.ttf no TEXMF), como o mono acima — o nome "DejaVu Sans"
+% nem sempre resolve no XeTeX fora do fontconfig do sistema.
+\newfontfamily{\BookSymbolFallback}{DejaVuSans.ttf}[
+    BoldFont=DejaVuSans-Bold.ttf,
+    ItalicFont=DejaVuSans-Oblique.ttf,
+    BoldItalicFont=DejaVuSans-BoldOblique.ttf,
+    Scale=MatchLowercase
+]
+\newunicodechar{→}{{\BookSymbolFallback →}}
+\newunicodechar{█}{{\BookSymbolFallback █}}
+\newunicodechar{░}{{\BookSymbolFallback ░}}
+\newunicodechar{∿}{{\BookSymbolFallback ∿}}
+\newunicodechar{⌬}{{\BookSymbolFallback ⌬}}
+\usepackage[portuguese]{babel}
+
+% Título do sumário (mais comum em livros PT-BR)
+\addto\captionsportuguese{
+  \renewcommand{\contentsname}{Sumário}
+}
+
+% Split de "Capítulo N — Título" em duas linhas (PDF)
+% Pandoc pode gerar " --- " (três hífens) e quebras de linha; normalizamos antes de splitar.
+\usepackage{xstring}
+\newcommand{\ChapterTop}{}
+\newcommand{\ChapterBottom}{}
+\newcommand{\ChapterTitleNorm}{}
+\newcommand{\SplitChapterTitle}[1]{%
+  \StrSubstitute{#1}{ --- }{ — }[\ChapterTitleNorm]%
+  \StrSubstitute{\ChapterTitleNorm}{  }{ }[\ChapterTitleNorm]%
+  \expandafter\SplitChapterTitleAux\expandafter{\ChapterTitleNorm}%
+}
+\newcommand{\SplitChapterTitleAux}[1]{%
+  \IfSubStr{#1}{ — }{%
+    \StrBefore{#1}{ — }[\ChapterTop]%
+    \StrBehind{#1}{ — }[\ChapterBottom]%
+  }{%
+    \def\ChapterTop{#1}%
+    \def\ChapterBottom{}%
+  }%
+}
+
+% Enhanced line spacing for better readability
+\usepackage{setspace}
+\onehalfspacing
+
+% Prevent widows and orphans (single lines at top/bottom of page)
+\widowpenalty=10000
+\clubpenalty=10000
+\displaywidowpenalty=10000
+
+% Better hyphenation
+\hyphenpenalty=500
+\tolerance=1000
+\emergencystretch=3em
+
+% Enhanced Drop Caps
+\usepackage{lettrine}
+\renewcommand{\LettrineTextFont}{\normalfont\scshape} % Small caps for the rest of the word
+
+% Section styling for fiction (Chapters)
+% Usamos o modo "explicit" para ter controle total do texto do título via #1.
+\usepackage[explicit]{titlesec}
+
+% Define Chapter format
+% Sem ornamento e começando do topo.
+\makeatletter
+\def\@makechapterhead#1{%
+  \vspace*{0\p@}%
+  {\parindent \z@
+   \normalfont\sffamily
+   \SplitChapterTitle{#1}%
+   \ifdefempty{\ChapterBottom}{%
+     \filcenter\Large\bfseries\ChapterTop
+   }{%
+     \filcenter\small\textsc{\ChapterTop}%
+     \\[8pt]\filcenter\LARGE\bfseries{\ChapterBottom}%
+   }%
+   \par\nobreak
+   \vskip 24\p@
+  }%
+}
+\def\@makeschapterhead#1{%
+  \vspace*{0\p@}%
+  {\parindent \z@
+   \normalfont\sffamily
+   \filcenter\Large\bfseries #1\par\nobreak
+   \vskip 24\p@
+  }%
+}
+\makeatother
+% titlesec: só espaçamento para chapter; o layout vem de \@makechapterhead acima
+\titlespacing*{\chapter}{0pt}{0pt}{14pt}
+
+% Style for unnumbered chapters (dedication, preface, etc.)
+\titleformat{name=\chapter,numberless}[display]
+  {\normalfont\large\filcenter\sffamily\bfseries}
+  {}
+  {0pt}
+  {\Large\bfseries #1}
+  [\vspace{14pt}]
+\titlespacing*{name=\chapter,numberless}{0pt}{0pt}{40pt}
+
+% Section styling (## in markdown)
+% Usamos o H2 como "título do capítulo", alinhado à direita, logo abaixo do "Capítulo N".
+\titleformat{\section}
+  {\normalfont\large\sffamily\bfseries\filright}
+  {}
+  {0pt}
+  {#1}
+\titlespacing*{\section}{0pt}{3pt}{22pt}
+
+% Subsection styling (### in markdown)
+\titleformat{\subsection}
+  {\normalfont\large\sffamily\bfseries}
+  {}
+  {0pt}
+  {#1}
+\titlespacing*{\subsection}{0pt}{20pt}{15pt}
+
+% Page styling (headers/footers)
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+% Título do livro para cabeçalho ímpar (Pandoc pode não ter chamado \title antes do header)
+\newcommand{\booktitle}{Masmorra ASCII}
+% Cabeçalho: capítulo (pares) / nome do livro (ímpares)
+\fancyhead[RE]{\leftmark}       % par: capítulo
+\fancyhead[LO]{\booktitle}     % ímpar: nome do livro
+\renewcommand{\headrulewidth}{0.3pt}
+
+% Rodapé: número da página sempre centralizado
+\fancyfoot[C]{\thepage}
+\renewcommand{\footrulewidth}{0pt}
+
+% Atualiza as marcas para exibir:
+% - leftmark: título do capítulo (H1, ex.: "Capítulo 7")
+% - rightmark: título real (H2, ex.: "O Mosteiro da Coesão")
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{#1}}
+
+% Paragraph formatting
+\setlength{\parindent}{1.5em}
+\setlength{\parskip}{0pt}
+
+% Obs.: o LaTeX já não indenta o primeiro parágrafo após títulos por padrão.
+% Evitamos hacks com \noindent aqui porque eles poluem o arquivo .toc (sumário).
+
+% Better justification and hyphenation
+% Note: With XeLaTeX, microtype only supports protrusion and tracking
+% expansion and spacing features require pdfTeX
+\usepackage{microtype}
+\microtypesetup{
+    protrusion=true,
+    tracking=false
+}
+
+% Start chapters on the next available page (avoid blank spreads)
+% and keep the custom TOC entry formatting.
+\usepackage{xparse}
+\makeatletter
+\@openrightfalse % Permite que os capitulos iniciem em qualquer pagina (mesmo par)
+\pretocmd{\part}{\cleardoublepage}{}{} % Força que as Partes comecem em paginas impares
+\let\stdchapter\chapter
+\RenewDocumentCommand{\chapter}{s o m}{%
+  \clearpage
+  \IfBooleanTF{#1}{%
+    \stdchapter*{#3}%
+  }{%
+    \SplitChapterTitle{#3}%
+    \IfValueTF{#2}{%
+       \stdchapter[#2]{#3}%
+    }{%
+       % Expand macros to avoid infinite recursion in \chaptermark.
+       % Sem ":" quando não há subtítulo (ex.: Prefácio, Prólogo, Epílogo).
+       \ifdefempty{\ChapterBottom}{%
+         \protected@edef\TocEntry{\ChapterTop}%
+       }{%
+         \protected@edef\TocEntry{\ChapterTop: \ChapterBottom}%
+       }%
+       \stdchapter[\TocEntry]{#3}%
+    }%
+  }%
+}
+\makeatother
+
+% Remove page numbers from blank pages
+\makeatletter
+\def\cleardoublepage{%
+  \clearpage
+  \if@twoside
+    \ifodd\c@page
+    \else
+      \hbox{}\newpage
+      \if@twocolumn
+        \hbox{}\newpage
+      \fi
+    \fi
+  \fi
+}
+\makeatother
+
+% Better handling of quotes and dialogue
+% csquotes desativado no book-15: causa "spacefactor in vertical mode" com o template Pandoc atual
+% \usepackage{csquotes}
+% \MakeOuterQuote{"}
+
+% Improve spacing around block quotes (epigraphs use > in markdown)
+\usepackage{etoolbox}
+\AtBeginEnvironment{quote}{%
+  \singlespacing
+  \small
+}
+
+% Estilo para blocos de código (Grimório / log)
+\usepackage{tcolorbox}
+\usepackage{fvextra}
+\tcbuselibrary{listings, skins}
+
+\fvset{
+  breaklines=true,
+  breakanywhere=true,
+  % Mantém os fragmentos de código com tamanho fixo (8pt),
+  % mesmo quando o corpo do texto estiver em 11pt (A5).
+  fontsize=\fontsize{8pt}{10pt}\selectfont
+}
+
+% Tip Box (Green)
+% \usepackage[most]{tcolorbox} % Already loaded
+\usepackage{fontawesome5}
+\tcbuselibrary{skins,breakable}
+\newtcolorbox{tipbox}{
+    enhanced, % requires skins
+    colback=green!5!white,
+    colframe=green!50!black,
+    title={\faLightbulb\ Dica do Mestre},
+    fonttitle=\bfseries,
+    coltitle=white,
+    boxrule=0.5mm,
+    arc=2mm,
+    left=3mm, right=3mm, top=2mm, bottom=2mm,
+    before upper={\setlength{\parindent}{0pt}\setlength{\parskip}{0.5em}} % Remove indent inside box
+}
+
+% Dica environment for fenced divs (::: dica ... ::: in markdown)
+\newtcolorbox{dica}{
+    enhanced,
+    colback=green!5!white,
+    colframe=green!50!black,
+    title={\faLightbulb\ Dica do Mestre},
+    fonttitle=\bfseries,
+    coltitle=white,
+    boxrule=0.5mm,
+    arc=2mm,
+    left=3mm, right=3mm, top=2mm, bottom=2mm,
+    before upper={\setlength{\parindent}{0pt}\setlength{\parskip}{0.5em}}
+}
+
+% Increase spacing before sections to handle "after enumerate" visual crowding
+\titlespacing*{\section}{0pt}{1.5em}{1em}
+\titlespacing*{\subsection}{0pt}{1.2em}{0.8em}
+
+% Blocos de código: estilo terminal (fundo escuro, texto claro)
+\newtcolorbox{logbox}{
+    enhanced,
+    arc=2mm,
+    boxrule=0.6pt,
+    colback=black!92,
+    colbacklower=black!92,
+    colframe=gray!55,
+    colupper=white,
+    before skip=1.5em,
+    after skip=1.5em,
+    left=3mm,
+    right=3mm,
+    top=2mm,
+    bottom=2mm,
+    listing only,
+    breakable,
+    fontupper={\normalfont\ttfamily\color{white}},
+    fontlower={\normalfont\ttfamily\color{white}}
+}
+
+% Blocos de código (` ``` `): `Shaded` deve existir antes de `\begin{document}` (Pandoc 3.x).
+\usepackage{framed}
+\definecolor{shadecolor}{gray}{0.08}
+\makeatletter
+\@ifundefined{Shaded}{%
+  \newenvironment{Shaded}{\begin{logbox}}{\end{logbox}}%
+}{%
+  \renewenvironment{Shaded}{\begin{logbox}}{\end{logbox}}%
+}%
+\makeatother
+
+% Improve table of contents (if used)
+\usepackage{titletoc}
+% Partes: entradas no sumário (quando \addcontentsline{toc}{part}{...} é usado)
+\titlecontents{part}
+  [0pt]
+  {\addvspace{1.5em}\normalfont\bfseries}
+  {\hspace*{0pt}}
+  {\hspace*{0pt}}
+  {\titlerule*[0.5pc]{.}\contentspage}
+\titlecontents{chapter}
+  [0pt]
+  {\addvspace{1em}\normalfont}
+  {\hspace*{0pt}}                  % capítulos numerados: sem rótulo extra (evita "*" e duplicações)
+  {\hspace*{0pt}}                  % capítulos não numerados: idem
+  {\titlerule*[0.5pc]{.}\contentspage}
+
+% Indenta e suaviza entradas de seção (H2) no sumário.
+\titlecontents{section}
+  [1.5em]
+  {\addvspace{0.2em}\normalfont}
+  {\hspace*{0pt}}
+  {\hspace*{0pt}}
+  {\titlerule*[0.5pc]{.}\contentspage}
+
+% TOC (padrão de livro): Prefácio, Sumário (esta página), Prólogo, Partes e crônicas (capítulos).
+% - tocdepth=0: part (nível -1) e chapter (nível 0) aparecem; -1 ocultaria os capítulos (H1).
+% - Partes via \addcontentsline{toc}{part}{...}; capítulos via \chapter.
+\let\origtableofcontents\tableofcontents
+\renewcommand{\tableofcontents}{%
+  \setcounter{tocdepth}{0}%
+  \vspace{1em}%
+  \origtableofcontents%
+}
+
+% Marcas de cabeçalho: pares mostram "Capítulo N", ímpares mostram o "título".
+\renewcommand{\chaptermark}[1]{%
+  \SplitChapterTitle{#1}%
+  \markboth{\ChapterTop}{\ChapterBottom}%
+}
+
+% Page break control
+\allowdisplaybreaks
+
+% Better handling of special characters
+\usepackage{textcomp}
+
+% Improve PDF metadata
+\usepackage[pdfusetitle]{hyperref}
+\hypersetup{
+    colorlinks=false,
+    pdfborder={0 0 0},
+    pdfstartview=FitH
+}
+
+% Suppress default title page generation by Pandoc/LaTeX
+\renewcommand{\maketitle}{}
+
+% Corrige "You can't use \spacefactor in vertical mode" ao iniciar documento:
+% garante modo horizontal antes de aplicar \spacefactor (template/book class).
+\makeatletter
+\let\orig@\@
+\def\@{\leavevmode\orig@}
+\makeatother

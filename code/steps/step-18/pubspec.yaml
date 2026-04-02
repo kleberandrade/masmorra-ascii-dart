@@ -1,0 +1,9 @@
+name: step_18_geracao_procedural
+description: Capítulo 18 - Geração procedural com Random Walk e Rooms-and-Corridors
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.11.0 <4.0.0'
+
+dev_dependencies:
+  lints: ^3.0.0

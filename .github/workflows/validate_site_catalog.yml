@@ -1,0 +1,42 @@
+name: Validate site catalog
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  catalog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install jq
+        run: sudo apt-get update -qq && sudo apt-get install -y jq
+
+      - name: Compare chapter files vs site_catalog.json
+        run: |
+          set -euo pipefail
+          if [[ ! -f site/site_catalog.json ]]; then
+            echo "Falta site/site_catalog.json"
+            exit 1
+          fi
+          n_files=$(find livro/capitulos -maxdepth 1 -name 'capitulo-*.md' -type f | wc -l | tr -d ' ')
+          n_catalog=$(jq '.chapters | length' site/site_catalog.json)
+          if [[ "$n_files" != "$n_catalog" ]]; then
+            echo "Erro: ficheiros capitulo-*.md ($n_files) ≠ entradas em chapters ($n_catalog)"
+            exit 1
+          fi
+          echo "OK: $n_files capítulos alinhados com o catálogo."
+
+      - name: Compare step folders vs catalog
+        run: |
+          set -euo pipefail
+          n_steps=$(find code/steps -maxdepth 1 -type d -name 'step-[0-9][0-9]' | wc -l | tr -d ' ')
+          n_catalog=$(jq '.chapters | length' site/site_catalog.json)
+          if [[ "$n_steps" != "$n_catalog" ]]; then
+            echo "Erro: pastas step-NN em code/steps ($n_steps) ≠ chapters no catálogo ($n_catalog)"
+            exit 1
+          fi
+          echo "OK: $n_steps steps alinhados com o catálogo."

@@ -1,0 +1,9 @@
+name: step_19_campo_visao
+description: Capítulo 19 - Campo de visão e névoa de guerra
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.11.0 <4.0.0'
+
+dev_dependencies:
+  lints: ^3.0.0

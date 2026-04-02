@@ -1,0 +1,9 @@
+name: step_15_grid_2d
+description: Capítulo 15 - Grid 2D com tiles e movimento WASD
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.11.0 <4.0.0'
+
+dev_dependencies:
+  lints: ^3.0.0

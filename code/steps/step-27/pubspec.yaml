@@ -1,0 +1,12 @@
+name: masmorra_ascii
+description: Capítulo 27 - Dungeon run completo (MARCO IV)
+version: 0.27.0
+
+environment:
+  sdk: '>=3.11.0 <4.0.0'
+
+dependencies:
+
+dev_dependencies:
+  lints: ^3.0.0
+  test: ^1.25.0

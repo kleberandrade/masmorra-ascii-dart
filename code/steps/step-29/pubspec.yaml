@@ -1,0 +1,13 @@
+name: masmorra_ascii
+version: 0.29.0
+description: Masmorra ASCII - Step 29 - Testes Unitários com package:test
+publish_to: none
+
+environment:
+  sdk: '>=3.11.0 <4.0.0'
+
+dependencies:
+
+dev_dependencies:
+  test: ^1.24.0
+  lints: ^4.0.0

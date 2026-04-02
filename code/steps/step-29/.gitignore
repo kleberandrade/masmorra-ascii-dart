@@ -1,0 +1,12 @@
+.dart_tool/
+pubspec.lock
+.DS_Store
+*.swp
+*.swo
+.vscode/
+.idea/
+build/
+dist/
+*.class
+*.jar
+*.log

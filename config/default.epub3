@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"$if(lang)$ lang="$lang$" xml:lang="$lang$"$endif$>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <title>$pagetitle$</title>
+  <style>
+$if(csl-css)$
+    $styles.citations.html()$
+$endif$
+$if(highlighting-css)$
+    /* CSS for syntax highlighting */
+    $highlighting-css$
+$endif$
+  </style>
+$for(css)$
+  <link rel="stylesheet" type="text/css" href="$css$" />
+$endfor$
+$for(header-includes)$
+  $header-includes$
+$endfor$
+</head>
+<body$if(coverpage)$ id="cover"$endif$$if(body-type)$ epub:type="$body-type$"$endif$>
+$if(titlepage)$
+$else$
+$if(coverpage)$
+<div id="cover-image">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="100%" height="100%" viewBox="0 0 $cover-image-width$ $cover-image-height$" preserveAspectRatio="xMidYMid">
+<image width="$cover-image-width$" height="$cover-image-height$" xlink:href="../media/$cover-image$" />
+</svg>
+</div>
+$else$
+$for(include-before)$
+$include-before$
+$endfor$
+$body$
+$for(include-after)$
+$include-after$
+$endfor$
+<div style="display: none">
+$table-of-contents$
+</div>
+$endif$
+$endif$
+</body>
+</html>
+

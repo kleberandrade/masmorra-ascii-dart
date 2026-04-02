@@ -1,0 +1,45 @@
+# Repositório do livro + código Dart. Para .gitignore Flutter no site, ver o repo masmorra-ascii.
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.Python
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Dart (pacotes em code/)
+**/.dart_tool/
+**/build/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+*~
+
+# Editores / IDE (local)
+*.swp
+*.swo
+.cursor/
+.idea/
+*.iml
+
+# Artefactos de build do livro (regeneráveis com ./build.sh)
+output/
+
+# LaTeX / XeLaTeX (ficheiros intermédios fora de output/)
+*.aux
+*.log
+*.out
+*.toc
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.xdv
+
+# Ambiente
+.env
+.env.local
