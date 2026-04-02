@@ -29,7 +29,7 @@ Ou:
 ./scripts/build.sh
 ```
 
-Saídas em `output/`.
+Saídas em `output/` (no `main`, os PDF/EPUB/DOCX gerados também estão versionados; volta a correr o build para atualizar).
 
 ## Arquivos principais
 
