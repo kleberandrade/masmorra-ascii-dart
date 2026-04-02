@@ -12,7 +12,7 @@ Obrigado por considerar ajudar!
 ## Texto do livro
 
 - Fontes em `livro/` (capítulos, pré/pós-textual, partes). Ordem em `config/chapters.txt`.
-- Build local: [`BOOK.md`](BOOK.md) (`./build.sh`). Normalização opcional: `python3 scripts/normalize_markdown_book.py`.
+- Build local: [`BOOK.md`](BOOK.md) (`./scripts/build.sh`). Normalização opcional: `python3 scripts/normalize_markdown_book.py`.
 
 ## Código Dart
 

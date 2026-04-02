@@ -20,12 +20,6 @@ Os restantes scripts de build (EPUB, `fix_epub_spine.py`) usam só a biblioteca 
 A partir da **raiz do repositório**:
 
 ```bash
-./build.sh
-```
-
-Ou:
-
-```bash
 ./scripts/build.sh
 ```
 
