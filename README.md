@@ -38,7 +38,7 @@ code/                 # código Dart do livro
 site/                 # site_catalog.json, catalog_meta.json
 scripts/              # build Pandoc, catálogo, normalização Markdown
 config/               # metadata.yaml, chapters.txt, estilos LaTeX/CSS
-output/               # PDF, EPUB, DOCX (gerados localmente; ver .gitignore)
+output/               # PDF, EPUB, DOCX (também versionados no main; regenerar com ./build.sh)
 assets/               # imagens e recursos do livro
 .github/workflows/    # CI: validação do catálogo
 ```
