@@ -63,12 +63,6 @@
       "iconHint": "lan"
     },
     {
-      "title": "Achievements do Aventureiro",
-      "subtitle": "Apêndice C — conquistas e metas para desbloquear.",
-      "path": "livro/pos-textual/apendice-c-achievements.md",
-      "iconHint": "emoji_events"
-    },
-    {
       "title": "Glossário",
       "subtitle": "Apêndice D — termos técnicos e mapa masmorra ↔ código.",
       "path": "livro/pos-textual/apendice-d-glossario.md",
@@ -79,18 +73,6 @@
       "subtitle": "A última descida — reflexão sobre a jornada.",
       "path": "livro/pos-textual/epilogo.md",
       "iconHint": "auto_stories"
-    },
-    {
-      "title": "Sobre o Autor",
-      "subtitle": "Kleber de Oliveira Andrade — trajetória e contato.",
-      "path": "livro/pos-textual/sobre-o-autor.md",
-      "iconHint": "person"
-    },
-    {
-      "title": "Notas do Autor",
-      "subtitle": "Como o livro funciona, para quem é e onde encontrar as soluções.",
-      "path": "livro/pre-textual/notas-do-autor.md",
-      "iconHint": "assignment"
     }
   ]
 }
