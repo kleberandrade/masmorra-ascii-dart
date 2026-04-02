@@ -216,10 +216,97 @@ def clean_nav_toc(epub_path):
     finally:
         shutil.rmtree(temp_dir)
 
+def fix_metadata(epub_path):
+    """
+    Ensures dc:title, dc:creator and dc:language are populated in the OPF.
+    Pandoc 2.x with custom templates sometimes leaves dc:title empty.
+    """
+    temp_dir = tempfile.mkdtemp()
+    try:
+        with zipfile.ZipFile(epub_path, 'r') as zip_ref:
+            zip_ref.extractall(temp_dir)
+
+        container_xml = os.path.join(temp_dir, 'META-INF', 'container.xml')
+        ET.register_namespace('', "urn:oasis:names:tc:opendocument:xmlns:container")
+        tree = ET.parse(container_xml)
+        root = tree.getroot()
+        ns = {'c': 'urn:oasis:names:tc:opendocument:xmlns:container'}
+        rootfile_path = root.find(".//c:rootfile", ns).attrib['full-path']
+        opf_path = os.path.join(temp_dir, rootfile_path)
+
+        opf_ns = 'http://www.idpf.org/2007/opf'
+        dc_ns = 'http://purl.org/dc/elements/1.1/'
+        ET.register_namespace('', opf_ns)
+        ET.register_namespace('dc', dc_ns)
+
+        tree_opf = ET.parse(opf_path)
+        root_opf = tree_opf.getroot()
+        metadata = root_opf.find(f'{{{opf_ns}}}metadata')
+        if metadata is None:
+            print("Warning: No <metadata> element found in OPF.")
+            return
+
+        changed = False
+
+        # Fix dc:title
+        title_el = metadata.find(f'{{{dc_ns}}}title')
+        if title_el is not None and not (title_el.text or '').strip():
+            title_el.text = 'Masmorra ASCII'
+            changed = True
+            print("Fixed empty dc:title -> 'Masmorra ASCII'")
+        elif title_el is None:
+            title_el = ET.SubElement(metadata, f'{{{dc_ns}}}title')
+            title_el.text = 'Masmorra ASCII'
+            changed = True
+            print("Added missing dc:title -> 'Masmorra ASCII'")
+
+        # Fix dc:creator
+        creator_el = metadata.find(f'{{{dc_ns}}}creator')
+        if creator_el is not None and not (creator_el.text or '').strip():
+            creator_el.text = 'Kleber de Oliveira Andrade'
+            changed = True
+            print("Fixed empty dc:creator -> 'Kleber de Oliveira Andrade'")
+        elif creator_el is None:
+            creator_el = ET.SubElement(metadata, f'{{{dc_ns}}}creator')
+            creator_el.text = 'Kleber de Oliveira Andrade'
+            changed = True
+            print("Added missing dc:creator -> 'Kleber de Oliveira Andrade'")
+
+        # Fix dc:language
+        lang_el = metadata.find(f'{{{dc_ns}}}language')
+        if lang_el is not None and not (lang_el.text or '').strip():
+            lang_el.text = 'pt-BR'
+            changed = True
+        elif lang_el is None:
+            lang_el = ET.SubElement(metadata, f'{{{dc_ns}}}language')
+            lang_el.text = 'pt-BR'
+            changed = True
+
+        if changed:
+            tree_opf.write(opf_path, encoding='utf-8', xml_declaration=True)
+            # Repack
+            with zipfile.ZipFile(epub_path, 'w', zipfile.ZIP_DEFLATED) as zip_out:
+                for foldername, subfolders, filenames in os.walk(temp_dir):
+                    for filename in filenames:
+                        fpath = os.path.join(foldername, filename)
+                        arcname = os.path.relpath(fpath, temp_dir)
+                        if arcname == 'mimetype':
+                            continue
+                        zip_out.write(fpath, arcname)
+                zip_out.write(os.path.join(temp_dir, 'mimetype'), 'mimetype',
+                              compress_type=zipfile.ZIP_STORED)
+        else:
+            print("Metadata already populated — no changes.")
+
+    finally:
+        shutil.rmtree(temp_dir)
+
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python3 fix_epub_spine.py <epub_file>")
         sys.exit(1)
-        
+
+    fix_metadata(sys.argv[1])
     reorder_nav_in_spine(sys.argv[1])
     clean_nav_toc(sys.argv[1])

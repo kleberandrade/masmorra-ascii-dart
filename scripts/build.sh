@@ -32,8 +32,9 @@ PREAMBLE="$CONFIG_DIR/preamble.tex"
 STYLESHEET="$CONFIG_DIR/style.css"
 BOOK_NAME="masmorra-ascii"
 CHAPTERS_FILE="$CONFIG_DIR/chapters.txt"
-# Tema de syntax highlight para fundo escuro nos blocos de código (PDF/EPUB/DOCX)
-SYNTAX_HIGHLIGHTING="zenburn"
+# Tema de syntax highlight — zenburn (escuro) para PDF, tango (claro) para EPUB/DOCX
+SYNTAX_PDF="zenburn"
+SYNTAX_EPUB="tango"
 
 mkdir -p "$OUTPUT_DIR"
 
@@ -59,7 +60,7 @@ echo "Generating PDF..."
 pandoc "${INPUT_ARGS[@]}" \
     --metadata-file="$METADATA" \
     --include-in-header="$PREAMBLE" \
-    --syntax-highlighting="$SYNTAX_HIGHLIGHTING" \
+    --highlight-style="$SYNTAX_PDF" \
     --pdf-engine=xelatex \
     --top-level-division=chapter \
     --toc-depth=1 \
@@ -84,7 +85,7 @@ done
 pandoc "${EPUB_INPUT_ARGS[@]}" \
     --metadata-file="$METADATA" \
     --template="$CONFIG_DIR/default.epub3" \
-    --syntax-highlighting="$SYNTAX_HIGHLIGHTING" \
+    --highlight-style="$SYNTAX_EPUB" \
     --metadata toc-title="Sumário" \
     --css="$STYLESHEET" \
     --epub-title-page=false \
@@ -119,7 +120,7 @@ done
 
 pandoc "${DOCX_INPUT_ARGS[@]}" \
     --metadata-file="$METADATA" \
-    --syntax-highlighting="$SYNTAX_HIGHLIGHTING" \
+    --highlight-style="$SYNTAX_EPUB" \
     --metadata toc-title="Sumário" \
     --toc \
     --toc-depth=3 \

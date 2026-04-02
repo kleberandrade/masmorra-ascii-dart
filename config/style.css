@@ -1,11 +1,11 @@
 /* EPUB Stylesheet - Fiction / Technology Aesthetic */
-/* Optimized for readability and professional appearance */
+/* Optimized for readability across EPUB readers (Apple Books, Calibre, Kobo, Kindle) */
 
 /* Base Styles */
 body {
     margin: 5% 8%;
     text-align: justify;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: Georgia, "Times New Roman", "Noto Serif", serif;
     line-height: 1.7;
     font-size: 1.1em;
     color: #1a1a1a;
@@ -24,12 +24,10 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: "Cinzel", serif;
+    font-family: Georgia, "Times New Roman", "Noto Serif", serif;
     color: #3e2723;
     margin-top: 2em;
-    /* Reduced from 2.5em */
     margin-bottom: 1em;
-    /* Reduced from 1.5em */
     font-weight: 600;
     line-height: 1.2;
     page-break-after: avoid;
@@ -49,15 +47,12 @@ h1 {
     border-bottom: 1px solid #333;
     padding: 1.1em 0;
     margin-top: 2.5em;
-    /* Keep Chapter title spacing */
     margin-bottom: 0.6em;
     font-variant: small-caps;
     font-size: 1.65em;
     letter-spacing: 0.08em;
     page-break-before: always;
     page-break-after: avoid;
-    orphans: 3;
-    widows: 3;
 }
 
 /* Unnumbered chapters (dedication, preface, etc.) */
@@ -80,7 +75,6 @@ h2 {
     font-style: normal;
     color: #444;
     margin-top: 1.5em;
-    /* Adjusted specific H2 margin */
     margin-bottom: 1em;
     font-size: 1.4em;
     font-weight: 500;
@@ -114,8 +108,6 @@ p {
     text-indent: 1.5em;
     margin-bottom: 0;
     margin-top: 0;
-    orphans: 2;
-    widows: 2;
 }
 
 /* First paragraph after heading has no indent */
@@ -163,13 +155,11 @@ blockquote p:last-child {
 .dica {
     background-color: #e8f5e9;
     border: 2px solid #2e7d32;
-    border-radius: 8px;
     padding: 1em;
     margin: 1.5em 0;
     font-style: normal;
     color: #333;
     position: relative;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .dica::before {
@@ -192,41 +182,34 @@ blockquote p:last-child {
     margin-bottom: 0;
 }
 
-/* Code and Code Blocks */
+/* ============================================================
+   Code and Code Blocks — light theme (default for most readers)
+   ============================================================ */
 code {
     font-family: "Courier New", Courier, monospace;
-    background-color: #1a1a1a;
+    background-color: #f4f4f4;
     padding: 0.2em 0.4em;
-    border-radius: 3px;
     font-size: 0.9em;
-    color: #e8e8e8;
-    /* Ensure inline code breaks if needed */
+    color: #2d2d2d;
+    border: 1px solid #ddd;
     overflow-wrap: break-word;
     word-wrap: break-word;
 }
 
 pre {
-    background-color: #0d0d0d;
-    color: #e8e8e8;
+    background-color: #f8f8f8;
+    color: #2d2d2d;
     padding: 1em;
-    border: 1px solid #3a3a3a;
-    border-radius: 4px;
+    border: 1px solid #ccc;
 
-    /* Force wrapping - reinforced */
-    white-space: pre-wrap !important;
-    white-space: -moz-pre-wrap !important;
-    white-space: -pre-wrap !important;
-    white-space: -o-pre-wrap !important;
-    word-wrap: break-word !important;
-    overflow-wrap: break-word !important;
-    word-break: break-all !important;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 
     font-family: "Courier New", Courier, monospace;
     font-size: 0.65em;
     line-height: 1.35;
     margin: 1.5em 0;
-    position: relative;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
     page-break-inside: auto;
     max-width: 100%;
 }
@@ -234,20 +217,18 @@ pre {
 pre code {
     background-color: transparent;
     padding: 0;
+    border: none;
     color: inherit;
     font-size: 1em;
-    /* Inherit wrapping */
-    white-space: pre-wrap !important;
-    word-wrap: break-word !important;
-    overflow-wrap: break-word !important;
-    word-break: break-all !important;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
-/* Specific Pandoc overrides — terminal */
+/* Specific Pandoc overrides — code containers */
 div.sourceCode {
-    background-color: #0d0d0d;
-    border: 1px solid #3a3a3a;
-    border-radius: 4px;
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
     margin: 1.5em 0;
     padding: 0;
     overflow-x: auto;
@@ -256,20 +237,18 @@ div.sourceCode {
 div.sourceCode pre {
     margin: 0;
     border: none;
-    box-shadow: none;
 }
 
 div.sourceCode pre,
 div.sourceCode code,
 div.sourceCode span {
-    white-space: pre-wrap !important;
-    word-wrap: break-word !important;
-    overflow-wrap: break-word !important;
-    word-break: break-all !important;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
     max-width: 100%;
 }
 
-/* Scene break (hr) — sem decorador (asteriscos removidos) */
+/* Scene break (hr) */
 hr {
     border: 0;
     text-align: center;
@@ -381,14 +360,11 @@ hr.scene-break::after {
     h1 {
         page-break-before: always;
     }
-
-    p {
-        orphans: 3;
-        widows: 3;
-    }
 }
 
-/* Dark mode support (for e-readers that support it) */
+/* ============================================================
+   Dark mode support (for e-readers that support it)
+   ============================================================ */
 @media (prefers-color-scheme: dark) {
     body {
         background-color: #1a1a1a;
@@ -407,22 +383,29 @@ hr.scene-break::after {
     code {
         background-color: #0d0d0d;
         color: #e8e8e8;
+        border-color: #555;
     }
 
     pre {
-        background-color: #000000;
+        background-color: #0d0d0d;
         border-color: #555;
         color: #e8e8e8;
     }
 
     div.sourceCode {
-        background-color: #000000;
+        background-color: #0d0d0d;
         border-color: #555;
     }
 
     blockquote {
         border-left-color: #666;
         color: #ccc;
+    }
+
+    .dica {
+        background-color: #1a2e1a;
+        border-color: #4caf50;
+        color: #e0e0e0;
     }
 
     hr::after {
@@ -436,7 +419,7 @@ hr.scene-break::after {
     margin: 2em auto;
     padding: 1em;
     border: 1px solid #757575;
-    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
     font-size: 0.7em;
     text-align: justify;
     background-color: #fff;
@@ -467,24 +450,22 @@ div#TOC li {
     margin-bottom: 0.5em;
 }
 
-/* Part Pages (EPUB) — folhas pretas alinhadas ao PDF */
+/* ============================================================
+   Part Pages (EPUB) — full-page dividers
+   Usa text-align + padding em vez de Flexbox/vh
+   ============================================================ */
 .part-page {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 75vh;
-    padding: 0 5%;
+    text-align: center;
+    padding: 6em 5% 4em 5%;
     margin: 0;
     background: #000000;
     color: #ffffff;
-    text-align: center !important;
     page-break-before: always;
-    page-break-after: avoid;
+    page-break-after: always;
 }
 
 .part-title {
-    font-family: "Cinzel", serif;
+    font-family: Georgia, "Times New Roman", "Noto Serif", serif;
     font-size: 2.5em;
     font-weight: bold;
     color: #ffffff;
@@ -495,90 +476,81 @@ div#TOC li {
 }
 
 .part-subtitle {
-    font-family: "Georgia", serif;
+    font-family: Georgia, "Times New Roman", "Noto Serif", serif;
     font-size: 1.5em;
     font-style: italic;
     color: #e0e0e0;
     margin-top: 0.5em;
     margin-bottom: 5em;
-    text-align: center !important;
-    text-align-last: center;
+    text-align: center;
 }
 
 .part-intro {
-    font-family: "Georgia", serif;
+    font-family: Georgia, "Times New Roman", "Noto Serif", serif;
     font-size: 0.9em;
     color: #cccccc;
     font-style: italic;
     max-width: 80%;
     margin: 0 auto;
     line-height: 1.8;
-    text-align: center !important;
-    text-indent: 0 !important;
+    text-align: center;
+    text-indent: 0;
 }
 
-/* EPUB Frontmatter Styles (Title Page & Copyright) */
+/* ============================================================
+   EPUB Frontmatter Styles (Title Page & Copyright)
+   Usa text-align + padding em vez de Flexbox/vh
+   ============================================================ */
 .epub-title-page {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     text-align: center;
     width: 100%;
-    height: 80vh;
-    padding: 0 5%;
+    padding: 5em 5% 3em 5%;
     margin: 0;
     box-sizing: border-box;
-    /* Prevent padding from increasing width */
     page-break-after: always;
 }
 
 .epub-title-page p {
-    text-indent: 0 !important;
-    margin-left: 0 !important;
+    text-indent: 0;
+    margin-left: 0;
 }
 
 /* Hide ghost headers generated by empty metadata title */
 h1:empty {
-    display: none !important;
+    display: none;
 }
 
 .main-title {
-    font-family: "Cinzel", serif;
+    font-family: Georgia, "Times New Roman", "Noto Serif", serif;
     font-size: 2em;
     font-weight: bold;
     margin-top: 1em;
     margin-bottom: 0.5em;
     border-top: 2px solid #333;
-    /* Framed look */
     border-bottom: 2px solid #333;
     padding: 0.5em 0;
     width: 100%;
-    /* Ensure lines span width */
 }
 
 .subtitle {
-    font-family: "Georgia", serif;
+    font-family: Georgia, "Times New Roman", "Noto Serif", serif;
     font-size: 1.2em;
-    /* Reduced */
     font-style: italic;
     color: #555;
     margin-bottom: 2em;
     max-width: 90%;
-    /* Ensure wrapping */
     margin-left: auto;
     margin-right: auto;
 }
 
 .author {
     font-size: 1.2em;
-    /* Reduced */
     font-weight: bold;
     margin-bottom: 2em;
 }
 
 .publisher-info {
-    margin-top: auto;
+    margin-top: 3em;
     font-size: 1.1em;
 }
 
