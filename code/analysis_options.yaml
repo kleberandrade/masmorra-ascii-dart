@@ -1,0 +1,6 @@
+# Raiz de code/: sem pubspec aqui — não usar `include: package:lints/...` (o IDE não resolve o pacote).
+# Cada step e `masmorra_ascii/` têm o próprio `analysis_options.yaml` com lints.
+# Isto só exclui `solucoes/` quando a pasta `code/` é analisada em conjunto.
+analyzer:
+  exclude:
+    - solucoes/**

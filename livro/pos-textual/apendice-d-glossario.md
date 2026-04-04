@@ -130,65 +130,172 @@ Este glossário reúne os termos técnicos mais importantes usados ao longo do l
 
 ## Do Mundo Real à Masmorra
 
-Além das entradas alfabéticas acima, este quadro traduz o vocabulário da masmorra para conceitos de programação (e vice-versa). Use-o para ver como mecânicas de roguelike se expressam em Dart e na arquitetura do jogo. É um mapa bidirecional: comece no RPG e encontre o código, ou comece no código e encontre a mecânica do jogo.
+Além das entradas alfabéticas acima, esta lista traduz o vocabulário da masmorra para conceitos de programação (e vice-versa). Use-a para ver como mecânicas de roguelike se expressam em Dart e na arquitetura do jogo. É um mapa bidirecional: comece no RPG e encontre o código, ou comece no código e encontre a mecânica do jogo.
 
-| Termo RPG | Termo de Programação | Descrição |
-|-----------|---------------------|-----------|
-| Masmorra | Loop principal (game loop) | O ciclo que mantém o jogo vivo: entrada → processamento → saída. A cada turno, o jogo lê ações, atualiza o estado e desenha na tela. |
-| Turno | Iteração do loop | Um ciclo completo da masmorra: o jogador age, os inimigos reagem, o mapa é desenhado. |
-| Personagem | Classe, Objeto | O herói é uma instância de uma classe Jogador, com atributos (nome, HP, inventário) e métodos (sofrer dano, usar item). |
-| Atributos (HP, força, agilidade) | Campos/Propriedades | Dados que definem o estado do personagem. HP é um int, força é um int, nome é uma String. |
-| Inventário | Lista (List) | Coleção ordenada de itens. Você pega itens em sequência (índice 0, 1, 2...). |
-| Loja do Mercador | Mapa (Map) | Cada item tem um nome (chave) e um preço (valor). "Espada" → 50 ouro, "Poção" → 20 ouro. |
-| Salas visitadas (exploração) | Conjunto (Set) | Você marca quais salas já visitou. Não importa a ordem, só se foi lá ou não. Muito rápido para verificar. |
-| Morte permanente (permadeath) | Sem try/catch, sem undo | Erro no combate? Game over. Sem salvação, sem continuar. É a verdade dos roguelikes. |
-| Magia/Habilidades | Polimorfismo (@override) | Zumbi sofre dano diferente de Esqueleto. Cada inimigo tem seu próprio `descreverAcao()`. |
-| Herança de classes de inimigos | Herança (extends) | Zumbi, Esqueleto, Lobo são todos Inimigos. Compartilham HP, método sofrerDano(), mas cada um age diferente. |
-| Poder compartilhado (todos sangram) | Mixin | Toda criatura que respira tem um método sofrerDano(). Em vez de copiar em cada classe, usamos mixin Combatente. |
-| Escudo mágico (null safety) | Null Safety | Dart garante que uma variável nunca será null sem sua permissão. Nenhuma surpresa de NullPointerException no meio do combate. |
-| Conhecimento tardio (só sabe quando pegar) | late | Você declara uma variável mas só a inicializa depois, quando precisar. `late String nomeMasmorra;` |
-| Contrato da criatura | Classe abstrata (abstract class) | Uma classe Inimigo define o contrato: toda criatura viva tem HP, pode sofrer dano, descreve sua ação. |
-| FOV (campo de visão) | Algoritmo, Set<Point> | O que o herói enxerga. Calcula-se com raycasting ou shadowcasting. Resulta em um Set de tiles visíveis. |
-| Névoa de guerra | Rastreamento de estado | Tiles que você já visitou (explorados) vs. nunca visitou (nunca visto). Booleano ou enum. |
-| Pathfinding (caminho ao inimigo) | Algoritmo A* ou BFS | Dado dois pontos (herói e inimigo), encontra o caminho mais curto. BFS é simples, A* é otimizado. |
-| Geração procedural | Random + Algoritmo | MapaMasmorra gera salas e corredores aleatoriamente a cada partida. Mesma seed = mesmo mapa. |
-| Colisão (parede, inimigo) | Verificação booleana | Posição (x, y) está ocupada? if (tilemap[x][y].temParede) bloqueia movimento. |
-| Tile (célula do mapa) | Posição (x, y) | Cada quadrado do grid. Uma sala é um conjunto de tiles. ASCII é um sprite simples. |
-| Sprite ASCII | Caractere único (char) | Um personagem, um inimigo, uma parede. 'Z' para zumbi, '@' para herói, '#' para parede. |
-| Roguelike | Gênero com regras | Exploração de dungeon, combate por turnos, morte permanente, progressão de personagem, geração procedural. |
-| Save (salvar partida) | Serialização + JSON | Objeto Jogador → Map → String JSON → Arquivo em disco. Persistência. |
-| Load (carregar partida) | Desserialização + JSON | String JSON → Map → Objeto Jogador. Reconstruir tudo da memória persistente. |
-| Boss final | Padrão especial | Inimigo com mais HP, mais dano, comportamento único. Marca o fim de um andar. |
-| Experience points (XP) | Contador inteiro | int xp acumula. Ao atingir threshold, level up. Base para crescimento de personagem. |
-| Level up | Aumento de atributos | Força sobe, HP máximo sobe. Resultado de acumular XP. |
-| Factory construtor (criar inimigo de dados) | Factory Constructor | `Inimigo.deJSON(Map dados)` retorna Zumbi, Esqueleto, ou Lobo conforme dados. Lógica centralizada. |
-| Padrão Strategy | Strategy Pattern | Cada inimigo tem uma IA: `patrulhar()`, `perseguir()`, `atacar()`. Algoritmo intercambiável por tipo. |
-| Padrão Command | Command Pattern | Ação do jogador: move norte, ataca, pega item. Cada uma é um Command que pode ser desfeita, registrada, ou executada depois. |
-| Padrão State | State Pattern | Inimigo em estado Patrulha, Alerta, Perseguição. Muda de estado quando vê jogador. Sealed class implementa isso bem. |
-| Padrão Observer | Observer Pattern | Quando algo morre, log ouve, UI ouve, som ouve. Event bus + Stream<Evento>. Baixo acoplamento. |
-| Máquina de estados (FSM) | Enum + Switch ou Sealed Class | Estado da entidade: vivo, morrendo, morto. Switch no estado, executa ação apropriada. |
-| Testabilidade | Testes Unitários | `test('jogador sofre dano', () { ... })`. Garante que sofrerDano(10) diminui HP de 10. |
-| Análise estática | dart analyze | Verifica erros antes de rodar. Variáveis não usadas, tipos errados, imports desnecessários. |
-| Gerenciador de pacotes | pub, pubspec.yaml | Declare dependências (package:test, etc). pub.dev é o repositório. |
-| Sandbox seguro | DartPad | Experimente Dart no navegador sem instalar nada. Perfeito para aprender. |
-| Estrutura do projeto | lib/, bin/, test/ | lib/ tem código reutilizável. bin/ tem main(). test/ tem testes. |
-| Configuração de análise | analysis_options.yaml | Regras estritas: evita patterns perigosos, força estilos. Lint é customizável. |
-| Distribuição do jogo | dart compile exe | Compila para executável nativo. pub global install para ferramentas. |
-| Geração de eventos | Enum + Pattern Matching | Comandos do jogador como enum. Switch expression extrai dados: `switch(cmd) { ... }`. |
-| Registros heterogêneos | Records | Retornar múltiplos valores: `(bool sucesso, String mensagem)`. Melhor que Tuple ou classe auxiliar. |
-| Extensão de linguagem | Extension | `extension IntUtils on int { ... }` adiciona método a int sem herança. `5.vezes(() { ... })`. |
-| Cascata de operações | Cascade Operator (..) | `jogador..hp = 100..ouro = 0..moverPara('inicio')`. Encadeamento. |
-| Condicional em coleção | Collection if | `[item1, if (condicao) item2, item3]`. Construir lista com lógica inline. |
-| Loop em coleção | Collection for | `[...lista1, for (item in lista2) item.upper()]`. Flatten/map inline. |
-| Type alias | typedef | `typedef Acao = void Function()`. Nome legível para assinatura complexa de função. |
-| Genérico | Generic<T> | `List<Item>`, `Map<String, Inimigo>`. Reutiliza estrutura, força tipo. |
-| Processamento paralelo | Isolate | Cada Isolate é uma thread Dart. Fork para computação pesada sem bloquear UI. |
-| Contexto de execução | Zone | Intercepta erros, logs, timers num escopo. Útil para testes e debugging. |
-| Padrão Factory | Factory Pattern | `DefinicaoItem` tem factory para criar Item concreto. Centraliza criação e validação. |
-| Abstração de dados | Interface (implements) | Contrato de métodos que uma classe deve ter. Em Dart, `class X implements Y` força cumprir interface de Y. |
-| Getters e setters | Propriedades computadas | `int get hp => _hp;` expõe leitura segura. `set hp(int v) { if (v >= 0) _hp = v; }` valida escrita. |
-| Sobrecarga de operadores | operator overload | `class Ponto { Ponto operator+(Ponto other) { ... } }`. Usar `+`, `-`, `==` em tipos custom. |
-| Tipo abstrato / contrato | Sealed class | `sealed class Entidade { }` garante que só subclasses conhecidas existem. Exaustividade em switch. |
+**Masmorra** → *Loop principal (game loop)*
+: O ciclo que mantém o jogo vivo: entrada → processamento → saída. A cada turno, o jogo lê ações, atualiza o estado e desenha na tela.
+
+**Turno** → *Iteração do loop*
+: Um ciclo completo da masmorra: o jogador age, os inimigos reagem, o mapa é desenhado.
+
+**Personagem** → *Classe, Objeto*
+: O herói é uma instância de uma classe `Jogador`, com atributos (nome, HP, inventário) e métodos (sofrer dano, usar item).
+
+**Atributos (HP, força, agilidade)** → *Campos/Propriedades*
+: Dados que definem o estado do personagem. HP é um int, força é um int, nome é uma String.
+
+**Inventário** → *Lista (List)*
+: Coleção ordenada de itens. Você pega itens em sequência (índice 0, 1, 2...).
+
+**Loja do Mercador** → *Mapa (Map)*
+: Cada item tem um nome (chave) e um preço (valor). "Espada" → 50 ouro, "Poção" → 20 ouro.
+
+**Salas visitadas (exploração)** → *Conjunto (Set)*
+: Você marca quais salas já visitou. Não importa a ordem, só se foi lá ou não. Muito rápido para verificar.
+
+**Morte permanente (permadeath)** → *Sem try/catch, sem undo*
+: Erro no combate? Game over. Sem salvação, sem continuar. É a verdade dos roguelikes.
+
+**Magia/Habilidades** → *Polimorfismo (@override)*
+: Zumbi sofre dano diferente de Esqueleto. Cada inimigo tem seu próprio `descreverAcao()`.
+
+**Herança de classes de inimigos** → *Herança (extends)*
+: Zumbi, Esqueleto, Lobo são todos Inimigos. Compartilham HP, método `sofrerDano()`, mas cada um age diferente.
+
+**Poder compartilhado (todos sangram)** → *Mixin*
+: Toda criatura que respira tem um método `sofrerDano()`. Em vez de copiar em cada classe, usamos mixin `Combatente`.
+
+**Escudo mágico (null safety)** → *Null Safety*
+: Dart garante que uma variável nunca será null sem sua permissão. Nenhuma surpresa de NullPointerException no meio do combate.
+
+**Conhecimento tardio (só sabe quando pegar)** → *late*
+: Você declara uma variável mas só a inicializa depois, quando precisar. `late String nomeMasmorra;`
+
+**Contrato da criatura** → *Classe abstrata (abstract class)*
+: Uma classe `Inimigo` define o contrato: toda criatura viva tem HP, pode sofrer dano, descreve sua ação.
+
+**FOV (campo de visão)** → *Algoritmo, Set<Point>*
+: O que o herói enxerga. Calcula-se com raycasting ou shadowcasting. Resulta em um Set de tiles visíveis.
+
+**Névoa de guerra** → *Rastreamento de estado*
+: Tiles que você já visitou (explorados) vs. nunca visitou (nunca visto). Booleano ou enum.
+
+**Pathfinding (caminho ao inimigo)** → *Algoritmo A* ou BFS*
+: Dado dois pontos (herói e inimigo), encontra o caminho mais curto. BFS é simples, A* é otimizado.
+
+**Geração procedural** → *Random + Algoritmo*
+: MapaMasmorra gera salas e corredores aleatoriamente a cada partida. Mesma seed = mesmo mapa.
+
+**Colisão (parede, inimigo)** → *Verificação booleana*
+: Posição (x, y) está ocupada? if (tilemap[x][y].temParede) bloqueia movimento.
+
+**Tile (célula do mapa)** → *Posição (x, y)*
+: Cada quadrado do grid. Uma sala é um conjunto de tiles. ASCII é um sprite simples.
+
+**Sprite ASCII** → *Caractere único (char)*
+: Um personagem, um inimigo, uma parede. 'Z' para zumbi, '@' para herói, '#' para parede.
+
+**Roguelike** → *Gênero com regras*
+: Exploração de dungeon, combate por turnos, morte permanente, progressão de personagem, geração procedural.
+
+**Save (salvar partida)** → *Serialização + JSON*
+: Objeto Jogador → Map → String JSON → Arquivo em disco. Persistência.
+
+**Load (carregar partida)** → *Desserialização + JSON*
+: String JSON → Map → Objeto Jogador. Reconstruir tudo da memória persistente.
+
+**Boss final** → *Padrão especial*
+: Inimigo com mais HP, mais dano, comportamento único. Marca o fim de um andar.
+
+**Experience points (XP)** → *Contador inteiro*
+: int xp acumula. Ao atingir threshold, level up. Base para crescimento de personagem.
+
+**Level up** → *Aumento de atributos*
+: Força sobe, HP máximo sobe. Resultado de acumular XP.
+
+**Factory construtor (criar inimigo de dados)** → *Factory Constructor*
+: `Inimigo.deJSON(Map dados)` retorna Zumbi, Esqueleto, ou Lobo conforme dados. Lógica centralizada.
+
+**Padrão Strategy** → *Strategy Pattern*
+: Cada inimigo tem uma IA: `patrulhar()`, `perseguir()`, `atacar()`. Algoritmo intercambiável por tipo.
+
+**Padrão Command** → *Command Pattern*
+: Ação do jogador: move norte, ataca, pega item. Cada uma é um Command que pode ser desfeita, registrada, ou executada depois.
+
+**Padrão State** → *State Pattern*
+: Inimigo em estado Patrulha, Alerta, Perseguição. Muda de estado quando vê jogador. Sealed class implementa isso bem.
+
+**Padrão Observer** → *Observer Pattern*
+: Quando algo morre, log ouve, UI ouve, som ouve. Event bus + Stream<Evento>. Baixo acoplamento.
+
+**Máquina de estados (FSM)** → *Enum + Switch ou Sealed Class*
+: Estado da entidade: vivo, morrendo, morto. Switch no estado, executa ação apropriada.
+
+**Testabilidade** → *Testes Unitários*
+: `test('jogador sofre dano', () { ... })`. Garante que sofrerDano(10) diminui HP de 10.
+
+**Análise estática** → *dart analyze*
+: Verifica erros antes de rodar. Variáveis não usadas, tipos errados, imports desnecessários.
+
+**Gerenciador de pacotes** → *pub, pubspec.yaml*
+: Declare dependências (package:test, etc). pub.dev é o repositório.
+
+**Sandbox seguro** → *DartPad*
+: Experimente Dart no navegador sem instalar nada. Perfeito para aprender.
+
+**Estrutura do projeto** → *lib/, bin/, test/*
+: lib/ tem código reutilizável. bin/ tem main(). test/ tem testes.
+
+**Configuração de análise** → *analysis_options.yaml*
+: Regras estritas: evita patterns perigosos, força estilos. Lint é customizável.
+
+**Distribuição do jogo** → *dart compile exe*
+: Compila para executável nativo. pub global install para ferramentas.
+
+**Geração de eventos** → *Enum + Pattern Matching*
+: Comandos do jogador como enum. Switch expression extrai dados: `switch(cmd) { ... }`.
+
+**Registros heterogêneos** → *Records*
+: Retornar múltiplos valores: `(bool sucesso, String mensagem)`. Melhor que Tuple ou classe auxiliar.
+
+**Extensão de linguagem** → *Extension*
+: `extension IntUtils on int { ... }` adiciona método a int sem herança. `5.vezes(() { ... })`.
+
+**Cascata de operações** → *Cascade Operator (..)*
+: `jogador..hp = 100..ouro = 0..moverPara('inicio')`. Encadeamento.
+
+**Condicional em coleção** → *Collection if*
+: `[item1, if (condicao) item2, item3]`. Construir lista com lógica inline.
+
+**Loop em coleção** → *Collection for*
+: `[...lista1, for (item in lista2) item.upper()]`. Flatten/map inline.
+
+**Type alias** → *typedef*
+: `typedef Acao = void Function()`. Nome legível para assinatura complexa de função.
+
+**Genérico** → *Generic<T>*
+: `List<Item>`, `Map<String, Inimigo>`. Reutiliza estrutura, força tipo.
+
+**Processamento paralelo** → *Isolate*
+: Cada Isolate é uma thread Dart. Fork para computação pesada sem bloquear UI.
+
+**Contexto de execução** → *Zone*
+: Intercepta erros, logs, timers num escopo. Útil para testes e debugging.
+
+**Padrão Factory** → *Factory Pattern*
+: `DefinicaoItem` tem factory para criar Item concreto. Centraliza criação e validação.
+
+**Abstração de dados** → *Interface (implements)*
+: Contrato de métodos que uma classe deve ter. Em Dart, `class X implements Y` força cumprir interface de Y.
+
+**Getters e setters** → *Propriedades computadas*
+: `int get hp => _hp;` expõe leitura segura. `set hp(int v) { if (v >= 0) _hp = v; }` valida escrita.
+
+**Sobrecarga de operadores** → *operator overload*
+: `class Ponto { Ponto operator+(Ponto other) { ... } }`. Usar `+`, `-`, `==` em tipos custom.
+
+**Tipo abstrato / contrato** → *Sealed class*
+: `sealed class Entidade { }` garante que só subclasses conhecidas existem. Exaustividade em switch.
 
 ## Como Usar Este Mapa Conceitual
 

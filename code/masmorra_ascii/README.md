@@ -1,62 +1,237 @@
-# masmorra_ascii
+# Masmorra ASCII
 
-Pacote Dart de apoio ao livro **Masmorra ASCII**.
+Um roguelike completo em Dart, desenvolvido através de 37 capítulos de aprendizado progressivo. O jogo oferece exploração de masmorras procedurais, combate tático, IA inteligente de inimigos, economia de jogo, persistência de dados e uma arquitetura baseada em padrões de design profissionais.
 
-Este é o **projeto de referência completo e executável**: exploração MUD, masmorra em grade, save/load e testes. Os snapshots por capítulo estão em `steps/step-XX/` (no mesmo repositório, sob `code/`); o **step-36** no livro não duplica aqui o código — usa este pacote como solução final (também ligada no site como “solução final”).
+## Descrição do Projeto
+
+**Masmorra ASCII** é um jogo roguelike em tempo real (baseado em turnos) que roda em terminal. Você controla um aventureiro que desce a uma masmorra infinita em busca de ouro, experiência e glória. O jogo oferece:
+
+- **Exploração dinâmica**: Uma masmorra procedural gerada infinitamente
+- **Combate estratégico**: Sistema de turnos com múltiplas opções de ataque
+- **IA inteligente**: Inimigos com máquinas de estado (patrulha, alerta, perseguição, fuga)
+- **Economia completa**: Loja, compra/venda de itens, progressão de ouro
+- **Progressão de herói**: Sistema de XP e níveis
+- **Chefe final**: Um antagonista multi-fase com fase especial
+- **Save/Load**: Persistência de dados em JSON
+- **Testes automatizados**: Cobertura de testes com o package `test`
 
 ## Requisitos
 
 - Dart SDK **3.11+**
 
-## Executar
+## Como Executar
+
+### Rodar o Jogo
 
 ```bash
-# A partir desta pasta (ou `code/masmorra_ascii` na raiz do repositório):
+cd code/masmorra_ascii
 dart pub get
-dart lib/main.dart
+dart run
 ```
 
-## Percurso mínimo (garantir que “está tudo a funcionar”)
+O jogo iniciará um menu interativo onde você pode:
+- Iniciar um novo jogo
+- Continuar um jogo salvo
+- Ver créditos
+- Sair
 
-1. `dart pub get` e `dart analyze` (sem erros).
-2. `dart lib/main.dart` — escreve um nome quando pedido.
-3. Menu: **1** Explorar — vês HUD, descrição da sala, prompt `> `.
-4. Comandos úteis: `olhar`, `n` / `s` / `e` / `o`, `inventario`, `equipar punhal`, `atacar` (onde houver inimigo), `loja`, `comprar …`, `vender 0` (índice da lista).
-5. Vai ao **portão** (`n` desde a praça, conforme o mapa em `world_data.dart`) e escreve `descer` — entras na **grade**; move com `n/s/e/o` ou `w/x/d/a`; recolhe `G`; sai pela célula `*`.
-6. Escreve `menu` na exploração ou na masmorra para voltar ao menu principal; **3** guarda, **4** carrega `masmorra_save.json`.
-
-Se `dart` não for reconhecido no terminal, instala ou atualiza o SDK em [dart.dev](https://dart.dev) (ou usa o Dart que vem com Flutter) e volta a abrir o terminal.
-
-## O que o programa faz (visão geral)
-
-- Banner em texto (`StringBuffer`, Cap. 6) e **menu** principal (0–4).
-- **Exploração** estilo MUD: salas com saídas, `loja` / `comprar` / `vender`, **combate** contra inimigos selados, comando `descer` no portão para a **masmorra em grade** (`DungeonMap`, RNG com semente).
-- **Guardar / carregar** JSON (`masmorra_save.json`, Cap. 26) — opções 3 e 4 do menu.
-- **Stream** `GameSession.eventos` para observadores (Cap. 31).
-
-## Testes
+### Rodar os Testes
 
 ```bash
+cd code/masmorra_ascii
 dart test
 ```
 
-Inclui `test/ascii_screen_test.dart`, `test/parser_test.dart` (Cap. 24) e `test/shop_test.dart` (venda com arma equipada).
+Todos os testes devem passar. Os testes cobrem:
+- **Combate**: Cálculo de dano, morte de inimigos
+- **Economia**: Compra/venda de itens
+- **Mapa**: Geração procedural, colisões
+- **Parser**: Análise de entrada do jogador
+- **Tela**: Renderização ASCII
 
-## Convenção de versões por capítulo
+## Arquitetura do Projeto
 
-| Etiquetas | Parte do livro |
-|-----------|----------------|
-| `step-01` … `step-07` | Parte I |
-| `step-08` … `step-14` | Parte II |
-| `step-15` … `step-22` | Parte III |
-| `step-23` … `step-27` | Parte IV |
-| `step-28` … `step-34` | Parte V |
+A estrutura de diretórios:
 
-Podes usar **uma etiqueta por capítulo** (`step-01` … `step-34`).
+```
+lib/
+├── main.dart                    # Ponto de entrada, inicia SessaoJogo
+├── masmorra_ascii.dart          # Exports públicos da biblioteca
+└── src/
+    ├── combate/                 # Lógica de combate
+    │   └── combate.dart         # Executa combates entre Jogador e Inimigo
+    │
+    ├── economia/                # Sistema econômico do jogo
+    │   └── loja.dart            # Funções de compra/venda
+    │
+    ├── ia/                      # Inteligência artificial dos inimigos
+    │   ├── acao_combate.dart    # Classe de ações possíveis em combate
+    │   └── estado_ia.dart       # Máquinas de estado (Patrulha, Alerta, etc)
+    │
+    ├── jogo/                    # Loop principal do jogo
+    │   └── sessao_jogo.dart     # Gerencia menu, exploração, save/load
+    │
+    ├── modelos/                 # Modelos de dados
+    │   ├── fabrica_inimigo.dart # Factory para criação de inimigos
+    │   ├── inimigo.dart         # Classe Inimigo com IA
+    │   ├── item.dart            # Classes Item e Arma
+    │   ├── jogador.dart         # Classe Jogador (herói)
+    │   └── sala.dart            # Classe Sala (locais do jogo)
+    │
+    ├── mundo/                   # Geração e gerenciamento do mundo
+    │   ├── dados_mundo.dart     # Factory do mundo demo
+    │   ├── mapa_masmorra.dart   # Gerador procedural de masmorra
+    │   └── mundo_texto.dart     # Mapa de salas textuais
+    │
+    ├── parse/                   # Análise de entrada do jogador
+    │   ├── comando_jogo.dart    # Enum de comandos válidos
+    │   └── parseador.dart       # Parser de strings em comandos
+    │
+    ├── persistencia/            # Save/Load de jogo
+    │   └── gerenciador_salve.dart # Funções de serialização em JSON
+    │
+    ├── tela_ascii.dart          # Renderização ASCII do jogo
+    │
+    └── ui/                      # Componentes da interface
+        └── banner.dart          # Títulos e banners decorativos
 
-## API principal
+test/
+├── combate_test.dart
+├── loja_test.dart
+├── mapa_masmorra_test.dart
+├── parseador_test.dart
+└── tela_ascii_test.dart
+```
 
-- **`GameSession`** — orquestra menu, exploração, masmorra, save/load.
-- **`AsciiScreen`** — grade de caracteres (`clear`, `write`, `drawBox`).
-- **`DungeonMap.gerar`** — masmorra procedural simples.
-- **`analisarLinha` / `GameCommand`** — parser MUD.
+## Classes Principais
+
+### Modelos de Dados
+
+| Classe | Responsabilidade |
+|--------|------------------|
+| `Jogador` | Representa o herói: HP, ouro, inventário, estatísticas |
+| `Inimigo` | Representa adversários com IA: HP, dano, estratégia |
+| `Item` | Classe base para objetos coletáveis (armas, poções) |
+| `Arma` | Item especial com dano e preço |
+| `Sala` | Localidade do mundo: descrição, saídas, inimigos |
+
+### Mundo e Exploração
+
+| Classe | Responsabilidade |
+|--------|------------------|
+| `MundoTexto` | Mapa de salas conectadas |
+| `MapaMasmorra` | Gerador procedural de masmorra infinita |
+| `DadosMundo` | Factory para criar o mundo demo |
+| `MundoTexto` | Acesso a salas pelo ID |
+
+### Jogo e Sessão
+
+| Classe | Responsabilidade |
+|--------|------------------|
+| `SessaoJogo` | Loop principal: menu, exploração, combate, save/load |
+| `TelaAscii` | Renderização do estado do jogo em terminal |
+| `Parseador` | Conversão de entrada do jogador em comandos |
+| `ComandoJogo` | Enum de ações possíveis |
+
+### IA e Combate
+
+| Classe | Responsabilidade |
+|--------|------------------|
+| `EstadoIA` | Máquina de estado (interface) |
+| `EstadoPatrulha`, `EstadoAlerta`, `EstadoPerseguicao`, `EstadoFuga` | Implementações concretas de comportamento |
+| `AcaoCombate` | Ação que um inimigo pode executar em combate |
+| `executarCombate()` | Simula um combate turno a turno |
+
+### Persistência
+
+| Classe/Função | Responsabilidade |
+|--------|------------------|
+| `guardarJogo()` | Serializa Jogador e metadata para JSON |
+| `carregarJogo()` | Desserializa Jogador de arquivo JSON |
+| `DadosSalve` | Container para dados carregados |
+
+## Padrões de Design Utilizados
+
+### 1. Strategy
+Cada `Inimigo` tem uma `EstrategiaIA` que pode ser trocada em tempo de execução. Permite desacoplar comportamento da classe.
+
+```dart
+var lobo = Inimigo(
+  nome: “Lobo”,
+  estrategia: IAAgressiva(),
+);
+if (lobo.hp < lobo.hpMax * 30 / 100) {
+  lobo.estrategia = IACovardia();
+}
+```
+
+### 2. Command
+Cada ação é um objeto (`AcaoCombate`) que pode ser executado e desfeito. Permite replay e undo.
+
+### 3. Factory
+`FabricaInimigo` centraliza a criação de inimigos. `DadosMundo` centraliza a criação do mundo.
+
+```dart
+var inimigo = FabricaInimigo.criarAleatorio(andar: 3);
+```
+
+### 4. Observer
+`BarramentoEventos` permite que múltiplos observadores reajam a eventos sem conhecer uns aos outros.
+
+### 5. State
+Inimigos usam máquinas de estado (`EstadoIA`) com transições explícitas entre Patrulha, Alerta, Perseguição e Fuga.
+
+## Conceitos Dart Utilizados
+
+- **Variáveis e tipos**: null safety, const, late
+- **Operadores e expressões**: aritméticos, lógicos, spread
+- **Coleções**: List, Map, Set
+- **Controle de fluxo**: if/else, switch, while, for
+- **Funções e closures**: higher-order functions, callbacks
+- **Classes e OOP**: construtores, getters/setters, herança
+- **Mixins**: composição de comportamento
+- **Enums e sealed classes**: tipagem de estados
+- **Generics**: tipos parametrizados
+- **Async/Await**: operações assíncronas
+- **Exceções**: try/catch/finally
+- **JSON**: serialização com dart:convert
+- **Testes**: test package com expect, grupo de testes
+
+## Aprendizado Progressivo
+
+Este projeto foi desenvolvido através de 37 capítulos:
+
+- **Capítulos 1-5**: Fundamentos Dart
+- **Capítulos 6-10**: Controle de fluxo
+- **Capítulos 11-14**: Orientação a Objetos
+- **Capítulos 15-21**: 2D, ASCII, exploração
+- **Capítulos 22-27**: Economia, progressão, jogo completo
+- **Capítulos 28-33**: Refatoração, testes, save/load
+- **Capítulos 34-36**: Padrões de design
+- **Capítulo 37**: Síntese e polimento
+
+## Próximos Passos
+
+### Flutter
+Adapt o roguelike para mobile/desktop com Flutter, usando a mesma lógica de jogo.
+
+### Networking
+Publique um backend com Shelf ou Serverpod para multiplayer.
+
+### Publicação
+Publique o código como package em pub.dev:
+```bash
+dart pub publish
+```
+
+## Recursos
+
+- [Documentação oficial Dart](https://dart.dev/guides)
+- [Flutter](https://flutter.dev)
+- [Pub.dev (packages)](https://pub.dev)
+- Livro: “Design Patterns: Elements of Reusable Object-Oriented Software” (Gang of Four)
+- Livro: “Game Programming Patterns” (online gratuito)
+
+---
+
+**Desenvolvido com ❤️ em Dart. Você não é mais iniciante.**

@@ -12,7 +12,7 @@
 Neste capítulo você vai deixar para trás o modelo de salas separadas (texto puro, grafo de conexões) e abraçar o paradigma roguelike clássico: um mapa 2D baseado em **tiles** (quadrados numa grade).
 
 Especificamente:
-- Entender por que roguelikes usam grades: colisão em tempo real, movimento gradual, visão de distância
+- Entender por que *roguelikes* usam grades: colisão em tempo real, movimento gradual, visão de distância
 - Criar uma estrutura de dados 2D eficiente em Dart: `List<List<Tile>>` com **collection for** e **collection if**
 - Usar **typedef** para melhorar legibilidade: `typedef Grade = List<List<Tile>>`
 - Definir um enum `Tile` com tipos: `parede`, `chao`, `porta`, `escadaDesce`
@@ -22,23 +22,23 @@ Especificamente:
 - Aplicar boundary checks para não sair da tela
 - Mostrar um exemplo completo funcionando: masmorra 10x10, jogador move-se com feedback
 
-Ao final, você terá o alicerce de toda exploração roguelike. Sem um grid não há mapa. Sem mapa não há jogo.
+Ao final, você terá o alicerce de toda exploração *roguelike*. Sem um grid não há mapa. Sem mapa não há jogo.
 
 
 ## Parte 1: Do Grafo ao Grid — Mudança Conceitual
 
 ### Por Que Sair das Salas?
 
-Nos capítulos anteriores você tinha um grafo de salas: cada sala era um nó, conexões eram arestas. Isso funciona para aventuras em prosa, mas roguelikes precisam de geometria real.
+Nos capítulos anteriores você tinha um grafo de salas: cada sala era um nó, conexões eram arestas. Isso funciona para aventuras em prosa, mas *roguelikes* precisam de geometria real.
 
 Considere:
-- Visibilidade (FOV): um inimigo pode ver o jogador? Precisa distância e linha de visão
+- Visibilidade (*FOV*): um inimigo pode ver o jogador? Precisa distância e linha de visão
 - Movimento: um jogador não pula de sala a sala. Caminha tile por tile
 - Pathfinding: como um inimigo caminha até o jogador? Precisa de coordenadas (x, y)
 - Colisões: paredes não são abstratas. Ocupam posições específicas
 - Geração procedural: criar uma masmorra aleatória é mais fácil em grade (pense em algoritmos como random walk)
 
-Uma grade 2D é a linguagem natural de roguelikes.
+Uma grade 2D é a linguagem natural de *roguelikes*.
 
 ### Conceitos Fundamentais
 
@@ -93,14 +93,16 @@ String tileParaChar(Tile tile) {
 }
 
 bool ehPassavelTile(Tile tile) {
-  return tile == Tile.chao || tile == Tile.porta || tile == Tile.escadaDesce;
+  return tile == Tile.chao ||
+      tile == Tile.porta ||
+      tile == Tile.escadaDesce;
 }
 ```
 
 Agora, typedef para clareza:
 
 ```dart
-// dungeon.dart
+// mapa_masmorra.dart
 
 typedef Grade = List<List<Tile>>;
 typedef Posicao = ({int x, int y});
@@ -119,7 +121,7 @@ Posicao jogador = (x: 5, y: 5);  // Mais semântico que Point(5, 5)
 A classe `MapaMasmorra` encapsula a lógica do mapa:
 
 ```dart
-// dungeon.dart
+// mapa_masmorra.dart
 
 class MapaMasmorra {
   final int largura;
@@ -284,7 +286,7 @@ class Jogador {
 Modificar `MapaMasmorra` para desenhar o jogador:
 
 ```dart
-// dungeon.dart (adição)
+// mapa_masmorra.dart (adição)
 
 class MapaMasmorra {
   // ... código anterior ...
@@ -306,7 +308,8 @@ class MapaMasmorra {
     }
 
     print('Posição: (${jogador.x}, ${jogador.y})');
-    print('HP: ${jogador.hpAtual}/${jogador.hpMax} | Ouro: ${jogador.ouro}');
+    print('HP: ${jogador.hpAtual}/${jogador.hpMax} | '
+        'Ouro: ${jogador.ouro}');
     print('Comandos: W/A/S/D para mover, Q para sair');
     print('');
   }
@@ -424,7 +427,8 @@ class MapaMasmorra {
   }
 
   Tile tileEm(int x, int y) {
-    if (x < 0 || x >= largura || y < 0 || y >= altura) return Tile.parede;
+    if (x < 0 || x >= largura || y < 0 || y >= altura)
+      return Tile.parede;
     return _tiles[y][x];
   }
 
@@ -451,7 +455,9 @@ class MapaMasmorra {
       stdout.write('\n');
     }
 
-    print('Posição: (${jogador.x}, ${jogador.y}) | HP: ${jogador.hpAtual}/${jogador.hpMax}');
+    final pos = '(${jogador.x}, ${jogador.y})';
+    final hp = '${jogador.hpAtual}/${jogador.hpMax}';
+    print('Posição: $pos | HP: $hp');
     print('[W]cima [A]esq [S]baixo [D]dir [Q]uit');
     print('');
   }
@@ -547,14 +553,14 @@ dart main.dart
 
 **Desafio 15.4. Múltiplos andares (Profundidade).** Implemente andares: quando o jogador pisa em `escadaDesce`, um novo `MapaMasmorra` é gerado. Use `List<MapaMasmorra> andares` para rastreá-los. Mostre "Andar 3 de 10" na HUD. Cada andar mais profundo deveria ter mais inimigos (aumentar dificuldade). Use uma seed ligeiramente diferente para cada andar.
 
-**Boss Final 15.5. Campo de Visão com tocha (FOV simplificado).** Implemente campo de visão: cada tile tem um bool `visivel`. Inicialmente, renderize apenas tiles dentro de um raio 3 do jogador (distância Manhattan). Conforme caminha, novos tiles são marcados como explorados. Tiles não visíveis aparecem como `░` (sombra). Isso simula uma tocha iluminando a escuridão. Ao pisar em novo tile, atualiza a visibilidade dinamicamente.
+**Boss Final 15.5. Campo de Visão com tocha (*FOV* simplificado).** Implemente campo de visão: cada tile tem um bool `visivel`. Inicialmente, renderize apenas tiles dentro de um raio 3 do jogador (distância Manhattan). Conforme caminha, novos tiles são marcados como explorados. Tiles não visíveis aparecem como `░` (sombra). Isso simula uma tocha iluminando a escuridão. Ao pisar em novo tile, atualiza a visibilidade dinamicamente.
 
 
 ## Pergaminho do Capítulo
 
 Neste capítulo você aprendeu:
 
-- Grade 2D é a base de roguelikes: pensamento em coordenadas (x, y)
+- Grade 2D é a base de *roguelikes*: pensamento em coordenadas (x, y)
 - Enums para tiles: `parede`, `chao`, `porta`, `escadaDesce`. Semântica clara
 - Typedef para legibilidade: `typedef Grade = List<List<Tile>>`
 - Classe MapaMasmorra: encapsula mapa, oferece `tileEm()`, `ehPassavel()`, renderização
@@ -565,7 +571,7 @@ Neste capítulo você aprendeu:
 
 Seu jogo agora tem um mapa explorador real. Já não é prosa, é geometria.
 
-No próximo capítulo (16), você aprenderá a separar modelo e visão com a classe TelaAscii, tornando a renderização muito mais poderosa e flexível para adicionar inimigos, itens e UIs complexas.
+No próximo capítulo (16), você aprenderá a separar modelo e visão com a classe `TelaAscii`, tornando a renderização muito mais poderosa e flexível para adicionar inimigos, itens e UIs complexas.
 
 
 ::: dica

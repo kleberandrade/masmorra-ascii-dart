@@ -2,7 +2,7 @@
 
 A tela pisca. Preta. Está escura há séculos, ou talvez desde esta manhã, quando o computador foi desligado pela última vez. O tempo não passa no monitor quando ninguém está olhando. Você se senta. A cadeira range sob o seu peso. Os dedos encontram as letras familiares do teclado, aquelas teclas que seus músculos já decoraram há anos de prática, e você digita como tantas vezes antes, o comando que torna tudo real, que desperta o silício do repouso:
 
-```
+```bash
 dart run
 ```
 

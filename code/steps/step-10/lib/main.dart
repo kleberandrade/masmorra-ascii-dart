@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:masmorra_ascii/jogador.dart';
 import 'package:masmorra_ascii/sala.dart';
-import 'package:masmorra_ascii/mundo_texto.dart';
+import 'package:masmorra_ascii/mundo_dados.dart';
 
 void exibirBanner() {
   // ignore: avoid_print

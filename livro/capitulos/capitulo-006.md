@@ -76,7 +76,11 @@ O operador `~/` é a divisão inteira, retorna um `int` em vez de `double`. Por 
 Agora que dominamos `StringBuffer`, vamos criar uma função mais sofisticada: uma moldura que se ajusta dinamicamente ao conteúdo. Esse é um excelente exercício de manipulação de strings. Calcular tamanhos programaticamente, preencher espaços e construir strings complexas são habilidades fundamentais para qualquer desenvolvedor de jogos de texto.
 
 ```dart
-String moldura(String titulo, List<String> linhas, {int minLargura = 30}) {
+String moldura(
+  String titulo,
+  List<String> linhas, {
+  int minLargura = 30,
+}) {
   var maxTexto = titulo.length;
   for (var linha in linhas) {
     if (linha.length > maxTexto) maxTexto = linha.length;
@@ -136,7 +140,7 @@ Resultado:
 ╚══════════════════════════════╝
 ```
 
-A função `moldura()` é um ótimo exercício de manipulação de strings. No nosso jogo, porém, vamos usar saídas mais simples no terminal para manter o código limpo e focado na lógica do roguelike.
+A função `moldura()` é um ótimo exercício de manipulação de strings. No nosso jogo, porém, vamos usar saídas mais simples no terminal para manter o código limpo e focado na lógica do *roguelike*.
 
 ## Barras de HP e XP
 
@@ -247,7 +251,13 @@ Resultado:
 Agora vamos integrar tudo: molduras, barras e alinhamento. Um bom **HUD** (Head-Up Display) comunica a saúde do jogador, recursos disponíveis e equipamento atual, tudo num pequeno espaço. Vamos montar um HUD que combina as técnicas de moldura, preenchimento e barra para criar uma tela profissional.
 
 ```dart
-String montarHUD(String nome, int hp, int maxHp, int ouro, String? arma) {
+String montarHUD(
+  String nome,
+  int hp,
+  int maxHp,
+  int ouro,
+  String? arma,
+) {
   var buffer = StringBuffer();
   var largura = 38;
 
@@ -325,8 +335,8 @@ Parte II começa a essa jornada. Suas salas soltas em `mundoSalas` viram objetos
 
 Neste capítulo você aprendeu a usar `StringBuffer` para montar texto complexo de forma eficiente, os métodos `padLeft`, `padRight` e `*` para alinhamento e repetição, a construir molduras dinâmicas que se ajustam ao conteúdo, barras de HP visuais com caracteres de bloco, tabelas ASCII com colunas alinhadas, e a divisão inteira `~/` para cálculos de posicionamento.
 
-Essas são as ferramentas visuais que vamos usar pelo resto do livro. Toda interface do jogo será construída com essas mesmas técnicas. No Capítulo 7, vamos unificar tudo num game loop completo e bem organizado.
+Essas são as ferramentas visuais que vamos usar pelo resto do livro. Toda interface do jogo será construída com essas mesmas técnicas. No Capítulo 7, vamos unificar tudo num *game loop* completo e bem organizado.
 
 ::: dica
-**Dica do Mestre:** Ao desenhar interfaces ASCII, escolha uma largura padrão (como 40 ou 50 caracteres) e mantenha-a consistente em todas as telas. Nada quebra mais a imersão do que molduras de tamanhos diferentes aparecendo em sequência. Defina uma constante global `const larguraTela = 40;` e use-a em todas as funções de desenho.
+**Dica do Mestre:** Ao desenhar interfaces ASCII, escolha uma largura padrão (como 40 ou 50 caracteres) e mantenha-a consistente em todas as telas. Nada quebra mais a imersão visual que molduras desalinhadas em sequência. Defina uma constante global `const larguraTela = 40;` e use-a em todas as funções de desenho.
 :::

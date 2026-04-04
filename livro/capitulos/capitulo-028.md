@@ -21,6 +21,7 @@ Um método com 150 linhas. Imagine refatorar um Pokémon: o poder muda, mas a es
 Observe como um método que deveria orquestrar o jogo termina fazendo renderização, processamento de entrada, cálculo de movimento e combate tudo junto. Cada uma dessas responsabilidades deveria ser um método separado. Quando você precisa testar "o inimigo se move corretamente", não consegue testar isoladamente pois o método está acoplado ao resto do código.
 
 ```dart
+// lib/jogo/dungeonCrawl.dart
 // Ruim: executar() faz tudo simultaneamente
 void executar() {
   while (true) {
@@ -53,6 +54,7 @@ Uma classe que faz tudo. Renderiza, processa entrada, executa combate, gera mund
 O código abaixo é aquilo que você quer evitar no seu projeto. Veja como `DungeonCrawl` acumula responsabilidades: uma mudança na renderização quebra a lógica de combate e vice-versa. Não consegue reutilizar a renderização em outro lugar, ou a lógica de combate em um editor de mapa. Cada responsabilidade "compete" com as outras pelo espaço e atenção.
 
 ```dart
+// lib/jogo/dungeonCrawl.dart
 // Ruim: uma classe com 50 métodos desconexos
 class DungeonCrawl {
   // Renderização
@@ -84,6 +86,7 @@ Você tira um método para refatorar, e três outros quebram. Você muda o rende
 Números espalhados pelo código são armadilhas clássicas. Você vê um `17` aqui, um `80` ali, um `5` em outro lugar. Ninguém consegue entender por quê. Foi sorte? Fórmula? Um erro antigo que ninguém tocou? O pior é quando o contexto muda (você aumenta o HP máximo do jogador para 100) e você esquece de atualizar um desses números mágicos em algum lugar; o jogo fica quebrado de forma sutil.
 
 ```dart
+// lib/config/constantes.dart (exemplo)
 // Ruim: o que significam estes números?
 if (jogador.hp < 17) print('crítico!');
 if (mapa.largura > 80) { }
@@ -139,6 +142,7 @@ O método `executar()` é o pior culpado. Vamos extrair responsabilidades em mé
 ### Antes (Ruim)
 
 ```dart
+// lib/jogo/dungeonCrawl.dart
 class DungeonCrawl {
   void executar() {
     while (true) {
@@ -168,6 +172,7 @@ Não consegue testar `_moverJogador()` separadamente. A lógica está espalhada.
 ### Depois (Bom)
 
 ```dart
+// lib/jogo/dungeonCrawl.dart
 class DungeonCrawl {
   void executar() {
     while (true) {
@@ -249,7 +254,7 @@ Exemplo:
 ```dart
 // lib/ui/renderizador.dart
 class Renderizador {
-  void mostrarMapa(Jogador j, MapaMasmorra m) { }
+  void mostrarMapa(Jogador j, MapaMasmorra m) {
   void mostrarStatus(Jogador j) { }
 }
 
@@ -287,6 +292,7 @@ for (int i = 0; i < 5; i++) tentarGerarMapa();
 Crie `lib/config/constantes.dart`:
 
 ```dart
+// lib/config/constantes.dart
 class Constantes {
   // Saúde
   static const int hpMinimoCritico = 17;
@@ -350,7 +356,8 @@ Se `Jogador` faz:
 Ela tem 4 razões para mudar. Separar:
 
 ```dart
-// lib/modelos/jogador.dart — apenas dados
+// lib/modelos/jogador.dart
+// Apenas dados
 class Jogador {
   int hp;
   int ataque;
@@ -358,17 +365,20 @@ class Jogador {
   List<Item> inventario;
 }
 
-// lib/ui/renderizadorJogador.dart — renderização
+// lib/ui/renderizadorJogador.dart
+// Renderização
 class RenderizadorJogador {
   void mostrarStatus(Jogador j) { }
 }
 
-// lib/combate/calculadorDano.dart — combate
+// lib/combate/calculadorDano.dart
+// Combate
 class CalculadorDano {
   int calcular(Jogador j, Inimigo i) { }
 }
 
-// lib/persistencia/salvadorJogador.dart — save/load
+// lib/persistencia/salvadorJogador.dart
+// Save/load
 class SalvadorJogador {
   void salvar(Jogador j, String caminho) { }
   Jogador carregar(String caminho) { }
@@ -444,7 +454,8 @@ Dentro de `lib/` use imports relativos. Em `test/` use `package:` imports (conve
 ### Antes: Monolítico
 
 ```dart
-// lib/dungeonCrawl.dart — 200 linhas, faz tudo
+// lib/jogo/dungeonCrawl.dart
+// 200 linhas, faz tudo
 class DungeonCrawl {
   late Jogador jogador;
   late MapaMasmorra mapa;
@@ -494,7 +505,8 @@ class DungeonCrawl {
 ### Depois: Refatorado
 
 ```dart
-// lib/jogo/dungeonCrawl.dart — 40 linhas, orquestra
+// lib/jogo/dungeonCrawl.dart
+// 40 linhas, orquestra
 class DungeonCrawl {
   late Jogador jogador;
   late MapaMasmorra mapa;
@@ -558,6 +570,12 @@ class Renderizador {
 }
 ```
 
+> **Dica:** O método `firstWhereOrNull()` faz parte do `package:collection`. Adicione-o ao `pubspec.yaml`:
+> ```yaml
+> dependencies:
+>   collection: ^1.18.0
+> ```
+
 Diferença clara:
 - DungeonCrawl antes: 200 linhas, 1 arquivo, impossível testar
 - DungeonCrawl depois: 40 + 30 linhas, 2 arquivos, cada um testável
@@ -596,11 +614,15 @@ to parameter type 'Offset' at ...
 
 **Boss Final 28.5. Quebra da Deus Classe.** Sua classe `Jogador` provavelmente faz 5 coisas: gerencia stats, renderiza, faz combate, salva, carrega. Viola SRP. Quebre em: (1) `JogadorModel` (HP, ataque, nível), (2) `RenderizadorJogador` (desenha barra HP), (3) `LogicaCombateJogador` (calcula dano). Mova métodos apropriados. Atualize `main` para usar 3 classes em lugar de uma. Teste tudo. Código mais limpo = bugs mais fáceis de caçar. Dica: faça um refactor por vez para não enlouquecer.
 
+## Próximo Capítulo
+
+No Capítulo 29, protegeremos o código refatorado com testes unitários. Cada classe limpa e focada é agora testável — vamos criar uma suite que garante que nada quebra quando você muda algo.
+
 ***
 
 ## Pergaminho do Capítulo
 
-Você aprendeu a reconhecer code smells: métodos gigantescos, deus classes, números mágicos, código duplicado, nomes ruins. Aprendeu a limpar:
+Você aprendeu a reconhecer *code smells*: métodos gigantescos, deus classes, números mágicos, código duplicado, nomes ruins. Aprendeu a limpar:
 
 - Extract Method quebra métodos longos
 - Extract Class separa responsabilidades
@@ -611,7 +633,7 @@ Você aprendeu a reconhecer code smells: métodos gigantescos, deus classes, nú
 
 Refatoração é investimento no futuro. Código limpo é código que você lê em cinco minutos. Código sujo vira um calabouço real: cada mudança quebra algo, cada teste falha, cada novo recurso demora o dobro.
 
-Um roguelike com 30 funcionalidades e código sujo é impossível de manter. Um com 5 funcionalidades e código limpo é uma base sólida para crescer.
+Um *roguelike* com 30 funcionalidades e código sujo é impossível de manter. Um com 5 funcionalidades e código limpo é uma base sólida para crescer.
 
 ## Dica Profissional
 

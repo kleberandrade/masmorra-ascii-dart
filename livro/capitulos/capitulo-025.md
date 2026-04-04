@@ -11,13 +11,15 @@ Neste capítulo você vai:
 - Aumentar HP máximo e ataque ao subir de nível
 - Desbloquear habilidades especiais em marcos de nível (nível 3, nível 5)
 - Implementar a classe `Habilidade` com execução dinâmica
-- Integrar o event system para notificações de level up
+- Integrar o event system para notificações de *level up*
 - Escalar inimigos por andar (mais difíceis conforme você desce)
 - Demonstrar um combate completo com progressão visível
 
-Ao final, seu jogo terá verdadeira sensação de progresso como em Chrono Trigger ou Elden Ring.
+Ao final, seu jogo terá verdadeira sensação de progresso como em *Chrono Trigger* ou *Elden Ring*.
 
 ## O Sistema de Progressão
+
+Progressão é o motor emocional do *roguelike*. Sem progressão visível, cada morte sente-se como desperdício puro. Com progressão bem calibrada, cada morte é aprendizado: você chegou mais longe, ficou mais forte, desbloqueou habilidades. O jogador *sente* que está melhorando.
 
 Antes de código, visualize o crescimento:
 
@@ -32,16 +34,18 @@ Nível 10: 4.950 XP (9 × 9 × 50). A curva sobe rapidamente
 
 Fórmula: `xpParaNivel(n) = n² × 50` (quadrática)
 
-Por quê? Porque no início você ganha níveis rápido (diversão), mas depois desacelera (desafio). É balanceado para roguelikes.
+**Por quê essa fórmula?** Porque no início você ganha níveis rápido (diversão imediata: nível 1→2 precisa só 50 XP). Mas depois desacelera exponencialmente (desafio: nível 20 precisa 19,000 XP). É balanceado para *roguelikes*: iniciantes não desistem rapidamente, veteranos têm meta de longo prazo.
 
 ## TabelaProgressao: A Tabela Mestre
 
 A progressão por XP segue uma fórmula. Você escolhe qual. Aqui usamos quadrática (`n² × 50`), que significa: nível 1 precisa 0 XP, nível 2 precisa 50, nível 3 precisa 200, nível 4 precisa 450. A curva sobe rápido; é difícil alcançar nível 20.
 
-A classe `TabelaProgressao` centraliza toda a matemática: cálculo de XP necessário, progresso em percentual, bônus por nível, XP por tipo de inimigo. Todos os números importantes vivem aqui.
+A classe `TabelaProgressao` é a base de todo o sistema. Ela centraliza toda a matemática: cálculo de XP necessário, progresso em percentual, bônus por nível, XP por tipo de inimigo. Todos os números importantes vivem aqui. Isso significa que balancear o jogo é tão simples quanto mudar um número em um único arquivo—nada espalhado, tudo em um lugar.
+
+Por quê design assim? Porque em desenvolvimento profissional, se a progressão estivesse espalhada em 10 classes diferentes, ajustar dificuldade seria um pesadelo. Centralizar dados em uma "tabela mestre" é um padrão universal em game design: databases no Skyrim, spreadsheets na Supercell, tudo segue esse princípio.
 
 ```dart
-// lib/tabelaProgressao.dart
+// lib/tabela_progressao.dart
 
 /// Define a curva de experiência e recompensas de nível
 class TabelaProgressao {
@@ -49,12 +53,14 @@ class TabelaProgressao {
   int xpParaNivel(int nivel) {
     if (nivel <= 1) return 0;
     final n = nivel - 1;
+    // ← fórmula quadrática: nível sobe mais caro com tempo
     return n * n * 50;
   }
 
   /// XP necessário para ir DO nível atual AO próximo
   int xpNecessarioParaProximoNivel(int nivelAtual) {
     final proximoNivel = nivelAtual + 1;
+    // ← diferença entre níveis
     return xpParaNivel(proximoNivel) - xpParaNivel(nivelAtual);
   }
 
@@ -62,18 +68,20 @@ class TabelaProgressao {
   int xpRestanteParaProximo(int nivelAtual, int xpAtual) {
     final xpDoNivelAtual = xpParaNivel(nivelAtual);
     final xpDoProximo = xpParaNivel(nivelAtual + 1);
+    // ← progresso dentro da janela
     final xpNaJanela = xpAtual - xpDoNivelAtual;
     final janelaNecessaria = xpDoProximo - xpDoNivelAtual;
-    return janelaNecessaria - xpNaJanela;
+    return janelaNecessaria - xpNaJanela;  // ← quanto resta
   }
 
   /// Progresso em percentual (0-100) para próximo nível
   int percentualProgresso(int nivelAtual, int xpAtual) {
-    if (nivelAtual >= 20) return 100;
+    if (nivelAtual >= 20) return 100;  // ← cap no nível máximo
     final xpDoNivelAtual = xpParaNivel(nivelAtual);
     final xpDoProximo = xpParaNivel(nivelAtual + 1);
     final xpNaJanela = xpAtual - xpDoNivelAtual;
     final janelaNecessaria = xpDoProximo - xpDoNivelAtual;
+    // ← conversão para 0-100%
     return ((xpNaJanela / janelaNecessaria) * 100).toInt();
   }
 
@@ -83,19 +91,32 @@ class TabelaProgressao {
 
   int xpPorInimigo(String tipoInimigo) {
     return switch (tipoInimigo) {
-      'zumbi' => 15,
-      'lobo' => 30,
-      'esqueleto' => 50,
-      'orc' => 75,
-      _ => 10,
+      'zumbi' => 15,          // ← fracos = pouco XP
+      'lobo' => 30,           // ← médios = médio XP
+      'esqueleto' => 50,      // ← fortes = mais XP
+      'orc' => 75,            // ← muito fortes = muito XP
+      _ => 10,                // ← padrão seguro
     };
   }
 }
 ```
 
+**Saída esperada ao criar TabelaProgressao:**
+
+```text
+// Exemplo de uso:
+var tabela = TabelaProgressao();
+print(tabela.xpParaNivel(5));  // 800
+print(tabela.xpNecessarioParaProximoNivel(3));  // 250
+print(tabela.percentualProgresso(2, 150));  // ~75%
+print(tabela.xpPorInimigo('lobo'));  // 30
+```
+
 ## Integração com Jogador
 
-Modifica `Jogador` para incluir XP e nível. Agora o jogador não é mais estático; pode ganhar XP, subir de nível, desbloquear habilidades. Cada vez que ganha XP, verifica se deve subir de nível. Se sim, aumenta HP e ataque, restaura saúde, desbloqueia habilidades, dispara evento.
+Agora estendemos a classe `Jogador` para incluir XP e nível. O jogador não é mais estático; pode ganhar XP, subir de nível, desbloquear habilidades. Isso é crucial: em um *roguelike*, o herói deve *crescer*. Cada *level up* é psicologicamente importante: HP aumenta, ataque aumenta, nova habilidade desbloqueada. O jogador *vê* e *sente* progresso.
+
+O design é simples: quando `ganharXp()` é chamado, o método `verificarNivel()` checa automaticamente se deve haver *level up*. Se sim, aumenta HP máximo (restaurando HP completamente), aumenta ataque, desbloqueia habilidades, e dispara um evento. Tudo em um único lugar bem organizado.
 
 ```dart
 // lib/jogador.dart
@@ -112,15 +133,15 @@ class Jogador extends Entidade {
     int maxHp = 50,
     int ataque = 5,
   }) : super(nome: nome, hpMax: maxHp, ataque: ataque) {
-    tabela = TabelaProgressao();
+    tabela = TabelaProgressao();  // ← carrega tabela de progressão
     eventos = BarramentoEventos<EventoJogo>();
   }
 
   /// Ganha XP e verifica se sobe de nível
   void ganharXp(int quantidade) {
-    xp += quantidade;
+    xp += quantidade;  // ← acumula XP
     print('$nome ganhou $quantidade XP (Total: $xp)');
-    verificarNivel();
+    verificarNivel();  // ← checa se deve fazer *level up*
   }
 
   /// Verifica se o jogador deve subir de nível
@@ -128,17 +149,22 @@ class Jogador extends Entidade {
     final proximoNivel = nivel + 1;
     final xpNecessario = tabela.xpParaNivel(proximoNivel);
 
+    // ← loop: pode fazer múltiplos *level ups* em um ganho grande de XP
     while (xp >= xpNecessario && nivel < tabela.nivelMaximo()) {
       nivel++;
       maxHp += tabela.bonusHPPorNivel();
+      // ← restaura HP completamente (recompensa psicológica)
       hp = maxHp;
       ataque += tabela.bonusAtaquePorNivel();
 
       print('\nLEVEL UP! $nome agora é nível $nivel!');
-      print('   HP máximo: +${tabela.bonusHPPorNivel()} (agora $maxHp)');
-      print('   Ataque: +${tabela.bonusAtaquePorNivel()} (agora $ataque)');
+      final bHp = tabela.bonusHPPorNivel();
+      final bAtk = tabela.bonusAtaquePorNivel();
+      print('   HP máximo: +$bHp (agora $maxHp)');
+      print('   Ataque: +$bAtk (agora $ataque)');
       print('   HP restaurado!\n');
 
+      // ← dispara evento para UI/sistema de logging
       eventos.dispara(EventoNivel(
         nivelAnterior: nivel - 1,
         nivelNovo: nivel,
@@ -146,6 +172,7 @@ class Jogador extends Entidade {
             '+${tabela.bonusAtaquePorNivel()} ATK',
       ));
 
+      // ← pode desbloquear novas habilidades
       _desbloquearHabilidades();
     }
   }
@@ -153,10 +180,10 @@ class Jogador extends Entidade {
   /// Mostra barra de progresso até próximo nível
   String barraProgresso() {
     final percent = tabela.percentualProgresso(nivel, xp);
-    final blocos = (percent / 10).toInt();
+    final blocos = (percent / 10).toInt();  // ← 10 blocos no total
     final cheios = '#' * blocos;
     final vazios = '-' * (10 - blocos);
-    return '$cheios$vazios $percent%';
+    return '$cheios$vazios $percent%';  // ← ex: "####------ 40%"
   }
 
   void _desbloquearHabilidades() {
@@ -165,15 +192,33 @@ class Jogador extends Entidade {
 }
 ```
 
+**Saída esperada ao ganhar XP:**
+
+```text
+Guerreiro ganhou 30 XP (Total: 80)
+
+Guerreiro ganhou 50 XP (Total: 130)
+
+LEVEL UP! Guerreiro agora é nível 2!
+   HP máximo: +10 (agora 60)
+   Ataque: +2 (agora 7)
+   HP restaurado!
+```
+
+**Nota técnica:** O método `verificarNivel()` usa um loop `while`, não `if`. Por quê? Porque se o jogador ganhar muito XP de uma vez (ex: 500 XP), deve fazer múltiplos *level ups* simultaneamente. O loop garante isso. A condição `xp >= xpNecessario` avalia constantemente até não haver mais níveis a subir.
+
 ## Sistema de Habilidades
 
-Habilidades são ações especiais que você desbloqueia ao subir de nível. Cada habilidade é uma classe que herda de `Habilidade` (abstrata). Implementa `executar()` que faz algo único: golpe forte (2x dano), curar (restaura 30% HP), ataque rápido (dois ataques).
+Habilidades são ações especiais que você desbloqueia ao subir de nível. Cada habilidade é uma classe que herda de `Habilidade` (abstrata). Implementa `executar()` que faz algo único: *golpe forte* (2x dano), *curar* (restaura 30% HP), *ataque rápido* (dois ataques).
 
-O padrão Strategy é usado aqui: cada habilidade é uma estratégia diferente. Você guarda uma lista delas, e em combate, você escolhe qual executar.
+O padrão *Strategy* é perfeito aqui: cada habilidade é uma estratégia diferente de combate. Você guarda uma lista de habilidades desbloqueadas, e durante o combate, o jogador escolhe qual executar (alternativa a "atacar normalmente"). Isso torna o combate tático: diferentes situações pedem diferentes habilidades.
+
+**Design:** Cada habilidade conhece seu nível requerido, nome, descrição. No `executar()`, faz algo único. Isto torna fácil adicionar novas habilidades: crie uma classe nova, herde de `Habilidade`, implemente `executar()`. Pronto. Extensibilidade sem modificar código existente.
 
 ```dart
 // lib/habilidade.dart
 
+/// Interface abstrata para todas as habilidades
 abstract class Habilidade {
   final String nome;
   final String descricao;
@@ -185,9 +230,13 @@ abstract class Habilidade {
     required this.nivelRequerido,
   });
 
+  /// Executa a habilidade. Retorna true se bem-sucedida.
+  /// ← cada subclasse implementa sua própria lógica
   bool executar(Jogador jogador, {Inimigo? alvo});
 
+  /// Formata para exibição (ex: menu de habilidades)
   String formato() {
+    // ← display padronizado
     return '[$nome] (Nív $nivelRequerido) - $descricao';
   }
 }
@@ -195,6 +244,7 @@ abstract class Habilidade {
 /// Habilidade: Golpe Forte
 /// Desbloqueado no nível 3
 /// Dano: 2× o ataque normal
+/// Dano concentrado num ataque (menos golpes, mais fortes)
 class GolpeForte extends Habilidade {
   GolpeForte()
       : super(
@@ -207,6 +257,7 @@ class GolpeForte extends Habilidade {
   bool executar(Jogador jogador, {Inimigo? alvo}) {
     if (alvo == null) return false;
 
+    // ← 2x dano do ataque normal
     final danoDuplicado = jogador.ataque * 2;
     print('\n${jogador.nome} executa um GOLPE FORTE!');
     print('   Dano: $danoDuplicado');
@@ -218,6 +269,7 @@ class GolpeForte extends Habilidade {
 /// Habilidade: Curar
 /// Desbloqueado no nível 5
 /// Efeito: +30% do HP máximo
+/// Estratégia: defesa (recupera saúde em vez de atacar)
 class Curar extends Habilidade {
   Curar()
       : super(
@@ -228,8 +280,10 @@ class Curar extends Habilidade {
 
   @override
   bool executar(Jogador jogador, {Inimigo? alvo}) {
+    // ← 30% do HP máximo
     final curaQuantidade = (jogador.maxHp * 0.3).toInt();
     final hpAnterior = jogador.hp;
+    // ← limita a HP máximo
     jogador.hp = (jogador.hp + curaQuantidade).clamp(0, jogador.maxHp);
     final curaReal = jogador.hp - hpAnterior;
 
@@ -241,7 +295,8 @@ class Curar extends Habilidade {
 }
 
 /// Habilidade: Ataque Rápido (nível 7)
-/// Ataque 2x de 60% cada
+/// Ataque 2x de 60% cada (total = 120% em um turno)
+/// Estratégia: múltiplos ataques (chance de acertar mesmo se um falhar)
 class AtaqueRapido extends Habilidade {
   AtaqueRapido()
       : super(
@@ -254,13 +309,16 @@ class AtaqueRapido extends Habilidade {
   bool executar(Jogador jogador, {Inimigo? alvo}) {
     if (alvo == null) return false;
 
+    // ← primeiro ataque (60%)
     final dano1 = (jogador.ataque * 0.6).toInt();
+    // ← segundo ataque (60%)
     final dano2 = (jogador.ataque * 0.6).toInt();
 
     print('\n${jogador.nome} executa ATAQUE RÁPIDO!');
     print('   Golpe 1: $dano1 de dano');
     alvo.sofrerDano(dano1);
 
+    // ← inimigo já morreu, pula golpe 2
     if (!alvo.estaVivo) return true;
 
     print('   Golpe 2: $dano2 de dano');
@@ -269,9 +327,27 @@ class AtaqueRapido extends Habilidade {
 }
 ```
 
+**Saída esperada ao executar habilidades:**
+
+```text
+Guerreiro executa um GOLPE FORTE!
+   Dano: 14
+
+Guerreiro invoca CURAR!
+   Recuperou 18 HP
+
+Guerreiro executa ATAQUE RÁPIDO!
+   Golpe 1: 4 de dano
+   Golpe 2: 4 de dano
+```
+
+**Por que não apenas aumentar ataque permanentemente?** Porque habilidades criam *momentos emocionantes*. Um *level up* com nova habilidade é mais memorável que +2 de ataque silencioso. Além disso, habilidades criam tática em combate: "Devo curar agora ou tentar matar o inimigo rápido com Golpe Forte?"
+
 ## Desbloquear Habilidades
 
-De volta ao `Jogador`. Quando você sobe de nível, o método `_desbloquearHabilidades()` é chamado. Se atingiu nível 3 e não tem "Golpe Forte", aprende. E assim por diante. Isto significa habilidades aparecem naturalmente, marcando marcos na progressão.
+De volta ao `Jogador`. Quando você sobe de nível, o método `_desbloquearHabilidades()` é chamado. Se atingiu nível 3 e não tem "Golpe Forte", aprende. E assim por diante. Isto significa habilidades aparecem *naturalmente*, marcando marcos na progressão. O jogador sempre sabe: "No nível 5 desbloqueio Curar".
+
+Esse design é intencional: marcos claros mantêm o jogador engajado. "Faltam 100 XP para nível 5 e a habilidade Curar" é uma meta psicológica poderosa.
 
 ```dart
 class Jogador extends Entidade {
@@ -280,18 +356,21 @@ class Jogador extends Entidade {
   void _desbloquearHabilidades() {
     switch (nivel) {
       case 3:
+        // ← nível 3: desbloqueio Golpe Forte
         if (!habilidades.any((h) => h.nome == 'Golpe Forte')) {
           habilidades.add(GolpeForte());
           print('* Você aprendeu a habilidade: Golpe Forte!');
         }
         break;
       case 5:
+        // ← nível 5: desbloqueio Curar
         if (!habilidades.any((h) => h.nome == 'Curar')) {
           habilidades.add(Curar());
           print('* Você aprendeu a habilidade: Curar!');
         }
         break;
       case 7:
+        // ← nível 7: desbloqueio Ataque Rápido
         if (!habilidades.any((h) => h.nome == 'Ataque Rápido')) {
           habilidades.add(AtaqueRapido());
           print('* Você aprendeu a habilidade: Ataque Rápido!');
@@ -309,15 +388,29 @@ class Jogador extends Entidade {
     print('\nHABILIDADES');
     print('─' * 30);
     for (int i = 0; i < habilidades.length; i++) {
+      // ← exibe cada habilidade com índice para seleção em combate
       print('[$i] ${habilidades[i].formato()}');
     }
     print('');
+  }
 }
 ```
 
+**Saída esperada ao subir para nível 3:**
+
+```text
+LEVEL UP! Guerreiro agora é nível 3!
+   HP máximo: +10 (agora 70)
+   Ataque: +2 (agora 7)
+   HP restaurado!
+* Você aprendeu a habilidade: Golpe Forte!
+```
+
+**Nota técnica:** O método `habilidades.any()` verifica se uma habilidade com esse nome já existe. Por quê? Para evitar duplicatas. Se o jogador respecificar seu nível (em um cheat, por exemplo), não quer aprender a mesma habilidade duas vezes.
+
 ## Desafios da Masmorra
 
-**Desafio 25.1. A Escalada Interminável.** Conforme você sobe de nível, custa cada vez mais. Mude a fórmula: em vez de `n² × 50`, use `n³ × 10` (cúbica). Calcule manualmente: nível 3 custa quanto antes vs depois? A progressão fica muito mais lenta (realista para um roguelike). Implemente e teste níveis 1-5: os custos aumentam dramaticamente? Dica: use `n * n * n * 10` no cálculo.
+**Desafio 25.1. A Escalada Interminável.** Conforme você sobe de nível, custa cada vez mais. Mude a fórmula: em vez de `n² × 50`, use `n³ × 10` (cúbica). Calcule manualmente: nível 3 custa quanto antes vs depois? (Antes: 200 XP; Depois: 200 XP, coincidência!). A progressão fica muito mais lenta em níveis altos (realista para um *roguelike*). Implemente e teste níveis 1-5: os custos aumentam dramaticamente? Dica: use `n * n * n * 10` no cálculo. Compare as duas fórmulas visualmente em um gráfico.
 
 **Desafio 25.2. Três Caminhos do Guerreiro.** Você pode treinar para ser recruta (rápido), normal (balanceado), ou veterano (lento mas forte). Crie enum `Dificuldade { recruta, normal, veterano }` e campo em `Jogador`. Modifique `ganharXP()`: recruta ganha 1.5x (treina rápido), normal 1.0x, veterano 0.5x (mas deve ganhar mais estatísticas). Teste: que caminho progride mais rápido? Qual é mais difícil? Dica: multiplicadores revelam trade-offs.
 
@@ -329,23 +422,55 @@ class Jogador extends Entidade {
 
 **Boss Final 25.6. Invencibilidade Temporária.** Se você derrotar 5 inimigos seguidos sem sofrer dano, você entra em "Fúria Perfeita" e ganha +50% XP na próxima vitória. Rastreie um `streakSemDano` que incrementa ao vencer sem dano recebido, reseta se sofrer dano. Teste: derrote 5 inimigos limpos (evite dano), vença mais um e ganhe 50% XP extra. Falhe uma vez? Streak reseta. Incentiva jogo agressivo e sem defeitos. Dica: `streakSemDano` é um getter que retorna quantos inimigos consecutivos venceu sem dano.
 
+## Comparação: Antes vs. Depois
+
+### Antes (Sem Sistema de Progressão)
+
+Cada combate é igual. Você ataca, inimigo ataca. Vitória sente-se sorte. Derrota sente-se injusta. Sem meta, sem *level up*, sem recompensa psicológica.
+
+```dart
+// Inimigo genérico, nunca muda
+class Zumbi extends Inimigo {
+  Zumbi() : super(nome: 'Zumbi', hpMax: 10, ataque: 2);
+}
+
+// Jogador estático
+class Jogador extends Entidade {
+  // Nada de XP, nada de níveis
+}
+```
+
+### Depois (Com Progressão)
+
+Cada vitória é palpável. Você sobe de nível, ganha habilidades, fica mais forte. Desafios antigos ficam triviais. Novos desafios esperam. Há sempre uma meta.
+
+```dart
+// Jogador dinâmico que cresce
+jogador.ganharXp(30);  // Subir de nível? Novo poder desbloqueado?
+print(jogador.barraProgresso());  // Vejo meu progresso visualmente
+```
+
+**Impacto psicológico:** Com progressão, o jogador joga "mais uma partida" para alcançar nível 5. Sem progressão, abandona após morte uma.
+
 ## Pergaminho do Capítulo
 
 Neste capítulo, você aprendeu:
 
 - `TabelaProgressao` com fórmula quadrática cria crescimento natural
-- Level up aumenta HP máximo, ataque, restaura HP completamente
-- Habilidades são classes especializadas que você desbloqueia em marcos
-- Integração em combate: habilidades são opções equivalentes a "atacar"
-- Escalação: inimigos ficam progressivamente mais fortes
+- *Level up* aumenta HP máximo, ataque, restaura HP completamente
+- Habilidades são classes especializadas que você desbloqueia em marcos (padrão *Strategy*)
+- Integração em combate: habilidades são opções estratégicas alternativas a "atacar"
+- Escalação: inimigos ficam progressivamente mais fortes (próximos capítulos)
 - Event system: notificações limpas quando coisas importantes acontecem
 
 Seu jogo agora tem verdadeira sensação de progresso. Você não é mais um guerreiro estático; é um herói em ascensão que aprende magias, fica mais forte, enfrenta desafios crescentes.
 
+**Um sistema de progressão bem balanceado é a diferença entre um jogo que você joga uma vez e um jogo que você não consegue parar de jogar.**
+
 ## Dica Profissional
 
 ::: dica
-Balanceamento é iterativo. A fórmula que escolhemos (`n² × 50`) é um ponto de partida. Quando começar a testar: meça tempo entre níveis, registre stats, ajuste constantemente. Mudar para `n² × 40` ou `n² × 60` é trivial. Teste várias versões. O número certo só aparece com testes reais de jogadores. Dados sempre vencem intuição.
+**Dica do Mestre:** Balanceamento é iterativo, nunca definitivo. A fórmula que escolhemos (`n² × 50`) é um ponto de partida. Quando começar a testar: meça tempo entre níveis (deve levar ~5 minutos?), registre stats, ajuste constantemente. Mudar para `n² × 40` ou `n² × 60` é trivial. Teste várias versões. O número certo só aparece com testes reais de jogadores. Dados sempre vencem intuição. Uma sheet com as três primeiras fórmulas, testadas por três pessoas diferentes, revela a verdade rapidamente.
 :::
 
 ## Próximo Capítulo

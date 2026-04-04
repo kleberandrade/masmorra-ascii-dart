@@ -191,6 +191,7 @@ var todosItens = [...basicos, ...extras];
 Vamos reconstruir o jogo usando coleções para representar o mundo. Cada sala é uma entrada num mapa:
 
 ```dart
+// main.dart
 import 'dart:io';
 
 final salas = <String, Map<String, dynamic>>{
@@ -198,7 +199,11 @@ final salas = <String, Map<String, dynamic>>{
     'descricao': 'Você está na Praça Central.\n'
         'Uma fonte de pedra murmura ao centro.\n'
         'Tochas iluminam três passagens.',
-    'saidas': {'norte': 'corredor', 'leste': 'taverna', 'sul': 'portao'},
+    'saidas': {
+      'norte': 'corredor',
+      'leste': 'taverna',
+      'sul': 'portao'
+    },
     'itens': <String>['Chave Enferrujada'],
   },
   'corredor': {
@@ -250,7 +255,9 @@ void exibirSala() {
     print(linha);
   }
 
-  var saidasTexto = saidasMap?.keys.map((d) => '[$d]').join(' ') ?? 'Sem saídas';
+  var saidasTexto =
+      saidasMap?.keys.map((d) => '[$d]').join(' ') ??
+      'Sem saídas';
   print('Saídas: $saidasTexto');
 
   if (itensNaSala != null && itensNaSala.isNotEmpty) {
@@ -330,7 +337,9 @@ void main() {
 
     var partes = input.split(' ');
     var cmd = sinonimos[partes[0]] ?? partes[0];
-    var argumento = partes.length > 1 ? partes.sublist(1).join(' ') : '';
+    var argumento = partes.length > 1
+        ? partes.sublist(1).join(' ')
+        : '';
 
     switch (cmd) {
       case 'norte' || 'sul' || 'leste' || 'oeste':
@@ -352,7 +361,8 @@ void main() {
         print('Comandos: norte, sul, leste, oeste, pegar <item>,');
         print('          inventario, olhar, ajuda, sair');
       default:
-        print('Não entendi "$input". Digite "ajuda" para ver os comandos.');
+        print('Não entendi "$input". '
+            'Digite "ajuda" para ver os comandos.');
     }
   }
 }
@@ -423,3 +433,7 @@ O jogo agora tem um mundo real com salas conectadas, itens coletáveis e navega�
 ::: dica
 **Dica do Mestre:** Resista à tentação de usar `Map<String, dynamic>` para tudo. É flexível mas perde toda a segurança de tipos. No Capítulo 8, vamos substituir esses mapas por classes tipadas, e muitos bugs potenciais vão simplesmente desaparecer.
 :::
+
+## Próximo Capítulo
+
+No próximo capítulo, transformamos dados em visual. Com `StringBuffer` e arte ASCII, a masmorra ganha forma na tela do terminal.

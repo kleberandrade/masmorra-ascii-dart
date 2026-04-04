@@ -1,4 +1,6 @@
 import 'item.dart';
+import 'arma.dart';
+import 'armadura.dart';
 
 mixin Combatente {
   int hp = 0;

@@ -24,7 +24,7 @@ O livro divide-se em seis partes, cada uma com um marco funcional que você pode
 
 **A Parte V** (capítulos 28 a 32) é engenharia de verdade, refatoração profissional: organização modular, testes unitários que você escreve e que protegem seu código, async/await para operações não bloqueantes, e persistência com JSON para salvar a progressão entre sessões (sim, você pode sair e voltar).
 
-**A Parte VI** (capítulos 33 a 36) aplica padrões de projeto clássicos à IA inimiga e à arquitetura do código: Strategy para comportamentos variáveis, Command para fila de ações, Factory para criação de entidades, Observer para sistemas de eventos, e State para máquinas de estados. Termina com uma síntese profunda que deixa você não apenas pronto para explorar o ecossistema oficial em `dart.dev`, mas também preparado para o salto natural rumo ao Flutter, se esse for o seu próximo andar na torre.
+**A Parte VI** (capítulos 33 a 37) aplica padrões de projeto clássicos à IA inimiga e à arquitetura do código: Strategy para comportamentos variáveis, Command para fila de ações, Factory para criação de entidades, Observer para sistemas de eventos, e State para máquinas de estados. Termina com uma síntese profunda que deixa você não apenas pronto para explorar o ecossistema oficial em `dart.dev`, mas também preparado para o salto natural rumo ao Flutter, se esse for o seu próximo andar na torre.
 
 ## Configuração do terminal
 
@@ -42,7 +42,7 @@ A Masmorra ASCII depende do terminal para sua apresentação visual: caracteres 
 
 ## O repositório de código
 
-Todo o código-fonte acompanha este livro com etiquetas Git (`step-01` até `step-36`), uma por capítulo, tornando fácil comparar estados em diferentes marcos da jornada. Você pode explorar diferenças entre etapas, voltar quando algo der inesperadamente errado, ou clonar um ponto específico e rodar antes de escrever uma linha sequer, apenas para entender. O pacote vive em `code/masmorra_ascii/`, estruturado com testes automatizados, análise estática rigorosa, e linting configurado conforme o livro prega.
+Todo o código-fonte acompanha este livro com etiquetas Git (`step-01` até `step-37`), uma por capítulo, tornando fácil comparar estados em diferentes marcos da jornada. Você pode explorar diferenças entre etapas, voltar quando algo der inesperadamente errado, ou clonar um ponto específico e rodar antes de escrever uma linha sequer, apenas para entender. O pacote vive em `code/masmorra_ascii/`, estruturado com testes automatizados, análise estática rigorosa, e linting configurado conforme o livro prega.
 
 ## Como usar este livro
 
@@ -52,14 +52,12 @@ Não pule os desafios. Quebre-se neles. Não copie sem ler. Leia o código antes
 
 ## Soluções dos desafios
 
-As soluções completas de todos os desafios e boss finals propostos neste livro, juntamente com o código-fonte íntegro de todos os 36 passos da jornada de desenvolvimento da Masmorra ASCII, estão disponíveis online. Acesse o site abaixo para acompanhar sua própria evolução, comparar suas implementações com as soluções de referência, aprofundar seu entendimento através de múltiplas abordagens, e continuar aprendendo na criação de jogos com Dart.
+As soluções completas de todos os desafios e boss finals propostos neste livro, juntamente com o código-fonte íntegro de todos os 37 passos da jornada de desenvolvimento da Masmorra ASCII, estão disponíveis online. Acesse o site abaixo para acompanhar sua própria evolução, comparar suas implementações com as soluções de referência, aprofundar seu entendimento através de múltiplas abordagens, e continuar aprendendo na criação de jogos com Dart.
 
-**Site:** [masmorra.io](https://masmorra.io)
-
-![Código QR para https://masmorra.io](qrcode-masmorra-io.png){width=4cm}
+**Site:** [https://masmorra.io](https://masmorra.io)
 
 No site você encontrará muito mais: errata viva e correções sugeridas pela comunidade que estuda conosco, artigos profundos sobre tópicos que o livro toca em superfície, desafios bônus para expandir suas habilidades além dos capítulos, e comunidades onde se conectar com outros desenvolvedores Dart, pessoas que estão na mesma descida que você, construindo seus próprios roguelikes e compartilhando criações.
 
-A aventura na Masmorra ASCII não termina quando você fecha este livro. Visite [masmorra.io](https://masmorra.io), explore as soluções, discuta com a comunidade, e continue evoluindo como programador e construtor de mundos Dart.
+A aventura na Masmorra ASCII não termina quando você fecha este livro. Visite [https://masmorra.io](https://masmorra.io), explore as soluções, discuta com a comunidade, e continue evoluindo como programador e construtor de mundos Dart.
 
-Boa descida, então. Que o seu `dart run` nunca lhe falte coragem, curiosidade, ou a teimosia necessária para depurar o impossível até que ele clique em lugar de quebrar.
+Boa descida. Que o seu `dart run` nunca lhe falte coragem, curiosidade e a teimosia necessária para depurar o impossível até que ele funcione.

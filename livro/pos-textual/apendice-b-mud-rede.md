@@ -15,34 +15,9 @@ Não é magia. É arquitetura: separar o modelo de domínio (que não muda) da a
 
 Pensar em rede significa pensar em separação:
 
-```
-┌─────────────────────────────────────────────────────────┐
-│ APRESENTAÇÃO (Cliente)                                  │
-│ - Terminal local do jogador                             │
-│ - WebSocket client que se conecta ao servidor           │
-│ - Renderiza o que o servidor envia                      │
-└─────────────────┬───────────────────────────────────────┘
-                  │ WebSocket (JSON/texto)
-┌─────────────────▼───────────────────────────────────────┐
-│ TRANSPORTE (Servidor)                                   │
-│ - HttpServer + WebSocketTransformer (dart:io)           │
-│ - Gerencia conexões ativas                              │
-│ - Roteia mensagens: cliente → processador → broadcast   │
-└─────────────────┬───────────────────────────────────────┘
-                  │ Fila interna
-┌─────────────────▼───────────────────────────────────────┐
-│ LÓGICA DE NEGÓCIO (Servidor)                            │
-│ - Seu Mundo, Sala, Inimigo, Jogador (DO LIVRO)          │
-│ - Máquina de estado do combate                          │
-│ - Geração procedural de dungeon                         │
-└─────────────────┬───────────────────────────────────────┘
-                  │ Callbacks/Events
-┌─────────────────▼───────────────────────────────────────┐
-│ PERSISTÊNCIA (Opcional)                                 │
-│ - Arquivo JSON para saves de jogadores                  │
-│ - Estado do mundo (salas, inimigos, loot)               │
-└─────────────────────────────────────────────────────────┘
-```
+Camadas da arquitetura em rede. A fonte editável do diagrama está em `assets/diagrams/apendice-b-camadas-rede.mmd`; o PNG é gerado em `./scripts/build.sh` com Node.js/npx (`@mermaid-js/mermaid-cli`).
+
+![Arquitetura em camadas: cliente, transporte, lógica e persistência](assets/diagrams/apendice-b-camadas-rede.png)
 
 A beleza disso: quase nada do que você escreveu no livro muda. Você reutiliza suas classes `Jogador`, `Sala`, `Inimigo`, etc. O que muda é o **loop principal**: deixa de ser single-player local e vira um servidor que coordena múltiplos clientes.
 
@@ -150,7 +125,8 @@ void _processarComando(String idJogador, String comando) {
       break;
 
     case 'inventario':
-      conectado.enviar('Seu inventário: ${conectado.jogador.inventario}');
+      final inv = conectado.jogador.inventario;
+      conectado.enviar('Seu inventário: $inv');
       break;
 
     case 'sair':
@@ -202,7 +178,8 @@ void _desconectar(String idJogador) {
     conectado.fechar();
     print('${conectado.jogador.nome} desconectou');
     // Notifica outros jogadores
-    _notificarSala(conectado, '${conectado.jogador.nome} saiu da masmorra');
+    final n = conectado.jogador.nome;
+    _notificarSala(conectado, '$n saiu da masmorra');
   }
 }
 

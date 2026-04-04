@@ -138,9 +138,20 @@ enum Direcao {
 
 ```dart
 sealed class ComandoJogo {}
-class CmdMover extends ComandoJogo { final Direcao dir; CmdMover(this.dir); }
+
+class CmdMover extends ComandoJogo {
+  final Direcao dir;
+
+  CmdMover(this.dir);
+}
+
 class CmdAtacar extends ComandoJogo {}
-class CmdUsarItem extends ComandoJogo { final Item item; CmdUsarItem(this.item); }
+
+class CmdUsarItem extends ComandoJogo {
+  final Item item;
+
+  CmdUsarItem(this.item);
+}
 
 // Switch exaustivo
 switch (comando) {
@@ -153,9 +164,12 @@ switch (comando) {
 }
 ```
 
-## Async e await
+## Async e Await: Programação Assíncrona
+
+### Sintaxe Básica
 
 ```dart
+// Future<T> retorna um valor do tipo T no futuro
 Future<String> carregarSave(String caminho) async {
   final arquivo = File(caminho);
   if (await arquivo.exists()) {
@@ -164,10 +178,129 @@ Future<String> carregarSave(String caminho) async {
   return '{}';
 }
 
-// Uso
+// Usar com await (bloqueia até completar)
 void main() async {
   final dados = await carregarSave('save.json');
   print(dados);
+}
+
+// Usar sem await (não bloqueia)
+void executarEmBackground() {
+  carregarSave('save.json').then((dados) {
+    print('Carregado: $dados');
+  });
+}
+```
+
+### Tratamento de Erros
+
+```dart
+// Try/catch em async
+Future<void> salvarProgresso(String arquivo, String dados) async {
+  try {
+    final file = File(arquivo);
+    await file.writeAsString(dados);
+    print('Salvo com sucesso!');
+  } catch (e) {
+    print('Erro ao salvar: $e');
+  } finally {
+    print('Operação finalizada');
+  }
+}
+
+// Capturar erros sem try/catch
+Future<String> carregarComFallback(String caminho) async {
+  try {
+    return await File(caminho).readAsString();
+  } on FileSystemException {
+    return 'dados padrão';
+  }
+}
+```
+
+### Future<T>: Computação Assíncrona
+
+```dart
+// Future completado imediatamente
+Future<int> damoDB() => Future.value(42);
+
+// Future que completa depois de delay
+Future<int> damoComEspera() async {
+  await Future.delayed(Duration(seconds: 2));
+  return 42;
+}
+
+// Múltiplas futures em paralelo
+Future<void> carregarTodos() async {
+  final dados1 = carregarSave('save1.json');
+  final dados2 = carregarSave('save2.json');
+
+  // Aguardar todas
+  final resultados = await Future.wait([dados1, dados2]);
+  print('Todos carregados: $resultados');
+}
+```
+
+### Streams: Fluxos de Dados Assíncronos
+
+```dart
+// Generator async retorna Stream
+Stream<int> contarAte5() async* {
+  for (int i = 1; i <= 5; i++) {
+    yield i;
+    await Future.delayed(Duration(seconds: 1));
+  }
+}
+
+// Consumir stream
+void main() async {
+  await for (final numero in contarAte5()) {
+    print('Número: $numero');
+  }
+}
+
+// Transformar stream
+Stream<String> nomesEmMaiusculas(Stream<String> nomes) async* {
+  await for (final nome in nomes) {
+    yield nome.toUpperCase();
+  }
+}
+```
+
+### Leitura e Escrita de Arquivos (dart:io)
+
+```dart
+import 'dart:io';
+import 'dart:convert';
+
+// Ler arquivo completo
+Future<String> lerArquivo(String caminho) async {
+  return await File(caminho).readAsString();
+}
+
+// Escrever arquivo
+Future<void> escreverArquivo(String caminho, String conteudo) async {
+  await File(caminho).writeAsString(conteudo);
+}
+
+// Ler linha por linha
+Future<void> processarLinhas(String caminho) async {
+  final arquivo = File(caminho);
+  final linhas = arquivo.openRead()
+    .transform(utf8.decoder)
+    .transform(const LineSplitter());
+
+  await for (final linha in linhas) {
+    print('Linha: $linha');
+  }
+}
+
+// Checar existência e criar diretório
+Future<void> garantirDiretorio(String caminho) async {
+  final dir = Directory(caminho);
+  if (!await dir.exists()) {
+    await dir.create(recursive: true);
+  }
 }
 ```
 
@@ -254,7 +387,8 @@ Typedefs criam aliases para funções e tipos complexos, melhorando legibilidade
 typedef Comparador = int Function(dynamic a, dynamic b);
 typedef DadosJogo = ({String nome, int vida});
 
-Comparador minhaComparacao = (a, b) => a.toString().compareTo(b.toString());
+Comparador minhaCmp =
+    (a, b) => a.toString().compareTo(b.toString());
 ```
 
 ### Extensions: Superpoderes para Tipos Existentes

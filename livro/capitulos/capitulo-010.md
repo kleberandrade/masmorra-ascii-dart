@@ -88,12 +88,14 @@ class Esqueleto extends Inimigo {
           hp: 15,
           maxHp: 15,
           ataque: 4,
-          descricao: 'Ossos antigos, alma presa. Rangem com cada passo.',
+          descricao: 'Ossos antigos, alma presa. '
+              'Rangem com cada passo.',
         );
 
   @override
   String descreverAcao() {
-    return 'O Esqueleto levanta o braço ósseo, você sente o frio da morte.';
+    return 'O Esqueleto levanta o braço ósseo, '
+        'você sente o frio da morte.';
   }
 }
 ```
@@ -122,14 +124,16 @@ class Lobo extends Inimigo {
 ```
 
 ```dart
-// lib/mimic.dart
+// lib/mimico.dart
+// Classe em ASCII (`Mimico`); nome exibido no jogo continua
+// acentuado.
 
 import 'inimigo.dart';
 
-class Mimic extends Inimigo {
-  Mimic()
+class Mimico extends Inimigo {
+  Mimico()
       : super(
-          nome: 'Mimic',
+          nome: 'Mímico',
           simbolo: 'M',
           hp: 12,
           maxHp: 12,
@@ -340,3 +344,7 @@ A herança é a ferramenta clássica para eliminar duplicação quando há uma r
 ::: dica
 **Dica do Mestre:** Evite hierarquias profundas. A cada vez que você adiciona um nível de herança, aumenta a complexidade. Depois de três níveis (`Inimigo > BipedeInteligente > Zumbi`), fica difícil compreender onde cada comportamento vem. Use herança quando há uma razão clara para IS-A; caso contrário, prefira composição (guardar um objeto dentro de outro) ou `mixin`. Dart favorece composição e `mixin` para código mais limpo.
 :::
+
+## Próximo Capítulo
+
+No próximo capítulo, descobrimos poderes compartilhados. Mixins permitem que qualquer criatura ganhe habilidades sem herança múltipla.

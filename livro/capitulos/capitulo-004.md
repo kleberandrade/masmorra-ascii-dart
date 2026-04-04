@@ -121,7 +121,7 @@ Uma das funcionalidades mais inteligentes do Dart é a promoção de tipo. Quand
 String? entrada = stdin.readLineSync();
 
 if (entrada != null) {
-  // There is no spoon... e não há null também.
+  // Aqui dentro, o Dart garante: não há null.
   var tamanho = entrada.length;
   print('Você digitou: ${entrada.trim()}');
 }
@@ -194,6 +194,7 @@ int? interpretarInput(String input) {
 Repare como o `null` flui naturalmente pelo código. A função `interpretarComoNumero()` retorna `null` se não for um número. A função `interpretarComoPalavra()` retorna `null` se não for uma palavra conhecida. O operador `??` encadeia as duas tentativas.
 
 ```dart
+// main.dart
 void main() {
   while (true) {
     var cmd = lerComando();
@@ -314,3 +315,7 @@ O código do jogo agora é robusto contra qualquer input do jogador. Nenhuma com
 ::: dica
 **Dica do Mestre:** Em Dart, prefira `??` e promoção de tipo ao operador `!`. O `!` é a última opção, não a primeira. Sempre que você escreve `!`, está dizendo "se eu estiver errado, o programa pode crashar". Com `??`, você está dizendo "se estiver vazio, use isso"; o programa nunca crasha. Código de jogo que não crasha é código de jogo que os jogadores respeitam.
 :::
+
+## Próximo Capítulo
+
+No próximo capítulo, seu herói ganha um inventário de verdade. Listas, mapas e sets organizam itens, inimigos e salas. A masmorra fica maior — e mais perigosa.

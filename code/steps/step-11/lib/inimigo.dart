@@ -1,4 +1,5 @@
 import 'combatente.dart';
+import 'envenenavel.dart';
 
 abstract class Inimigo with Combatente, Envenenavel {
   final String nome;

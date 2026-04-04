@@ -2,11 +2,11 @@
 
 > *O loop é o coração que bate no peito de todo jogo. Enquanto ele pulsa, o mundo respira; o jogador age, o jogo reage, a tela redesenha. Quando ele para, o jogo morre. Neste capítulo, construímos o coração.*
 
-Nos seis capítulos anteriores, construímos peças separadas: input, output, funções, null safety, coleções e arte ASCII. Agora é hora de juntar tudo num programa coeso - uma aventura textual completa com salas conectadas, itens coletáveis, HUD visual e um loop principal bem organizado. Este é o marco da Parte I: o primeiro **roguelike** jogável.
+Nos seis capítulos anteriores, construímos peças separadas: input, output, funções, null safety, coleções e arte ASCII. Agora é hora de juntar tudo num programa coeso - uma aventura textual completa com salas conectadas, itens coletáveis, HUD visual e um loop principal bem organizado. Este é o marco da Parte I: o primeiro *roguelike* jogável.
 
-## O que é um **game loop**
+## O que é um *game loop*
 
-Todo jogo, de Pac-Man a Elden Ring, roda sobre o mesmo conceito: um **game loop** que se repete indefinidamente, executando três passos a cada iteração.
+Todo jogo, de Pac-Man a Elden Ring, roda sobre o mesmo conceito: um *game loop* que se repete indefinidamente, executando três passos a cada iteração.
 
 O primeiro passo é mostrar o estado atual: desenhar o mundo na tela (ou, no nosso caso, no terminal).
 
@@ -40,7 +40,11 @@ final mundoSalas = <String, Map<String, dynamic>>{
     'descricao': 'Uma fonte de pedra murmura ao centro da praça.\n'
         'Tochas iluminam três passagens que se abrem\n'
         'nas paredes de pedra.',
-    'saidas': {'norte': 'corredor', 'leste': 'taverna', 'sul': 'portao'},
+    'saidas': {
+      'norte': 'corredor',
+      'leste': 'taverna',
+      'sul': 'portao'
+    },
     'itens': <String>['Tocha', 'Chave Enferrujada']
   },
   'corredor': {
@@ -94,7 +98,8 @@ final sinonimos = <String, String>{
 var nomeJogador = 'Aventureiro';
 var salaAtual = 'praca';
 var inventario = <String>[];
-var salasVisitadas = <String>{}; // Rastreia salas visitadas para indicar novos lugares
+// Rastreia salas visitadas para indicar novos lugares
+var salasVisitadas = <String>{};
 var ouro = 0;
 var hp = 100;
 var maxHp = 100;
@@ -225,7 +230,8 @@ void pegarItem(String nomeItem) {
   var item = encontrado.first;
   itens.remove(item);
 
-  // Moedas de Ouro vão direto para o contador de ouro, não para o inventário
+  // Moedas de Ouro vão direto para o contador de
+  // ouro, não para o inventário
   if (item == 'Moeda de Ouro') {
     ouro += 10;
     print('Você pegou $item e ganhou 10g! (Total: ${ouro}g)');
@@ -255,7 +261,7 @@ void largarItem(String nomeItem) {
 }
 ```
 
-## O game loop principal
+## O *game loop* principal
 
 Finalmente, o loop que une tudo em `main()`. O `main()` é surpreendentemente simples agora: inicializa o jogo, mostra a cena inicial e depois entra num `while` que continua até o jogador sair. Em cada iteração, imprime um prompt, lê o comando, processa e renderiza. Esse é o padrão que vai funcionar para todos os nossos jogos por turnos.
 
@@ -338,13 +344,20 @@ void main() {
       case 'sair':
         print('');
         print('╔${'═' * larguraTela}╗');
-        print('║${centralizar('Até a próxima aventura!', larguraTela)}║');
-        print('║${centralizar('$nomeJogador, $turno turnos, ${ouro}g', larguraTela)}║');
+        var msgFinal = centralizar(
+          'Até a próxima aventura!',
+          larguraTela,
+        );
+        print('║$msgFinal║');
+        final resumo = '$nomeJogador, $turno turnos, ${ouro}g';
+        var resumoFormatado = centralizar(resumo, larguraTela);
+        print('║$resumoFormatado║');
         print('╚${'═' * larguraTela}╝');
         return;
 
       default:
-        print('Não entendi "$input". Digite "ajuda" para ver os comandos.');
+        print('Não entendi "$input". '
+            'Digite "ajuda" para ver os comandos.');
     }
   }
 }
@@ -428,7 +441,7 @@ Comece o Capítulo 8. Está na hora de aprender orientação a objetos de verdad
 
 Ao final desta parte, seu jogo no terminal se parece com isto:
 
-```
+```text
 
 ╔══════════════════════════════════════╗
 ║        M A S M O R R A   A S C I I  ║
@@ -506,10 +519,10 @@ Cada parte adiciona novas camadas ao jogo. Compare com o início e veja o quanto
 
 ## Pergaminho do Capítulo
 
-Neste capítulo você construiu o game loop completo: ler input, processar comando, atualizar estado, redesenhar a tela. Organizou o código em seções claras (constantes, dados, estado, renderização, comandos, loop principal). Integrou todas as técnicas dos capítulos anteriores numa aventura textual jogável com 5 salas, inventário, ouro e HUD visual.
+Neste capítulo você construiu o *game loop* completo: ler input, processar comando, atualizar estado, redesenhar a tela. Organizou o código em seções claras (constantes, dados, estado, renderização, comandos, loop principal). Integrou todas as técnicas dos capítulos anteriores numa aventura textual jogável com 5 salas, inventário, ouro e HUD visual.
 
 Este é o fim da Parte I. Você partiu de `print('Olá')` e chegou a um jogo funcional no terminal.
 
 ::: dica
-**Dica do Mestre:** O game loop que construímos é síncrono: ele para e espera o jogador digitar. Isso é perfeito para um jogo por turnos. Mas quando adicionarmos persistência nos capítulos futuros, vamos precisar de `async`/`await` para operações de disco. Não se preocupe com isso agora. Quando chegar a hora, a transição será natural. O importante é que a estrutura do loop já está correta.
+**Dica do Mestre:** O *game loop* que construímos é síncrono: ele para e espera o jogador digitar. Isso é perfeito para um jogo por turnos. Mas quando adicionarmos persistência nos capítulos futuros, vamos precisar de `async`/`await` para operações de disco. Não se preocupe com isso agora. Quando chegar a hora, a transição será natural. O importante é que a estrutura do loop já está correta.
 :::

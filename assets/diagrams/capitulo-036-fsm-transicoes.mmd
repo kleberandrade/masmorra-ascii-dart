@@ -1,0 +1,17 @@
+stateDiagram-v2
+    [*] --> Patrulhando
+
+    Patrulhando --> Alerta: Vê o herói
+
+    Alerta --> Perseguindo: Se aproxima
+    Alerta --> Patrulhando: Sai de visão<br/>(3+ turnos)
+
+    Perseguindo --> Atacando: Distância ≤ 1
+    Perseguindo --> Alerta: Sai de visão
+    Perseguindo --> Fugindo: HP < 30%
+
+    Atacando --> Perseguindo: Distância > 1
+    Atacando --> Fugindo: HP < 25%
+
+    Fugindo --> Perseguindo: HP > 60%
+    Fugindo --> Patrulhando: Timeout (10+ turnos)

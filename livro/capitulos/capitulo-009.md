@@ -133,7 +133,9 @@ class Jogador {
           ouro: (dados['ouro'] as int?) ?? 0,
           ataque: (dados['ataque'] as int?) ?? 5,
           salaAtual: (dados['salaAtual'] as String?) ?? 'praca',
-          inventario: List<String>.from(dados['inventario'] as List? ?? []),
+          inventario: List<String>.from(
+            dados['inventario'] as List? ?? [],
+          ),
         );
 }
 ```
@@ -268,3 +270,7 @@ O modelo do jogo agora é robusto: campos protegidos, validação interna, e uma
 ::: dica
 **Dica do Mestre:** Em Dart, a regra é: torne privado por padrão, exponha por necessidade. Se um campo não precisa ser lido de fora, não crie getter. Se precisa ser lido mas não escrito, crie getter sem setter. Só exponha o mínimo necessário. Quanto menos superfície de API, menos formas o código externo tem de criar bugs no seu objeto.
 :::
+
+## Próximo Capítulo
+
+No próximo capítulo, a masmorra ganha inimigos variados. Herança permite criar zumbis, esqueletos e goblins a partir de uma base comum.

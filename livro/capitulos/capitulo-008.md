@@ -1,6 +1,6 @@
 # Capítulo 8 - Classes: dando vida ao jogador
 
-*Você deixou de ser turista na masmorra; agora é artesão. Classes são a forja onde você molda jogadores, inimigos e itens com precisão. Herança conecta criaturas em linhagens, como famílias de monstros que compartilham traços mas guardam suas próprias surpresas. Mixins são habilidades que qualquer criatura pode aprender, como um pergaminho de poder colado nas costas de quem precisar.*
+*Você deixou de ser observador da masmorra; agora é arquiteto. Classes são a forja onde você molda jogadores, inimigos e itens com precisão. Herança conecta criaturas em linhagens, como famílias de monstros que compartilham traços mas guardam suas próprias surpresas. Mixins são habilidades que qualquer criatura pode aprender, como um pergaminho de poder colado nas costas de quem precisar.*
 
 *Nesta parte, o código deixa de ser uma sequência de instruções e vira um conjunto de objetos que conversam entre si. Você vai criar seu primeiro sistema de combate por turnos, com inventário, equipamentos e inimigos que morrem de verdade. Quando o último Zumbi cair, você vai perceber que não está mais apenas programando. Está construindo um mundo.*
 
@@ -63,7 +63,13 @@ Os parâmetros entre `{ }` são parâmetros nomeados com valores padrão. Isso p
 var heroi = Jogador('Aldric');
 // hp = 100, maxHp = 100, ouro = 0, ataque = 5, salaAtual = 'praca'
 
-var veterano = Jogador('Kael', hp: 150, maxHp: 150, ouro: 50, ataque: 10);
+var veterano = Jogador(
+  'Kael',
+  hp: 150,
+  maxHp: 150,
+  ouro: 50,
+  ataque: 10,
+);
 // valores customizados
 ```
 
@@ -365,3 +371,7 @@ O jogo deu um salto de organização: de variáveis soltas e mapas genéricos pa
 ::: dica
 **Dica do Mestre:** Quando não souber se algo deveria ser um campo ou um getter, use esta regra: se o valor é armazenado e pode ser diferente entre instâncias, é um campo. Se o valor é calculado a partir de outros campos, é um getter. `nome` é campo. `estaVivo` é getter (calculado a partir de `hp`). Essa distinção mantém o modelo limpo e evita dados duplicados que ficam inconsistentes.
 :::
+
+## Próximo Capítulo
+
+No próximo capítulo, protegemos o herói. Construtores controlam a criação, e encapsulamento garante que ninguém mexa no HP sem permissão.

@@ -11,12 +11,12 @@
 Neste capítulo você vai:
 
 - Entender por que a economia importa em roguelikes (como o sistema de Gil em Final Fantasy): tudo tem preço, e o balanceamento decide se o jogo é justo ou quebrado
-- Modelar loot tables com pesos aleatórios (como as drops em Diablo): cada criatura tem uma tabela de probabilidades
+- Modelar *loot tables* com pesos aleatórios (como os *drops* em Diablo): cada criatura tem uma tabela de probabilidades
 - Criar a classe `EntradaSaque` e `Economia` para governar preços e recompensas
 - Implementar cascatas de dificuldade: inimigos mais fortes em andares mais profundos
 - Usar constantes de balanceamento para ajustes rápidos de design
 - Simular corridas de teste para validar a curva de dificuldade
-- Integrar drops no combate da Masmorra
+- Integrar *drops* no combate da Masmorra
 
 Ao final, você terá um sistema econômico coerente que propicia progressão justa e recompensadora.
 
@@ -45,8 +45,8 @@ Estas constantes vivem num único lugar (`EconomiaConstants`). Se você quer dei
 /// Constantes de balanceamento da economia
 class EconomiaConstants {
   /// Dificuldade escalonada por andar
-  static const int kBaseHpPorInimigo = 10;
-  static const double kAumentoHpPorAndar = 0.2; // +20% HP por andar
+  static const int kBaseHPPorInimigo = 10;
+  static const double kAumentoHPPorAndar = 0.2; // +20% HP por andar
 
   /// Recompensas em ouro
   static const int kOuroBasePorInimigo = 5;
@@ -62,17 +62,17 @@ class EconomiaConstants {
 }
 ```
 
-Estas constantes são parâmetros de design. Ajuste um deles e observe como o jogo responde. A progressão fica lenta demais? Aumente `kOuroBasePorInimigo`. O primeiro inimigo é muito fácil e entediante? Aumente `kAumentoHpPorAndar`. Isto é iteração de design: números controlam a sensação inteira do jogo. Este é o coração invisível do balanceamento.
+Estas constantes são parâmetros de design. Ajuste um deles e observe como o jogo responde. A progressão fica lenta demais? Aumente `kOuroBasePorInimigo`. O primeiro inimigo é muito fácil e entediante? Aumente `kAumentoHPPorAndar`. Isto é iteração de design: números controlam a sensação inteira do jogo. Este é o coração invisível do balanceamento.
 
 ## EntradaSaque: A Tabela de Drops
 
-Cada tipo de inimigo tem uma tabela de drops, uma lista de itens que pode soltar com probabilidades. Por exemplo:
+Cada tipo de inimigo tem uma tabela de *drops*, uma lista de itens que pode soltar com probabilidades. Por exemplo:
 
 - Zumbi: 80% moeda de ouro, 15% adaga velha, 5% nada
 - Lobo: 60% moeda de ouro, 30% espada de ferro, 10% poção de vida
 - Orc: 50% moeda de ouro, 40% poção de vida, 10% nada
 
-Loot tables são como os drops em Diablo: cada monstro tem uma probabilidade de soltar cada item. Modelamos isto com a classe `EntradaSaque`, que encapsula item, chance e quantidade mínima/máxima.
+Loot tables são como os *drops* em Diablo: cada monstro tem uma probabilidade de soltar cada item. Modelamos isto com a classe `EntradaSaque`, que encapsula item, chance e quantidade mínima/máxima.
 
 ```dart
 // lib/entrada_saque.dart
@@ -80,7 +80,8 @@ Loot tables são como os drops em Diablo: cada monstro tem uma probabilidade de 
 import 'dart:math';
 
 /// Uma entrada na tabela de drops de um inimigo
-/// Define qual item pode cair, com que probabilidade, e em que quantidade
+/// Define qual item pode cair, com que
+/// probabilidade, e em que quantidade
 class EntradaSaque {
   final String itemId;
   final double chance;
@@ -102,7 +103,8 @@ class EntradaSaque {
     if (quantidadeMin == quantidadeMax) {
       return quantidadeMin;
     }
-    return quantidadeMin + random.nextInt(quantidadeMax - quantidadeMin + 1);
+    return quantidadeMin +
+        random.nextInt(quantidadeMax - quantidadeMin + 1);
   }
 
   @override
@@ -116,26 +118,26 @@ class EntradaSaque {
 
 A classe `Economia` centraliza toda a lógica de economia. Tem dois serviços principais:
 
-1. Determinar drops após combate (usa um Roller para decisões probabilísticas)
+1. Determinar *drops* após combate (usa um Rolador para decisões probabilísticas)
 2. Calcular preços de compra e venda
 
 ```dart
 // lib/economia.dart
 
 import 'dart:math';
-import 'roller.dart';
+import 'rolador.dart';
 import 'entrada_saque.dart';
 import 'economia_constants.dart';
 
 /// Sistema de economia: drops, preços, balanceamento
 class Economia {
   final Map<String, List<EntradaSaque>> tabelasDrops;
-  final Roller roller;
+  final Rolador roller;
 
   Economia({
     required this.tabelasDrops,
-    Roller? roller,
-  }) : roller = roller ?? Roller();
+    Rolador? roller,
+  }) : roller = roller ?? Rolador();
 
   /// Resolve os drops de um inimigo derrotado
   List<String> resolverDrop(String nomeInimigo) {
@@ -164,8 +166,12 @@ class Economia {
   int precoCompra(String itemId) {
     return switch (itemId) {
       'espada_ferro' => EconomiaConstants.kPrecoEspadaFerro,
-      'espada_aco' => (EconomiaConstants.kPrecoEspadaFerro * 1.5).toInt(),
-      'espada_mithril' => (EconomiaConstants.kPrecoEspadaFerro * 3.0).toInt(),
+      'espada_aco' =>
+        (EconomiaConstants.kPrecoEspadaFerro * 1.5)
+            .toInt(),
+      'espada_mithril' =>
+        (EconomiaConstants.kPrecoEspadaFerro * 3.0)
+            .toInt(),
       'armadura_couro' => EconomiaConstants.kPrecoArmaduraCouro,
       'armadura_ferro' =>
         (EconomiaConstants.kPrecoArmaduraCouro * 1.5).toInt(),
@@ -184,13 +190,14 @@ class Economia {
 
   /// Retorna dificuldade escalonada para um andar
   double getDificuldadeAndar(int numero) {
-    return 1.0 + (numero * EconomiaConstants.kAumentoHpPorAndar);
+    return 1.0 + (numero * EconomiaConstants.kAumentoHPPorAndar);
   }
 
   /// Retorna recompensa escalonada para um andar
   int getOuroEscalonado(int numero) {
     final base = EconomiaConstants.kOuroBasePorInimigo.toDouble();
-    final multiplicador = 1.0 + (numero * EconomiaConstants.kAumentoOuroPorAndar);
+    final aum = EconomiaConstants.kAumentoOuroPorAndar;
+    final multiplicador = 1.0 + (numero * aum);
     return (base * multiplicador).toInt();
   }
 }
@@ -278,7 +285,7 @@ class TabelasDrops {
 
 ## Integrando Drops no Combate
 
-Quando você derrota um inimigo, resolvemos o drop. Isto acontece no sistema de combate:
+Quando você derrota um inimigo, resolvemos o *drop*. Isto acontece no sistema de combate:
 
 ```dart
 // Exemplo: em combate.dart, quando inimigo morre
@@ -419,15 +426,15 @@ A mesma criatura fica progressivamente mais desafiadora.
 
 ## Desafios da Masmorra
 
-**Desafio 22.1. O Tesouro do Dragão Antigo.** A lenda diz que um dragão guardava uma Chave Dourada nos tempos antigos. Crie uma nova tabela de drops onde o Dragão tem 5% de chance de deixar cair essa chave rara. Implemente em `EntradaSaque` com id `'chave_dourada'`, chance `0.05`, quantidade 1, descrição épica. Teste: derrote o dragão 20 vezes, conte quantas vezes recebe a chave. A probabilidade bate com 5%? Dica: use `EntradaSaque` para encapsular cada possível drop.
+**Desafio 22.1. O Tesouro do Dragão Antigo.** A lenda diz que um dragão guardava uma Chave Dourada nos tempos antigos. Crie uma nova tabela de *drops* onde o Dragão tem 5% de chance de deixar cair essa chave rara. Implemente em `EntradaSaque` com id `'chave_dourada'`, chance `0.05`, quantidade 1, descrição épica. Teste: derrote o dragão 20 vezes, conte quantas vezes recebe a chave. A probabilidade bate com 5%? Dica: use `EntradaSaque` para encapsular cada possível *drop*.
 
 **Desafio 22.2. Ganância do Comerciante.** O comerciante da masmorra cobrava margem de 50%. Você descobriu que ele é ganancioso demais. Reduza a margem de venda para 30% mudando `kMargemVenda` de 0.5 para 0.3. Agora uma Espada de Ferro que custa 50 ouro vale quanto em venda? Calcule manualmente e depois valide em código. Os preços mais justos faz você comprar mais itens? Dica: novo preço = 50 × 0.3.
 
-**Desafio 22.3. A Maldição dos Cinco Andares.** Você desce 5 andares, cada um com 3 Lobos hostis. Implemente uma simulação: (1) Faça loop dos andares 0-4, (2) em cada andar, gere 3 Lobos com HP escalonado por `getDificuldadeAndar()`, (3) resolva drops de cada lobo, (4) some o ouro total. Execute e veja: quantos ouro ganharam? O HP dos lobos aumenta conforme desce? A economia se ajusta naturalmente? Dica: imprima resumo: "Andar X: 3 Lobos, Y ouro, HP variou de Z a W".
+**Desafio 22.3. A Maldição dos Cinco Andares.** Você desce 5 andares, cada um com 3 Lobos hostis. Implemente uma simulação: (1) Faça loop dos andares 0-4, (2) em cada andar, gere 3 Lobos com HP escalonado por `getDificuldadeAndar()`, (3) resolva *drops* de cada lobo, (4) some o ouro total. Execute e veja: quantos ouro ganharam? O HP dos lobos aumenta conforme desce? A economia se ajusta naturalmente? Dica: imprima resumo: "Andar X: 3 Lobos, Y ouro, HP variou de Z a W".
 
-**Desafio 22.4. Modo Fácil para Aprendizes.** Criar um jogo que escala dificuldade é difícil. Você quer testar em modo fácil onde tudo é menos letal. Crie `EconomiaFacil extends Economia`: dificuldade em 50% (inimigos mais fracos), drops em 150% (mais ouro). Simule 5 andares em modo fácil e modo normal, compare. Em fácil, sobrevive melhor? Ganha mais ouro? Dica: use `super.getDificuldadeAndar()` para chamar o pai e depois multiplicar.
+**Desafio 22.4. Modo Fácil para Aprendizes.** Criar um jogo que escala dificuldade é difícil. Você quer testar em modo fácil onde tudo é menos letal. Crie `EconomiaFacil extends Economia`: dificuldade em 50% (inimigos mais fracos), *drops* em 150% (mais ouro). Simule 5 andares em modo fácil e modo normal, compare. Em fácil, sobrevive melhor? Ganha mais ouro? Dica: use `super.getDificuldadeAndar()` para chamar o pai e depois multiplicar.
 
-**Desafio 22.5. (Desafio): Raríssimo.** Nem todo item é igual. Itens raros são mais caros. Crie um enum `Raridade { comum, raro, mitico }` e adicione esse campo em `EntradaSaque`. Depois, multiplique preço de compra: comum (1x), raro (3x), mítico (10x). Crie 3 drops de um inimigo: ouro comum (50 ouro), espada rara (200 ouro), artefato mítico (5000 ouro). Teste o balanceamento: qual é mais comum? Qual mais valioso? Dica: use switch/case no getter `precoCompra()`.
+**Desafio 22.5. (Desafio): Raríssimo.** Nem todo item é igual. Itens raros são mais caros. Crie um enum `Raridade { comum, raro, mitico }` e adicione esse campo em `EntradaSaque`. Depois, multiplique preço de compra: comum (1x), raro (3x), mítico (10x). Crie 3 *drops* de um inimigo: ouro comum (50 ouro), espada rara (200 ouro), artefato mítico (5000 ouro). Teste o balanceamento: qual é mais comum? Qual mais valioso? Dica: use switch/case no getter `precoCompra()`.
 
 **Boss Final 22.6. A Profundeza Recompensa.** Conforme desce, as recompensas aumentam. Implemente um bônus de +10% de ouro a cada 2 andares (andar 2→+10%, andar 4→+20%, andar 6→+30%). Integre em `getOuroEscalonado()`. Teste descendo 10 andares: o ouro cresce suavemente ou tem saltos? Sinta-se recompensado pela sua coragem. Dica: use `(andar ~/ 2) * 0.10` para calcular bônus.
 
@@ -436,8 +443,8 @@ A mesma criatura fica progressivamente mais desafiadora.
 Neste capítulo, você aprendeu:
 
 - Loot tables modelam o que cada inimigo deixa cair quando morre
-- `EntradaSaque` encapsula item, chance e quantidade; `Roller` resolve aleatoriedade
-- `Economia` é o governador central: preços, drops, dificuldade escalonada
+- `EntradaSaque` encapsula item, chance e quantidade; `Rolador` resolve aleatoriedade
+- `Economia` é o governador central: preços, *drops*, dificuldade escalonada
 - Constantes de balanceamento permitem ajustar o jogo rapidamente
 - Simulação valida a curva: 100 corridas revelam se o jogo é justo ou quebrado
 - Dificuldade por andar escala inimigos naturalmente, sem queda abrupta
@@ -452,6 +459,6 @@ Testes de economia são tão importantes quanto testes de código. Uma simples m
 
 ## Próximo Capítulo
 
-No Capítulo 23, vamos transformar esta economia em UI tangível: a loja do comerciante. Você não apenas ganha ouro, mas entra numa sala especial, vê preços, compra e vende itens com o comerciante. A economia ganha corpo.
+No Capítulo 23, a economia ganha uma interface tangível. Vamos construir a loja do mercador — com `ItemVenda`, `Mercador`, `LojaRenderer` e `ModoLoja` — onde o jogador pode comprar, vender e planejar estraticamente seus próximos movimentos.
 
 ***

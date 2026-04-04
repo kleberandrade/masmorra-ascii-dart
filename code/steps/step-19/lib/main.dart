@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:math';
-import 'package:step_19_campo_visao/dungeon.dart';
+import 'package:step_19_campo_visao/mapa_masmorra.dart';
 import 'package:step_19_campo_visao/tela_ascii.dart';
 import 'package:step_19_campo_visao/tile.dart';
 import 'package:step_19_campo_visao/campo_visao.dart';

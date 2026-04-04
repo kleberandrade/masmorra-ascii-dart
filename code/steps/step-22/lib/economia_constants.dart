@@ -1,8 +1,8 @@
 /// Constantes de balanceamento da economia
 class EconomiaConstants {
   /// Dificuldade escalonada por andar
-  static const int kBaseHpPorInimigo = 10;
-  static const double kAumentoHpPorAndar = 0.2; // +20% HP por andar
+  static const int kBaseHPPorInimigo = 10;
+  static const double kAumentoHPPorAndar = 0.2; // +20% HP por andar
 
   /// Recompensas em ouro
   static const int kOuroBasePorInimigo = 5;

@@ -6,35 +6,38 @@
 
 Neste capítulo você vai:
 
-- Entender generics: `List<T>`, `BarramentoEventos<T extends EventoJogo>`
-- Criar uma hierarquia de sealed classes para eventos: `EventoCombate`, `EventoLoot`, `EventoMovimento`, `EventoNivel`
-- Usar pattern matching em Dart 3: **switch expressions** com destructuring
+- Entender *generics*: `List<T>`, `BarramentoEventos<T extends EventoJogo>`
+- Criar uma hierarquia de *sealed classes* para eventos: `EventoCombate`, `EventoLoot`, `EventoMovimento`, `EventoNivel`
+- Usar *pattern matching* em Dart 3: *switch expressions* com destructuring
 - Implementar um `BarramentoEventos` genérico que filtra eventos por tipo
-- Criar um log de eventos rich, com renderização diferenciada por tipo
+- Criar um log de eventos *rich*, com renderização diferenciada por tipo
 - Integrar eventos no fluxo de jogo: cada ação dispara um evento
-- Mostrar notificações em tempo real: loot pickups, levelups, combate
-- Demonstrar **guard clauses** em pattern matching
+- Mostrar notificações em tempo real: *loot pickups*, *levelups*, combate
+- Demonstrar *guard clauses* em pattern matching
 
 Ao final, você terá um sistema de eventos tipado que torna o jogo mais narrativo e reativo.
 
 ## Generics: Uma Rápida Recordação
 
-Você já conhece `List<T>`. Generics são a forma de Dart dizer: "esta estrutura pode guardar qualquer tipo, mas vou ser estrito sobre qual tipo é". É segurança de tipos em tempo de compilação.
+Você já conhece `List<T>`. *Generics* são a forma de Dart dizer: "esta estrutura pode guardar qualquer tipo, mas vou ser estrito sobre qual tipo é". É segurança de tipos em tempo de compilação. Sem generics, você teria listas sem tipo e teria que fazer *cast* (conversão) manual toda vez, arriscando erros em tempo de execução. Com generics, o compilador sabe exatamente o que você guardou e avisa se tenta usar errado.
 
 ```dart
 List<int> numeros = [1, 2, 3];
 List<String> nomes = ['Alice', 'Bob'];
+// Isto não compila:
+// numeros.add('texto'); // ← erro em tempo de compilação: esperava int
 ```
 
 O `T` é um parâmetro de tipo. Significa: esta lista pode conter qualquer tipo, desde que todas as coisas nela sejam do mesmo tipo.
 
-**Generics em classes customizadas:**
+**Generics em classes customizadas:** Você pode criar suas próprias classes genéricas. Observe como `Caixa<T>` funciona para qualquer tipo:
 
 ```dart
 class Caixa<T> {
   T? conteudo;
 
   void guardar(T item) {
+    // ← T é substituído pelo tipo real quando você cria a Caixa
     conteudo = item;
   }
 
@@ -48,15 +51,31 @@ class Caixa<T> {
 final caixaInt = Caixa<int>();
 caixaInt.guardar(42);
 print(caixaInt.remover()); // 42
+
+final caixaString = Caixa<String>();
+caixaString.guardar('magia');
+print(caixaString.remover()); // magia
 ```
+
+**Saída esperada:**
+```text
+42
+magia
+```
+
+Cada instância de `Caixa` é especializada para um tipo específico. Isto é o poder dos generics: código reutilizável mas type-safe.
 
 ## Hierarquia de Eventos com Sealed Classes
 
-Eventos são dados imutáveis que representam algo que aconteceu. Usamos sealed classes para uma hierarquia fechada:
+Eventos são dados imutáveis que representam algo que aconteceu no jogo. Cada evento é um snapshot de um momento: "você atacou", "coletou item", "subiu de nível". Eventos são *sealed classes* — uma hierarquia fechada onde apenas certos tipos podem existir. Isto garante que quando você processa eventos em um switch, o compilador pode certificar que cobriu **todos** os casos possíveis. Sem sealed classes, seria fácil esquecer um tipo de evento e ter comportamento não esperado.
+
+**Por que eventos imutáveis?** Uma vez criado um evento, ele representa um fato histórico que não muda. Se você lança `EventoLoot(quantidade: 5)` e depois muda para `3`, você falsificou a história. Imutabilidade força clareza: para mudar o comportamento futuro, lance um novo evento, não modifique o antigo.
 
 ```dart
 // lib/evento_jogo.dart
 
+// ← sealed class: apenas as subclasses neste
+// arquivo podem herdar EventoJogo
 sealed class EventoJogo {
   final DateTime timestamp;
 
@@ -104,8 +123,9 @@ class EventoLoot extends EventoJogo {
 }
 
 /// Evento de movimento: você moveu-se
-/// Nota: usa registros (records) de Dart 3 para pares de coordenadas
+/// Nota: usa *records* de Dart 3 para pares de coordenadas.
 class EventoMovimento extends EventoJogo {
+  // ← Tupla nomeada: (int x, int y) é imutável e anônima
   final (int x, int y) de;
   final (int x, int y) para;
 
@@ -143,28 +163,39 @@ class EventoNivel extends EventoJogo {
 
 Um `BarramentoEventos` é um registador (log) de eventos tipado. Permite subscrições filtradas e callbacks. Pense como um serviço de notificações: alguém dispara um evento (ex: item coletado), e todas as subscrições recebem a notificação automaticamente. Isto desacopla completamente: o gerenciador de combate não precisa saber que a UI existe; combate dispara evento, UI sente e reage de forma independente.
 
+**Por que este padrão?** Sem eventos, cada ação (ataque, loot, movimento) teria que informar manualmente à UI, ao log, ao sistema de achievements, etc. Código cada vez mais acoplado. Com eventos, há um canal central: tudo que importa dispara um evento, qualquer coisa interessada subscreve. Adicionar nova feature (áudio, efeitos, achievements) é trivial: cria um novo listener, subscreve ao evento relevante, pronto. Nada no código de combate muda.
+
 ```dart
 // lib/barramento_eventos.dart
 
+/// Sistema de eventos genérico e tipado
+/// T deve ser EventoJogo ou subclasse para garantir compatibilidade
 class BarramentoEventos<T extends EventoJogo> {
   final List<T> eventos = [];
+  // ← Callbacks: funções que reagem quando um evento é disparado
   final List<void Function(T)> _listeners = [];
 
+  /// Dispara um evento e notifica todos os listeners
   void dispara(T evento) {
     eventos.add(evento);
+    // ← Itera listeners e chama cada um; qualquer pode reagir
     for (final listener in _listeners) {
       listener(evento);
     }
   }
 
+  /// Subscreve a este barramento: ao disparar, seu callback é chamado
   void subscreve(void Function(T) callback) {
     _listeners.add(callback);
   }
 
+  /// Remove um callback da lista de listeners
   void desinscreve(void Function(T) callback) {
     _listeners.remove(callback);
   }
 
+  /// Filtra eventos por tipo: retorna só EventoLoot, por ex.
+  /// Útil para gerar relatórios: "quantos loots coletei?"
   List<T> filtrarPorTipo<U extends T>() {
     return eventos.whereType<U>().toList();
   }
@@ -185,41 +216,78 @@ class BarramentoEventos<T extends EventoJogo> {
 
 ## Pattern Matching em Dart 3
 
-O pattern matching permite desconstructir dados de forma clara. Aqui está o power:
+O *pattern matching* permite desconstructir dados de forma clara e expressar lógica condicional de forma muito mais legível do que if/else aninhados. Dart 3 introduziu *switch expressions* (não apenas statements): em vez de `if (evento is EventoCombate) { ... }`, você escreve um `switch` que desconstructura e filtra simultaneamente. É como decomposição estrutural: "este dado tem essa forma? Se sim, extraia seus campos e processe."
+
+**Antes (if/else aninhado):**
+```dart
+if (evento is EventoCombate) {
+  final dano = evento.dano;
+  if (dano > 50) {
+    print('[CRÍTICO] Dano muito alto: $dano');
+  } else {
+    print('Dano normal: $dano');
+  }
+}
+```
+
+**Depois (pattern matching):**
+```dart
+// ← Muito mais conciso e legível
+final mensagem = switch (evento) {
+  EventoCombate(:final dano) when dano > 50 => '[CRÍTICO] Dano: $dano',
+  EventoCombate(:final dano) => 'Dano: $dano',
+  _ => 'Outro tipo de evento',
+};
+```
+
+Aqui está o power:
 
 ```dart
 // lib/processador_eventos.dart
 
 class ProcessadorEventos {
+  // ← switch expression: retorna um valor (String)
   static String renderizar(EventoJogo evento) {
     return switch (evento) {
+      // ← Extrai campos com (:final dano)
+      // ← when clause: condição extra; só aplica se dano > 50
       EventoCombate(:final mensagem, :final dano) when dano > 50 =>
         '[CRÍTICO] $mensagem (dano: $dano)',
 
+      // ← Mesmo tipo, mas sem guard clause: todos
+      // os combates com dano <= 50
       EventoCombate(:final mensagem, :final dano) =>
         '> $mensagem (dano: $dano)',
 
-      EventoLoot(:final nomeItem, :final quantidade) when quantidade > 1 =>
+      // ← Extrai nomeItem e quantidade; mostra
+      // plural se quantidade > 1
+      EventoLoot(:final nomeItem, :final quantidade)
+          when quantidade > 1 =>
         '+ $quantidade x $nomeItem',
 
       EventoLoot(:final nomeItem, :final quantidade) =>
         '+ $nomeItem',
 
+      // ← Extrai tupla de coordenadas e acessa campos ($1 = x, $2 = y)
       EventoMovimento(:final de, :final para) =>
         '> Movimento: (${de.$1},${de.$2}) → (${para.$1},${para.$2})',
 
       EventoNivel(:final nivelNovo, :final bonus) =>
         'LEVEL UP! Nível $nivelNovo! +$bonus',
 
+      // ← Fallback: qualquer outro tipo de evento
       _ => '? Evento desconhecido',
     };
   }
 
+  // ← switch statement: executa código, não retorna valor
   static void processar(EventoJogo evento) {
     switch (evento) {
+      // ← (:final atacante?) = atacante é opcional (pode ser null)
       case EventoCombate(:final dano, :final atacante?) when dano > 0:
         print('> $atacante causou $dano dano!');
 
+      // ← dano < 0 significa você sofreu dano (negativo)
       case EventoCombate(:final dano) when dano < 0:
         print('! Recebeu ${dano.abs()} de dano!');
 
@@ -229,6 +297,7 @@ class ProcessadorEventos {
       case EventoNivel(:final nivelAnterior, :final nivelNovo):
         print('* Subiu de nível $nivelAnterior → $nivelNovo!');
 
+      // ← Matches mas não usa nada; break é suficiente
       case EventoMovimento():
         break;
 
@@ -239,30 +308,53 @@ class ProcessadorEventos {
 }
 ```
 
-**Quebra-cabeça:**
+**Saída esperada (após disparar eventos):**
+```text
+[CRÍTICO] Dragão ataca! (dano: 75)
++ 3 x Moeda de Ouro
++ Poção de Mana
+LEVEL UP! Nível 5! +5 HP, +2 ATK
+```
 
-- `(:final dano)` desconstructures o campo `dano`
-- `when dano > 50` é uma guard clause: aplica-se só se verdadeira
-- `(:final atacante?)` significa "pode ser null"
-- `_` é match-all (qualquer coisa)
+**Símbolos descodificados:**
+
+- `(:final dano)` desconstructures o campo `dano` de `EventoCombate`
+- `when dano > 50` é uma *guard clause*: a correspondência só aplica se verdadeira
+- `(:final atacante?)` significa "pode ser null"; o `?` o marca como opcional
+- `_` é *match-all*: qualquer coisa; usado para fallback
+- `$1` e `$2` acessam campos de um *record* (tupla): primeiro e segundo elementos
+- `switch (x)` pode ser expressão (`=> valor`) ou statement (`{ código }`)
 
 ## Integrando Eventos no Jogo
 
 Cada ação dispara um evento. Quando você se move, um `EventoMovimento` é disparado. Quando coleta item, um `EventoLoot`. Quando sofre dano, um `EventoCombate`. Cada evento é registado no barramento, listeners recebem notificação, renderizam mensagem na tela.
 
+Observe como isso desacopla completamente o código: a classe que gerencia movimento não precisa saber nada sobre renderização. Ela apenas dispara o evento. Qualquer coisa interessada em movimento subscreve ao barramento e reage. Isto permite:
+
+1. **Múltiplos listeners**: UI, log, áudio, achievements — todos reagem ao mesmo evento
+2. **Fácil adicionar features**: novo sistema de achievements? Subscreve ao barramento, pronto
+3. **Testabilidade**: você pode testar o comportamento sem UI, disparando eventos diretamente
+4. **Auditoria**: o histórico de eventos é uma log completa do que aconteceu
+
 ```dart
 // lib/dungeon_com_eventos.dart
 
+/// Gerenciador do dungeon que dispara eventos para tudo que acontece
 class DungeonComEventos {
   late BarramentoEventos<EventoJogo> eventoBus;
+  late Jogador jogador;
+  late MapaMasmorra mapa;
 
   DungeonComEventos() {
     eventoBus = BarramentoEventos<EventoJogo>();
+    // ← Subscreve ao barramento: toda vez que algo é disparado,
+    //   ProcessadorEventos.renderizar() é chamado
     eventoBus.subscreve((evento) {
       print(ProcessadorEventos.renderizar(evento));
     });
   }
 
+  /// Movimento dispara evento com origem e destino (para replay/undo)
   void moverJogador(int dx, int dy) {
     final xAnterior = jogador.x;
     final yAnterior = jogador.y;
@@ -270,15 +362,18 @@ class DungeonComEventos {
     jogador.x += dx;
     jogador.y += dy;
 
+    // ← Cria um record (tupla) com as coordenadas
     eventoBus.dispara(EventoMovimento(
       de: (xAnterior, yAnterior),
       para: (jogador.x, jogador.y),
     ));
   }
 
+  /// Ganhar item dispara evento de loot com fonte
   void ganharItem(String itemId, String nomeItem, int quantidade) {
     jogador.adicionarItem(itemId);
 
+    // ← Registra a fonte do item (chão, inimigo, loja, etc.)
     eventoBus.dispara(EventoLoot(
       itemId: itemId,
       nomeItem: nomeItem,
@@ -287,9 +382,12 @@ class DungeonComEventos {
     ));
   }
 
+  /// Sofrer dano dispara combate (dano negativo = você recebeu dano)
   void sofrerDano(int dano) {
     jogador.hp -= dano;
 
+    // ← dano é negativo aqui; ProcessadorEventos
+    // interpreta como sofrimento
     eventoBus.dispara(EventoCombate(
       mensagem: 'Sofreste dano!',
       dano: -dano,
@@ -297,6 +395,7 @@ class DungeonComEventos {
     ));
   }
 
+  /// Level up dispara evento com bônus
   void levelUp() {
     final nivelAnterior = jogador.nivel;
     jogador.nivel++;
@@ -309,6 +408,99 @@ class DungeonComEventos {
   }
 }
 ```
+
+**Saída esperada (sequência típica):**
+```text
+> Movimento: (5,3) → (6,3)
++ Poção de Mana
+> Dragão causou 15 dano!
+! Recebeu 15 de dano!
+* Subiu de nível 3 → 4!
+```
+
+## Antes vs. Depois: Arquitetura de Eventos
+
+### Antes: Acoplamento Direto
+
+```dart
+// Combate conhece tudo; tudo está entrosado
+class Combate {
+  void atacar(Inimigo inimigo) {
+    int dano = calcularDano(heroi.arma, inimigo.defesa);
+    inimigo.hp -= dano;
+
+    // UI deve saber como renderizar
+    ui.mostrarDano(dano);
+
+    // Log deve saber como registrar
+    log.adicionarLinha('Ataque causou $dano');
+
+    // Sistema de sons deve saber
+    audio.tocarSomCombate(dano);
+
+    // Se adicionar achievements, muda tudo aqui
+    if (dano > 50) achievements.unlock('CRITICO');
+  }
+}
+```
+
+**Problema:** Combate conhece UI, Log, Áudio, Achievements. Adicionar novidade quebra tudo.
+
+### Depois: Desacoplamento com Eventos
+
+```dart
+// Combate é puro
+class Combate {
+  final BarramentoEventos eventoBus;
+
+  void atacar(Inimigo inimigo) {
+    int dano = calcularDano(heroi.arma, inimigo.defesa);
+    inimigo.hp -= dano;
+
+    // Dispara evento; ninguém especifico é chamado
+    eventoBus.dispara(EventoCombate(
+      mensagem: 'Ataque!',
+      dano: dano,
+    ));
+  }
+}
+
+// UI subscreve
+eventoBus.subscreve((evento) {
+  if (evento is EventoCombate) {
+    ui.mostrarDano(evento.dano);
+  }
+});
+
+// Log subscreve
+eventoBus.subscreve((evento) {
+  log.adicionarLinha(evento.toString());
+});
+
+// Áudio subscreve
+eventoBus.subscreve((evento) {
+  if (evento is EventoCombate) {
+    audio.tocarSomCombate(evento.dano);
+  }
+});
+
+// Achievements subscreve
+eventoBus.subscreve((evento) {
+  if (evento is EventoCombate && evento.dano > 50) {
+    achievements.unlock('CRITICO');
+  }
+});
+```
+
+**Ganho:** Combate não muda. Cada sistema subscreve independentemente. Adicionar nova feature é adicionar um novo listener — zero modificação do código existente.
+
+## Por Que Não Apenas Callbacks Simples?
+
+Você pode pensar: "Por que não apenas passar um callback para Combate.atacar()?" Resposta: porque então Combate precisa conhecer **todos** os callbacks. Se temos UI, Log, Áudio, Achievements, Combate.atacar() teria 4+ parâmetros de callback. Cada novo sistema adiciona um parâmetro. Isto é **hell de parâmetros**.
+
+Com eventos, há um único canal central. Qualquer coisa que queira reagir subscreve uma vez. Combate nunca muda sua assinatura. Isto é escalável: 5 sistemas, 5 listeners independentes. Mil sistemas? Mil listeners independentes. Combate não sabe disso tudo.
+
+Além disso, eventos são **históricos**: você pode guardar uma lista completa de tudo que aconteceu (para replay, debug, análise). Com callbacks, é fugace: reage e esquece.
 
 ## Desafios da Masmorra
 
@@ -328,14 +520,21 @@ class DungeonComEventos {
 
 Neste capítulo, você aprendeu:
 
-- Generics (`<T>`, `<T extends BaseType>`) permitem código reutilizável e tipado
-- Sealed classes criam hierarquias fechadas e hierárquicas de eventos
-- Pattern matching em Dart 3 (`switch` com destructuring e `when`) é limpo e expressivo
-- `BarramentoEventos<T>` é um sistema de eventos tipado que notifica subscritos
+- *Generics* (`<T>`, `<T extends BaseType>`) permitem código reutilizável e *type-safe*
+- *Sealed classes* criam hierarquias fechadas e seguras de eventos
+- *Pattern matching* em Dart 3 (`switch` com destructuring e `when`) é limpo e expressivo
+- `BarramentoEventos<T>` é um sistema de eventos tipado que notifica subscritos (padrão *Observer*)
 - `ProcessadorEventos` renderiza eventos de forma humanizada com regras por tipo
 - Integração: cada ação do jogo dispara um evento, criando um log narrativo
+- Desacoplamento: nenhum sistema precisa conhecer os outros; todos reagem a eventos
 
-O sistema de eventos transforma um jogo silencioso em um que fala. Cada ação é registada, cada vitória é celebrada.
+O sistema de eventos transforma um jogo silencioso em um que fala. Cada ação é registada, cada vitória é celebrada. A arquitetura fica limpa: adicionar novidades é subscrever um novo listener, não modificar código existente.
+
+::: nota
+**Código Completo no Step**
+
+O diretório `code/steps/step-24/` contém a classe `DungeonComEventos`, que integra todos os componentes de eventos ensinados neste capítulo. `DungeonComEventos` é o maestro que orquestra movimento, coleta de itens, dano e subidas de nível — cada ação dispara eventos apropriados no `BarramentoEventos`. É aqui que você vê sealed classes, generics e pattern matching trabalhando juntos para criar uma arquitetura reactiva, limpa e extensível. Consulte o step para ver como a integração entre `ProcessadorEventos`, listeners e o gerenciador central funciona em contexto real.
+:::
 
 ## Dica Profissional
 

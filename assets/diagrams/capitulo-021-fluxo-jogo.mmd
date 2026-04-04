@@ -1,0 +1,22 @@
+flowchart TB
+  subgraph init[INICIALIZAÇÃO]
+    direction TB
+    i1[Criar jogador] --> i2[Gerar andar 0] --> i3[Spawnar entidades]
+    i3 --> i4[Calcular FOV inicial] --> i5[Mostrar primeira frame]
+  end
+  subgraph loop[LOOP PRINCIPAL enquanto vivo]
+    direction TB
+    l1[Limpar tela] --> l2[Renderizar mapa com FOV]
+    l2 --> l3[Renderizar entidades com FOV] --> l4[Renderizar HUD]
+    l4 --> l5[Ler input] --> l6[Processar movimento e colisão]
+    l6 --> l7[Recalcular FOV] --> l8[Verificar morte]
+    l8 --> l9[Verificar chegada à escada] --> l10[Próxima iteração]
+    l10 --> l1
+  end
+  subgraph out[CONDIÇÕES DE SAÍDA]
+    direction TB
+    o1[Jogador morre → Game Over]
+    o2[Jogador atinge andar 5 → Vitória]
+  end
+  init --> loop
+  loop -.-> out

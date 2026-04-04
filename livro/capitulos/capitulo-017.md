@@ -11,7 +11,7 @@ Especificamente:
 - A classe Random de `dart:math`: `nextInt()`, `nextDouble()`, `nextBool()`
 - Sementes (seeds): entender por que reprodutibilidade é essencial
 - Seeded vs unseeded `Random`. Diferença e quando usar cada uma
-- Por que sementes importam em roguelikes: debugging, testes, modo replayável
+- Por que sementes importam em *roguelikes*: debugging, testes, modo replayável
 - Geração aleatória de itens em tiles de chão
 - Colocação aleatória de inimigos (evitando posição inicial do jogador)
 - Loot tables: probabilidades ponderadas (comum, raro, épico)
@@ -90,7 +90,7 @@ void main() {
 
 ## Parte 3: Por Que Sementes Importam em Roguelikes
 
-Sementes são a arma secreta para debug e testes em roguelikes. Em vez de "meu jogo está quebrado aleatoriamente", você pode reproduzir exatamente o mesmo mapa/combate e investigar. Vamos ver dois cenários onde sementes são essenciais.
+Sementes são a arma secreta para debug e testes em *roguelikes*. Em vez de "meu jogo está quebrado aleatoriamente", você pode reproduzir exatamente o mesmo mapa/combate e investigar. Vamos ver dois cenários onde sementes são essenciais.
 
 ### Caso 1: Debugging
 
@@ -151,7 +151,8 @@ class SessaoJogo {
       final x = random.nextInt(mapa.largura);
       final y = random.nextInt(mapa.altura);
 
-      if (mapa.ehPassavel(x, y) && !(x == jogador.x && y == jogador.y)) {
+      if (mapa.ehPassavel(x, y) &&
+          !(x == jogador.x && y == jogador.y)) {
         itens.add(Item(
           nome: _gerarNomeItem(),
           x: x,
@@ -232,7 +233,7 @@ class SessaoJogo {
 ```
 
 
-## Parte 6: Loot Tables . Probabilidades Ponderadas
+## Parte 6: Loot Tables — Probabilidades Ponderadas
 
 Loot tables com raridade são essenciais em RPGs. Você define probabilidades (70% comum, 20% raro, etc.) e sorteia aleatoriamente qual item o jogador recebe. A técnica é simples: role um número 0-99, e dependendo do resultado, devolva a raridade. Depois, `gerarItemPorRaridade()` escolhe qual item específico dessa raridade. Isso cria variedade realista sem sobrecarga de código.
 
@@ -261,9 +262,12 @@ class TabelaLoot {
 
   String gerarItemPorRaridade(RaridadeItem raridade) {
     return switch (raridade) {
-      RaridadeItem.comum => ['Moeda', 'Pão', 'Lenha'][random.nextInt(3)],
-      RaridadeItem.raro => ['Poção de Vida', 'Espada de Ferro'][random.nextInt(2)],
-      RaridadeItem.epico => ['Sabre de Ouro', 'Capa Mágica'][random.nextInt(2)],
+      RaridadeItem.comum =>
+          ['Moeda', 'Pão', 'Lenha'][random.nextInt(3)],
+      RaridadeItem.raro =>
+          ['Poção de Vida', 'Espada de Ferro'][random.nextInt(2)],
+      RaridadeItem.epico =>
+          ['Sabre de Ouro', 'Capa Mágica'][random.nextInt(2)],
       RaridadeItem.lendario => 'Excalibur',
     };
   }
@@ -280,7 +284,7 @@ class TabelaLoot {
 ```
 
 
-## Parte 7: Classe Rolador . Utilitária de Dados
+## Parte 7: Classe Rolador — Utilitária de Dados
 
 A classe `Rolador` encapsula operações aleatórias comuns em RPGs. Em vez de escrever `random.nextInt(...)` em cem lugares diferentes, você usa `rolador.d(6)` ou `rolador.chance(60)`. Note o método `escolherPonderado()` que sorteia de um `Map<String, int>` onde as chaves são opções e valores são pesos. Isso é muito usado para raridade, inimigos em ambientes, etc.
 
@@ -368,6 +372,11 @@ void main() {
 
 **Boss Final 17.5. Teste de Determinismo (Replicabilidade).** Implemente `==` e `hashCode` em suas classes principais (Mapa, Jogador, Inimigo). Escreva testes que verificam: (1) Mapas com semente 42 são idênticos, (2) Semente 43 é diferente, (3) Semente 42 novamente = idêntico à primeira. Isso demonstra que o caos é controlado: mesma semente = mesma jornada. Esse é o fundamento de replays.
 
+::: nota
+**Código Completo no Step**
+
+O diretório `code/steps/step-17/` estende os conceitos deste capítulo com classes adicionais: `RaridadeItem` (enum para classificar itens por raridade), `TabelaLoot` (classe que encapsula loot tables completas e inteligentes), e `SalvoJogo` (classe que serializa o estado da sessão, incluindo semente, turno e posição do jogador). Essas classes não são mostradas aqui mas são compiladas no step, demonstrando como organizar aleatoriedade em um projeto real com persistência e configuração.
+:::
 
 ::: dica
 **Dica do Mestre:** Gerenciamento de sementes em produção: em um jogo real, você quer que a semente seja visível ao jogador (para replay, streaming, speedrun). Considere adicionar um menu que mostra a semente inicial ou salve-a junto com o savegame:

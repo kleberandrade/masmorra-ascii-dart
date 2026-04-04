@@ -22,7 +22,7 @@ Antes de codificar, vamos pensar como um designer. Um item numa masmorra tem car
 - Um preço (quanto custa comprar)
 - Um peso (realismo mínimo)
 
-Mas nem todos os itens são iguais. Uma espada é um `Item`, mas precisa de `dano`. Uma armadura é `Item`, mas precisa de `defesa`. Uma poção é `Item`, mas precisa de `efeitoHps`.
+Mas nem todos os itens são iguais. Uma espada é um `Item`, mas precisa de `dano`. Uma armadura é `Item`, mas precisa de `defesa`. Uma poção é `Item`, mas precisa de `efeitoHP`.
 
 Essa é a oportunidade perfeita para herança de classes: todos os itens compartilham estrutura comum, mas cada tipo especializa isso de forma diferente.
 
@@ -49,7 +49,9 @@ class Item {
   });
 
   @override
-  String toString() => '$nome (id: $id, preço: $preco ouro, peso: $peso)';
+  String toString() =>
+      '$nome (id: $id, preço: $preco ouro, '
+      'peso: $peso)';
 }
 ```
 
@@ -316,11 +318,13 @@ class Jogador {
   void mostraStatus() {
     print('\n== STATUS ==');
     print('HP: $hp/$maxHp');
-    print('Dano: $danoTotal (base: $danoBase' +
-          (armaEquipada != null ? ' + ${armaEquipada!.dano} arma' : '') +
-          ')');
+    print('Dano: $danoTotal (base: $danoBase'
+        '${armaEquipada != null ? ' + ${armaEquipada!.dano} arma' : ''}'
+        ')');
     print('Defesa: $defesaTotal (base: 2' +
-          (armaduraEquipada != null ? ' + ${armaduraEquipada!.defesa} armadura' : '') +
+          (armaduraEquipada != null
+              ? ' + ${armaduraEquipada!.defesa} armadura'
+              : '') +
           ')');
     print('Ouro: $ouro');
   }
@@ -341,7 +345,8 @@ class Jogador {
 
   bool tentarComprar(Item item) {
     if (ouro < item.preco) {
-      print('Dinheiro insuficiente! Custa ${item.preco}, você tem $ouro.');
+      print('Dinheiro insuficiente! '
+          'Custa ${item.preco}, você tem $ouro.');
       return false;
     }
 
@@ -352,7 +357,8 @@ class Jogador {
   }
 
   bool tentarVender(int indiceNoInventario) {
-    if (indiceNoInventario < 0 || indiceNoInventario >= inventario.length) {
+    if (indiceNoInventario < 0 ||
+        indiceNoInventario >= inventario.length) {
       print('Índice inválido!');
       return false;
     }
@@ -360,7 +366,7 @@ class Jogador {
     final item = inventario[indiceNoInventario];
 
     if (armaEquipada == item || armaduraEquipada == item) {
-      print('Você não pode vender algo que está equipado! Desequipe primeiro.');
+      print('Não pode vender algo equipado! Desequipe antes.');
       return false;
     }
 
@@ -565,3 +571,7 @@ No próximo capítulo, vamos usar todo esse sistema num combate real, onde o dan
 ::: dica
 **Dica do Mestre:** `sealed class` (Dart 3+) são incríveis para limitar a hierarquia. Use `sealed class Item` e `final class Arma extends Item` para garantir que apenas `Arma`, `Armadura` e `Consumivel` podem estender `Item`. Com `sealed`, o compilador avisa se você esquecer um caso num `switch`. Isso previne bugs no futuro, quando adicionar novos tipos.
 :::
+
+## Próximo Capítulo
+
+No próximo capítulo, o sangue corre. O sistema de combate por turnos ganha vida com ataques, defesas, críticos e a tensão de cada decisão.

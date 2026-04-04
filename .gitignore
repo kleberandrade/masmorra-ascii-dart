@@ -19,6 +19,10 @@ __pycache__/
 .DS_Store
 Thumbs.db
 *~
+.fuse_hidden*
+
+# Backups locais de capítulos / editores
+*.md.bak
 
 # Editores / IDE (local)
 *.swp

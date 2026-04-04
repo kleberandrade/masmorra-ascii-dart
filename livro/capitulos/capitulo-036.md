@@ -116,6 +116,8 @@ class Patrulhando implements EstadoIA {
 }
 ```
 
+> **Nota:** O método `self.temLinhaDeVisao()` verifica se há linha de visão direta entre o inimigo e o alvo usando o algoritmo de Bresenham, sem paredes ou obstáculos bloqueando (implementado em `campo_visao.dart`, Capítulo 19). O método `mapa.caminhoParaPos()` retorna o próximo passo do caminho mais curto entre duas posições (implementado em `pathing.dart`, Capítulo 20).
+
 ### Alerta
 
 Alerta é um estado intermediário. O inimigo viu você, mas não tem certeza. Aguarda 3 turnos. Se você sair de visão, volta a patrulhar. Se se aproximar, passa para perseguição ou ataque. É como em Zelda quando um inimigo te vê, pisca e fica em guarda antes de atacar.
@@ -129,9 +131,10 @@ class Alerta implements EstadoIA {
     if (!self.temLinhaDeVisao(alvo, mapa)) {
       turnosAlerta++;
       if (turnosAlerta > 3) {
-        // Retorna ao patrulhamento com rota vazia (simplificado para este exemplo).
-        // Em um sistema real, você poderia gerar uma rota aleatória ou retomar patrulha anterior.
-        // Aqui, com rota vazia, o inimigo fica imóvel até detectar o jogador novamente.
+        // Retorna ao patrulhamento com rota vazia (simplificado).
+        // Num sistema real, poderia gerar rota aleatória ou
+        // retomar a patrulha anterior. Com rota vazia, o inimigo
+        // fica imóvel até detectar o jogador novamente.
         return Patrulhando([]);
       }
       return null;
@@ -155,6 +158,8 @@ class Alerta implements EstadoIA {
   String get nome => "Alerta";
 }
 ```
+
+> **Nota:** O método `mapa.distancia()` calcula a distância Manhattan entre duas posições, usada para determinar se o inimigo está próximo o suficiente para atacar (implementado em `mapa.dart`, Capítulo 12).
 
 ### Perseguindo
 
@@ -190,6 +195,8 @@ class Perseguindo implements EstadoIA {
   String get nome => "Perseguindo";
 }
 ```
+
+> **Nota:** O método `mapa.caminhoParaPos()` retorna o próximo passo do caminho mais curto, essencial para fazer o inimigo se mover inteligentemente em direção ao alvo sem atravessar paredes (implementado em `pathing.dart`, Capítulo 20).
 
 ### Atacando
 
@@ -239,9 +246,10 @@ class Fugindo implements EstadoIA {
     }
 
     if (turnosFuga > 10) {
-      // Retorna ao patrulhamento com rota vazia (simplificado para este exemplo).
-      // Em um sistema real, você poderia gerar uma rota aleatória ou retomar patrulha anterior.
-      // Aqui, com rota vazia, o inimigo fica imóvel até detectar o jogador novamente.
+      // Retorna ao patrulhamento com rota vazia (simplificado).
+      // Num sistema real, poderia gerar rota aleatória ou retomar
+      // a patrulha anterior. Com rota vazia, o inimigo fica imóvel
+      // até detectar o jogador novamente.
       return Patrulhando([]);
     }
 
@@ -263,40 +271,13 @@ class Fugindo implements EstadoIA {
 }
 ```
 
+> **Nota:** O método `mapa.caminhoParaPos()` com `inverso: true` retorna o próximo passo na direção *oposta* ao alvo, implementando assim um comportamento inteligente de fuga (em vez de apenas mover aleatoriamente). Esse mecanismo evita que inimigos fuja eternamente: após 10 turnos de fuga, retorna ao patrulhamento (implementado em `pathing.dart`, Capítulo 20).
+
 ## Diagrama de Transições
 
-Aqui está o ciclo de vida de um inimigo em ASCII:
+Ciclo de vida de um inimigo (FSM). A fonte editável do diagrama está em `assets/diagrams/capitulo-036-fsm-transicoes.mmd`; o PNG é gerado em `./scripts/build.sh` com Node.js/npx (`@mermaid-js/mermaid-cli`).
 
-```text
-        +─────────────+
-        | Patrulhando |
-        +─────────────+
-              |
-         Vê o herói
-              |
-              v
-        +─────────────+
-        |   Alerta    |
-        +─────────────+
-          /         \
-      /                 \
-     v                   v
-+──────────────+   +──────────────+
-| Perseguindo  |---| Atacando     |
-+──────────────+   +──────────────+
-     ^                    |
-     |               HP muito baixo
-     +────────┐       |
-              +──────────────+
-              | Fugindo      |
-              +──────────────+
-                    |
-            HP restaurada
-            ou timeout
-                    |
-                    v
-              Patrulhando
-```
+![Diagrama de transições da FSM do inimigo](assets/diagrams/capitulo-036-fsm-transicoes.png)
 
 ## Fases de Boss com FSM
 
@@ -414,7 +395,26 @@ Neste capítulo você aprendeu o padrão State, transformando comportamento comp
 
 **Desafio 36.5. (Desafio). Implemente uma máquina de estado de "Comportamento Imprevisível" onde o boss tem 5 estados (Atacando, Fugindo, Invulnerável, ChamandoMinions, Regenerando), cada um com 30% de chance de ser escolhido quando o anterior termina. Adicione debug logging de cada mudança de estado.
 
-**Boss Final 36.6. Volte ao Capítulo 34 (Strategy) e substitua os `if/else` aninhados que controlam a IA dos inimigos por uma máquina de estados completa. Implementa estados para o Lobo: Patrulhando (começa aqui), Alerta (quando você está a 5 tiles de distância e tem linha de visão), Perseguindo (quando está a 3 tiles), Atacando (quando está ao lado), Fugindo (quando HP < 25%). O símbolo do Lobo muda a cada estado no mapa: `L` patrulhando, `L?` alerta, `L!` perseguindo, `L!!` atacando, `L..` fugindo. Rode o jogo e observe como a máquina de estados torna o comportamento do inimigo previsível mas estratégico: você consegue "ler" o mapa pelo símbolo e saber exatamente em que estado cada Lobo está.
+**Desafio 36.7. Implemente um estado `Confuso` com o seguinte comportamento:
+- O inimigo anda aleatoriamente durante exatamente 5 turnos
+- A cada turno, há 10% de chance de se recuperar (transicionar de volta para `Alerta`)
+- Se o inimigo é atacado enquanto confuso, sai do estado imediatamente e vai para `Atacando`
+- Adicione uma estratégia que faz o inimigo entrar em pânico quando toma dano crítico (> 50% do HP em uma ação), transitando para `Confuso` por 3 turnos como reflexo defensivo
+
+**Desafio 36.8. Crie um estado `VigiaEspecial` que transiciona automaticamente para `Confuso`:
+- Este estado representa um inimigo em alta alerta que vai ficar confuso se não conseguir atacar por muito tempo
+- Se o inimigo não consegue atingir o herói em linha reta por 4 turnos consecutivos (está bloqueado), fica confuso
+- Use um contador interno `turnosBloquados` que incrementa cada turno se o inimigo não tem linha reta para o herói
+- Implemente transição: `VigiaEspecial` -> `Confuso` (quando contador atinge 4) -> `Alerta` (após 5 turnos confuso)
+
+**Desafio 36.9. Implemente um estado `BossEmFuria` que:
+- Só é acessível quando o boss tem menos de 20% de HP (estado enraivecido)
+- Neste estado, o boss ignora linha de visão e persegue o herói por toda a masmorra
+- Ataque a cada turno (não aguarda) com dano aumentado em 50%
+- Após 10 turnos de fúria, o boss explode e morre (mecanismo de limite de tempo para evitar combates infinitos)
+- Transição visual: símbolo muda para `D!!!` (Dragão em fúria) quando entra neste estado
+
+**Boss Final 36.10. Volte ao Capítulo 34 (Strategy) e substitua os `if/else` aninhados que controlam a IA dos inimigos por uma máquina de estados completa. Implementa estados para o Lobo: Patrulhando (começa aqui), Alerta (quando você está a 5 tiles de distância e tem linha de visão), Perseguindo (quando está a 3 tiles), Atacando (quando está ao lado), Fugindo (quando HP < 25%). O símbolo do Lobo muda a cada estado no mapa: `L` patrulhando, `L?` alerta, `L!` perseguindo, `L!!` atacando, `L..` fugindo. Rode o jogo e observe como a máquina de estados torna o comportamento do inimigo previsível mas estratégico: você consegue "ler" o mapa pelo símbolo e saber exatamente em que estado cada Lobo está.
 
 ***
 
@@ -422,4 +422,6 @@ O padrão State transformou comportamento complexo em máquinas de estado explí
 
 > *"Uma máquina de estado bem feita é como um roteiro bem escrito: cada cena conhece a próxima, cada personagem conhece seu papel nesta cena, e a audiência acompanha cada passo."*
 
-No capítulo final, você verá uma visão geral completa de tudo que construiu, polirá a interface e estará pronto para mostrar seu jogo ao mundo.
+## Próximo Capítulo
+
+No Capítulo 37, você consolidará tudo que aprendeu sobre design patterns e assincronismo numa aplicação completa. Verá como State, Factory, Observer e Strategy trabalham juntos para criar um ecossistema de jogo coeso. Polirá a interface, salvará o jogo com persistência robusta, e estará pronto para mostrar seu projeto ao mundo como um exemplo de engenharia de software profissional em Dart.

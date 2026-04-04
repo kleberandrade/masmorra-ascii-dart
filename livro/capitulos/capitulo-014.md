@@ -17,7 +17,7 @@ Ao final, você terá um sistema completo de combate que é o pico emocional des
 
 ## Parte 1: Conceitualizando a luta
 
-Um **combate por turnos** em roguelike tem estrutura:
+Um **combate por turnos** em *roguelike* tem estrutura:
 
 1. Inicialização: jogador encontra inimigo, entrada no "modo combate"
 2. Loop de turnos:
@@ -76,7 +76,9 @@ class Combate {
     print('⚔ COMBATE ⚔');
     print('${jogador.nome} vs ${inimigo.nome}');
     print('$barraJogador $barraInimigo');
-    print('HP: ${jogador.hp}/${jogador.maxHp}  HP: ${inimigo.hp}/${inimigo.maxHp}');
+    final hpJ = '${jogador.hp}/${jogador.maxHp}';
+    final hpI = '${inimigo.hp}/${inimigo.maxHp}';
+    print('HP: $hpJ  HP: $hpI');
     print('Atq: ${jogador.danoTotal}  Atq: ${inimigo.danoBase}');
     print('');
   }
@@ -91,7 +93,8 @@ class Combate {
 
   bool atacar() {
     final variacao = (jogador.danoTotal * 0.2).toInt();
-    final dano = jogador.danoTotal - variacao + random.nextInt(variacao * 2);
+    final dano = jogador.danoTotal - variacao +
+        random.nextInt(variacao * 2);
 
     _registrar('> ${jogador.nome} ataca com força! Dano: $dano');
 
@@ -135,7 +138,8 @@ class Combate {
       jogador.hp = (jogador.hp + cura).clamp(0, jogador.maxHp);
       final curaReal = jogador.hp - vidaAnterior;
 
-      _registrar('> ${jogador.nome} bebe uma poção e recupera $curaReal HP!');
+      _registrar('> ${jogador.nome} bebe uma poção '
+          'e recupera $curaReal HP!');
       jogador.inventario.removeAt(indiceNoInventario);
       return false;
     }
@@ -153,7 +157,8 @@ class Combate {
       int danoFinal = dano;
       if (defesaAtiva) {
         danoFinal = (dano * 0.6).toInt();
-        _registrar('> ${inimigo.nome} ataca, mas a defesa reduz o impacto!');
+        _registrar('> ${inimigo.nome} ataca, mas '
+            'a defesa reduz o impacto!');
       } else {
         _registrar('> ${inimigo.nome} contra-ataca! Dano: $danoFinal');
       }
@@ -201,7 +206,8 @@ class Combate {
           }
           break;
         case '4':
-          stdout.write('Qual item? (0-${jogador.inventario.length - 1}): ');
+          stdout.write('Qual item? '
+              '(0-${jogador.inventario.length - 1}): ');
           final indiceStr = stdin.readLineSync() ?? '0';
           usarItem(int.tryParse(indiceStr) ?? 0);
           break;
@@ -286,7 +292,7 @@ Notas importantes:
 
 ## Parte 3: Classe Inimigo e Subtipos
 
-Agora você precisa de inimigos que funcionem com combate. Mas aqui surge um problema clássico: seu roguelike tem Zumbi, Lobo e Orc. Cada um é diferente em nome, HP, dano e habilidades. Se você criasse cada um do zero como uma classe separada, teria muita duplicação: `class Zumbi { int hpMax; int hpAtual; int dano; ... sofrerDano() { ... } }` e `class Lobo { int hpMax; int hpAtual; int dano; ... sofrerDano() { ... } }`. O código `sofrerDano()` é idêntico em ambos. Você estaria escrevendo a mesma coisa várias vezes.
+Agora você precisa de inimigos que funcionem com combate. Mas aqui surge um problema clássico: seu *roguelike* tem Zumbi, Lobo e Orc. Cada um é diferente em nome, HP, dano e habilidades. Se você criasse cada um do zero como uma classe separada, teria muita duplicação: `class Zumbi { int hpMax; int hpAtual; int dano; ... sofrerDano() { ... } }` e `class Lobo { int hpMax; int hpAtual; int dano; ... sofrerDano() { ... } }`. O código `sofrerDano()` é idêntico em ambos. Você estaria escrevendo a mesma coisa várias vezes.
 
 Aí entra a classe abstrata. Você cria uma `abstract class Inimigo` que define a estrutura e o comportamento comum a todos os inimigos: HP, dano, método `sofrerDano()`, método para calcular dano aleatório. Depois, cada inimigo (Zumbi, Lobo, Orc) herda desse template e personaliza apenas o que é único: seu loot, suas habilidades especiais, seus valores base. Zero duplicação.
 
@@ -300,7 +306,8 @@ import 'item.dart';
 import 'combate.dart';
 
 abstract class Inimigo {
-  static final Random _random = Random(); // Reutilize uma única instância entre todos os inimigos
+  // Reutilize uma única instância entre todos os inimigos
+  static final Random _random = Random();
 
   final String id;
   final String nome;
@@ -451,7 +458,7 @@ Aí entra o padrão Factory. Você centraliza toda a lógica de criação de ini
 Para gerar inimigos pelo ID, use o padrão Factory (uma `class` com métodos estáticos). Você não cria `Zumbi()` diretamente, mas chama `FabricaInimigo.criarPorId('zumbi')`. Note a função `gerarInimigo()` que escolhe aleatoriamente qual tipo de inimigo aparece num certo ambiente (floresta vs catacumba).
 
 ```dart
-// lib/enemy_factory.dart
+// lib/fabrica_inimigo.dart
 
 import 'dart:math';
 import 'inimigo.dart';
@@ -497,7 +504,7 @@ import 'dart:io';
 import 'jogador.dart';
 import 'arma.dart';
 import 'item.dart';
-import 'enemy_factory.dart';
+import 'fabrica_inimigo.dart';
 
 void main() {
   final jogador = Jogador(
@@ -542,12 +549,13 @@ void main() {
 
 Ao final desta parte, seu combate no terminal se parece com isto:
 
-```
+```text
 
 ⚔ COMBATE ⚔
 
 Aldric          vs Lobo Selvagem
-██████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░ ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+██████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 HP: 80/100          HP: 15/50
 Atq: 12             Atq: 8
 
@@ -571,6 +579,12 @@ XP: +50
 ```
 
 Cada parte adiciona novas camadas ao jogo. Compare com o início e veja o quanto você evoluiu nesta jornada!
+
+::: nota
+**Código Completo no Step**
+
+O diretório `code/steps/step-14/` contém a implementação completa e compilável deste capítulo. Note que o método `enfrentarInimigo()` no passo 14 está integrado na classe `Jogador`, e a orquestração final do combate (chamadas em sequência de encontros, game loop principal) está em `main.dart`. O capítulo foca nos conceitos de combate por turnos; o step completo mostra como integrar essa lógica na aventura maior, separando responsabilidades entre `Combate`, `Jogador` e o ponto de entrada da aplicação.
+:::
 
 ***
 
@@ -600,7 +614,7 @@ Neste capítulo você aprendeu:
 - Recompensas: ouro, XP, itens baseado em derrota
 - ASCII visual: barras de HP, `log`, estrutura clara com `@override`
 
-Seu jogo agora é um verdadeiro roguelike com combate completo. Isso é o pico emocional desta parte.
+Seu jogo agora é um verdadeiro *roguelike* com combate completo. Isso é o pico emocional desta parte.
 
 No próximo capítulo começaremos a expandir a exploração da masmorra, com salas, movimento 2D e encontros dinâmicos.
 

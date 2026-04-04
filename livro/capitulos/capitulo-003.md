@@ -2,7 +2,7 @@
 
 > *O menu da taverna está pregado na parede com uma adaga. "1, Cerveja. 2, Hidromel. 0, Sair." O aventureiro escolhe. O taberneiro reage. E o menu continua ali, esperando a próxima escolha.*
 
-Até agora o programa aceita um comando e morre. Isso não é um jogo, é uma máquina de venda automática com uma única moeda. Um jogo de verdade precisa de duas coisas: decisões (reagir de forma diferente a cada input) e repetição (continuar rodando até o jogador decidir parar). Neste capítulo vamos construir as duas, e o resultado será o primeiro loop interativo com **turnos** do nosso roguelike.
+Até agora o programa aceita um comando e morre. Isso não é um jogo, é uma máquina de venda automática com uma única moeda. Um jogo de verdade precisa de duas coisas: decisões (reagir de forma diferente a cada input) e repetição (continuar rodando até o jogador decidir parar). Neste capítulo vamos construir as duas, e o resultado será o primeiro loop interativo com **turnos** do nosso *roguelike*.
 
 ## Decisões com **if**, `else if`, `else`
 
@@ -217,6 +217,7 @@ Se o jogador digitar algo que não é número, `opcao` será `-1`, um valor que 
 Agora vamos juntar tudo num menu que roda em loop:
 
 ```dart
+// main.dart
 import 'dart:io';
 
 void exibirBanner() {
@@ -260,7 +261,7 @@ void mostrarStatus(String nome) {
 
 void mostrarAjuda() {
   print('');
-  print('Masmorra ASCII é um roguelike em texto.');
+  print('Masmorra ASCII é um *roguelike* em texto.');
   print('Use os números do menu para navegar.');
   print('Em breve você poderá explorar masmorras,');
   print('lutar contra monstros e coletar tesouros.');
@@ -427,10 +428,10 @@ print('HP: ${hp}/${maxHp} ${hp < 20 ? "(PERIGO!)" : ""}');
 
 ## Pergaminho do Capítulo
 
-Você aprendeu `if`/`else if`/`else`, `switch`/`case`, `while` com o padrão `while (true)` e `break`, `for` para repetições contadas, `int.tryParse` para conversão segura, e o operador ternário para condições compactas. O programa agora é um game loop funcional: roda continuamente, aceita múltiplos comandos, e trata input inválido.
+Você aprendeu `if`/`else if`/`else`, `switch`/`case`, `while` com o padrão `while (true)` e `break`, `for` para repetições contadas, `int.tryParse` para conversão segura, e o operador ternário para condições compactas. O programa agora é um *game loop* funcional: roda continuamente, aceita múltiplos comandos, e trata input inválido.
 
 No Capítulo 4, vamos entender null safety de Dart: por que `readLineSync()` retorna `String?` e como Dart protege você de crashes.
 
 ::: dica
-**Dica do Mestre:** O `while (true)` com `break` e o `while (variavel)` são dois padrões igualmente válidos para game loops. Use o que fizer mais sentido para cada situação.
+**Dica do Mestre:** O `while (true)` com `break` e o `while (variavel)` são dois padrões igualmente válidos para *game loops*. Use o que fizer mais sentido para cada situação.
 :::

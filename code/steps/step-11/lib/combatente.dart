@@ -7,6 +7,7 @@ mixin Combatente {
     if (hp < 0) {
       hp = 0;
     }
+    print('Sofri $d de dano! HP agora é $hp');
   }
 
   void curar(int q) {
@@ -14,6 +15,7 @@ mixin Combatente {
     if (hp > maxHp) {
       hp = maxHp;
     }
+    print('Curado por $q. HP agora é $hp');
   }
 
   bool get estaVivo => hp > 0;
@@ -22,26 +24,5 @@ mixin Combatente {
     final preenchimento = '█' * (hp ~/ (maxHp ~/ 10 + 1));
     final vazio = '░' * (10 - preenchimento.length);
     return '[$preenchimento$vazio] $hp/$maxHp';
-  }
-}
-
-mixin Curavel on Combatente {
-  void regenerar(int pontos) {
-    curar(pontos);
-  }
-}
-
-mixin Envenenavel on Combatente {
-  int veneno = 0;
-
-  void envenenar(int quantidade) {
-    veneno += quantidade;
-  }
-
-  void aplicarDanoVeneno() {
-    if (veneno > 0) {
-      sofrerDano(veneno);
-      veneno = 0;
-    }
   }
 }

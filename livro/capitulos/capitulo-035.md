@@ -2,7 +2,7 @@
 
 > *Você mata um inimigo. Instantaneamente: som toca, tela pisca, XP sobe, conquista desbloqueia. O mundo não estava esperando sua ordem—estava observando. Quando algo muda, tudo que precisa saber é notificado. Cacos que se comunicam sem se acoplarem.*
 
-Neste capítulo você vai implementar **Factory (padrão de design)** para criar inimigos e itens de forma escalável e data-driven, e **Observer (padrão de design)** para fazer múltiplos sistemas reagirem aos eventos sem acoplamento direto. Aprenderá também sobre **Singleton**, um padrão para garantir que apenas uma instância de uma classe exista no programa.
+Neste capítulo você vai implementar **Factory (padrão de design)** para criar inimigos e itens de forma escalável e **data-driven** e **Observer (padrão de design)** para fazer múltiplos sistemas reagirem aos eventos sem acoplamento direto. Aprenderá também sobre **Singleton**, um padrão para garantir que apenas uma instância de uma classe exista no programa.
 
 ## Factory: Construtor Central
 
@@ -43,6 +43,7 @@ Problemas:
 Agora toda definição está em um único lugar. Um `Map` de catálogo mapeia tipo (string) para definição. Métodos estáticos criam inimigos: `criar('zumbi', 3)` cria um zumbi no andar 3, com HP e dano escalonados por andar. Mudar HP de um zumbi? Mude em um lugar. Quer um novo tipo? Adicione ao catálogo. O resto do código nunca vê os detalhes construtivos; sempre vai through a factory. Isso é elegância.
 
 ```dart
+// lib/fabrica_inimigo.dart
 class FabricaInimigo {
   static final Map<String, DefinicaoInimigo> catalogo = {
     'zumbi': DefinicaoInimigo(
@@ -155,13 +156,14 @@ var zumbi = FabricaInimigo.criar('zumbi', 3);
 var aleatorio = FabricaInimigo.criarAleatorio(5);
 ```
 
-É como o spawner de monstros em Minecraft: tudo vem de um único lugar, balanceado por andar.
+É como o *spawner* de monstros em Minecraft: tudo vem de um único lugar, balanceado por andar.
 
-### ### FabricaItem: Similarmente
+### FabricaItem: Similarmente
 
 Itens também precisam de factory. Aqui, cada item tem nome, descrição, valor, raridade e um `criador` (uma função que constrói o item real). Isso permite criar diferentes tipos de poções, armas e armaduras sem espalhar lógica de construção por todo o código.
 
 ```dart
+// lib/fabrica_item.dart
 class FabricaItem {
   static final Map<String, DefinicaoItem> catalogo = {
     'pocao_vida': DefinicaoItem(
@@ -213,6 +215,10 @@ class DefinicaoItem {
 
 O padrão Observer permite que múltiplos observadores se inscrevam em eventos sem que o disparador conheça os observadores. Usa `Stream` Dart e `StreamController` para desacoplar totalmente.
 
+## Por que Factory e Observer Juntos?
+
+Factory e Observer são complementares. Factory **cria** os objetos (inimigos, itens) de forma consistente. Observer **reage** ao que esses objetos fazem (morte, coleta, dano). Factory diz "aqui está um novo zumbi"; Observer diz "algo importante aconteceu, vou reagir". Juntos, eles separam **criação** (centralizada, orientada a dados) de **comportamento** (reativo, desacoplado). É uma arquitetura poderosa: o que é criado é controlado em um lugar, mas como o sistema reage é extensível sem modificação.
+
 ### O Problema: Acoplamento
 
 Sem Observer, matar um inimigo seria acoplado demais:
@@ -238,6 +244,7 @@ Tudo em uma função. Novo observador? Edita aqui. Ruim.
 Em vez de `matarInimigo` saber de tudo, ele apenas emite um evento: "um inimigo morreu". Quem se importa? Log, UI, som, conquistas, estatísticas. Todos escutam. Nenhum conhece o outro. `matarInimigo` não precisa saber de nada além do evento básico. Quer adicionar um novo sistema que reage a mortes? Cria um novo observador e o registra. Zero mudança no código de combate.
 
 ```dart
+// lib/barramento_eventos.dart
 abstract class EventoJogo {
   final DateTime timestamp = DateTime.now();
 }
@@ -293,9 +300,10 @@ class BarramentoEventos {
 
 ### Observadores Concretos
 
-Cada observador é uma classe simples que escuta um tipo de evento e reage. `ObservadorLog` escreve no log. `ObservadorUI` pisca a tela. `ObservadorSom` toca um efeito sonoro. Cada um é isolado e testável. Se o log está quebrado, não afeta som. Se sound está quebrado, não afeta conquistas.
+Cada observador é uma classe simples que escuta um tipo de evento e reage. `ObservadorLog` escreve no log. `ObservadorUI` pisca a tela. `ObservadorSom` toca um efeito sonoro. Cada um é isolado e testável. Se o log está quebrado, não afeta som. Se o som está quebrado, não afeta conquistas.
 
 ```dart
+// lib/observadores.dart
 class ObservadorLog {
   final BarramentoEventos bus;
   final Log log;
@@ -307,7 +315,8 @@ class ObservadorLog {
         log.escrever("${evento.inimigo.nome} foi derrotado!");
       } else if (evento is EventoDanoAplicado) {
         log.escrever(
-          "${evento.atacante.nome} ataca ${evento.alvo.nome} por ${evento.dano}!",
+          "${evento.atacante.nome} -> "
+          "${evento.alvo.nome}: ${evento.dano}!",
         );
       }
     });
@@ -345,7 +354,8 @@ class ObservadorUI {
   ObservadorUI(this.bus, this.ui) {
     subscription = bus.on<EventoJogo>().listen((evento) {
       if (evento is EventoDanoAplicado) {
-        ui.piscar(cor: Cor.vermelho, duracao: Duration(milliseconds: 150));
+        ui.piscar(
+            cor: Cor.vermelho, duracao: Duration(milliseconds: 150));
       } else if (evento is EventoMorteInimigo) {
         ui.mostrarAnimacaoMorte(evento.inimigo.pos);
       }
@@ -378,7 +388,7 @@ class ObservadorSom {
 
 ## Integrando Factory e Observer
 
-Factory cria, Observer reage. Combina assim:
+Factory cria, Observer reage. Veja como se combinam:
 
 Factory gera inimigos de forma consistente. Durante um turno, o inimigo age, e a ação é executada. Se a ação é um ataque que mata o alvo, um evento é emitido. Todos os observadores registrados escutam e reagem. Simples, elegante, extensível.
 
@@ -465,7 +475,7 @@ Feito. Nenhuma alteração em código de combate.
 
 ## Pergaminho do Capítulo
 
-Neste capítulo você aprendeu como Factory centraliza a criação de objetos, removendo lógica de construção espalhada por todo o código. Implementou FabricaInimigo que define balanceamento em um único lugar e FabricaItem para itens, ambas permitindo fácil extensão e carregamento de dados via JSON. O padrão Observer permitiu que múltiplos sistemas (log, UI, som, estatísticas, conquistas) reajam a eventos do jogo (morte, dano, colheita) sem conhecerem um ao outro, eliminando acoplamento e simplificando a adição de novos comportamentos. Juntos, Factory e Observer transformam um jogo de um sistema monolítico em um ecossistema modular e extensível, onde novos inimigos e novos observadores se adicionam sem modificar código existente.
+Neste capítulo você aprendeu como Factory centraliza a criação de objetos, removendo lógica de construção espalhada por todo o código. Implementou `FabricaInimigo` que define balanceamento em um único lugar e `FabricaItem` para itens, ambas permitindo fácil extensão e carregamento de dados via JSON. O padrão Observer permitiu que múltiplos sistemas (log, UI, som, estatísticas, conquistas) reajam a eventos do jogo (morte, dano, colheita) sem conhecerem um ao outro, eliminando acoplamento e simplificando a adição de novos comportamentos. Juntos, Factory e Observer transformam um jogo de um sistema monolítico em um ecossistema modular e extensível, onde novos inimigos e novos observadores se adicionam sem modificar código existente.
 
 ::: dica
 **Dica do Mestre:** Factory Pattern é essencial em desenvolvimento real. Qualquer sistema que cria múltiplos objetos de tipos variados deve centralizar essa criação. Em aplicações web, factories criam modelos de banco de dados. Em sistemas de configuração, factories parseiam dados e constroem objetos. Em testes, factories criam fixtures. Observer é igualmente crucial: é a base de qualquer sistema event-driven profissional. Desde sistemas de notificação em apps até pipelines de data processing, Observer permite que sistemas desacoplados se comuniquem. O investimento em aprender esses padrões agora te preparará para código profissional em qualquer contexto.
@@ -485,10 +495,25 @@ Neste capítulo você aprendeu como Factory centraliza a criação de objetos, r
 
 **Boss Final 35.5. Implemente um sistema de "Reações em Cadeia" onde um evento dispara eventos posteriores (morte -> loot -> colheita -> XP -> subida de nível -> conquista). Use `Future` e `Timer` para simular delays entre reações.
 
+**Desafio 35.6. Implemente um `ObservadorFiltro` que permite observadores se inscreverem apenas em eventos que atendem certos critérios:
+- Exemplo: `bus.onComFiltro<EventoDanoAplicado>((evento) => evento.dano > 10)` só reage a dano acima de 10
+- Implemente `Stream<T> onComFiltro<T extends EventoJogo>(bool Function(T) filtro)` no `BarramentoEventos`
+- Crie um `ObservadorDanoCrítico` que só reage quando o dano em um ataque é maior que 50% do HP máximo do alvo
+
+**Desafio 35.7. Crie um `RegistroEventos` que persiste todos os eventos em um arquivo JSON de log:
+- Cada evento tem timestamp, tipo, e dados relevantes
+- Implemente `salvarJSON(String caminho)` e `carregarJSON(String caminho)`
+- Permita replay: leia o JSON, re-emita todos os eventos em sequência com os mesmos timings
+- Útil para debug e para mostrar "replay" de combates para jogador
+
+**Desafio 35.8. Implemente uma `FabricaInimigoEvoluída` que carrega definições não apenas de um JSON estático, mas de múltiplos JSONs baseado em "temas" de andar (tema "undead" para andares 1-5, tema "demonios" para 6-10). Cada tema tem sua própria lista de inimigos com variações de poder. A Factory `carregarTema(String nomeArquivo)` carrega todas as definições de um arquivo JSON estruturado.
+
 ***
 
 Factory transformou criação de inimigos em um processo escalável e orientado a dados. Observer transformou sistemas isolados em um ecossistema de reações elegante. Juntos, eles permitem crescimento sem acoplamento: novos observadores se adicionam sem modificar código anterior, balanço muda via JSON.
 
 > *"A verdadeira elegância de um sistema reside não no que ele faz hoje, mas em quanto pode crescer amanhã sem quebrar o que já funciona."*
 
-No próximo capítulo, você verá o último padrão crucial: máquinas de estado para IA que comporta realmente inteligente.
+## Próximo Capítulo
+
+No Capítulo 36, você verá o último padrão crucial: o padrão **State** para **máquinas de estado finito** (FSM) que permitem IA verdadeiramente inteligente. Enquanto Factory e Observer resolvem criação (de forma centralizada) e reações (de forma desacoplada), State resolve comportamento complexo com transições claras e visuais — a inteligência que torna a IA adaptativa e interessante. Inimigos terão estados discretos (Patrulhando, Alerta, Perseguindo, Atacando, Fugindo) com transições explícitas baseadas em condições, tornando comportamento previsível mas estratégico para o jogador.

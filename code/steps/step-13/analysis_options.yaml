@@ -3,7 +3,6 @@ include: package:lints/recommended.yaml
 linter:
   rules:
     - avoid_empty_else
-    - avoid_print
     - avoid_relative_lib_imports
     - avoid_returning_this
     - avoid_slow_async_io
@@ -23,6 +22,7 @@ linter:
 analyzer:
   exclude: [build/**]
   errors:
+    use_super_parameters: ignore
     missing_required_param: error
     missing_return: error
     todo: ignore

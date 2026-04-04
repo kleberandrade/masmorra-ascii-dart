@@ -31,6 +31,6 @@ class Constantes {
 
   // Progressão
   static const int nivelMaximo = 20;
-  static const double aumentoHpPorAndar = 0.2;
+  static const double aumentoHPPorAndar = 0.2;
   static const double aumentoOuroPorAndar = 0.3;
 }

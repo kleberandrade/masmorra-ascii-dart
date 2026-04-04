@@ -63,6 +63,8 @@ class IAAgressiva implements EstrategiaIa {
 }
 ```
 
+> **Nota:** O método `mapa.distancia()` calcula a distância Manhattan entre duas posições no mapa, utilizada para determinar se um inimigo está próximo o suficiente para atacar (implementado em `mapa.dart`, Capítulo 12). O método `self.temLinhaDeVisao()` verifica se há linha de visão direta entre o inimigo e o alvo (sem paredes bloqueando), usando o algoritmo de Bresenham (implementado em `campo_visao.dart`, Capítulo 19). O método `mapa.caminhoParaPos()` retorna o próximo passo do caminho mais curto entre duas posições, usando busca em largura ou A* (implementado em `pathing.dart`, Capítulo 20).
+
 ### IACovardia: Retirada Estratégica
 
 Um goblin covarde foge quando ferido:
@@ -94,6 +96,8 @@ class IACovardia implements EstrategiaIa {
   }
 }
 ```
+
+> **Nota:** O método `mapa.caminhoParaPos()` aceita um parâmetro nomeado `inverso: true` que inverte o algoritmo de *pathfinding*, retornando um passo na direção *oposta* ao alvo, útil para implementar comportamento de fuga (implementado em `pathing.dart`, Capítulo 20).
 
 ### IAPatrulha: Vigilância Constante
 
@@ -134,6 +138,8 @@ class IAPatrulha implements EstrategiaIa {
 }
 ```
 
+> **Nota:** O método `self.temLinhaDeVisao()` é usado aqui para detectar automaticamente quando um inimigo em patrulha avista o jogador, disparando o início do combate (implementado em `campo_visao.dart`, Capítulo 19). Uma vez que `emCombate` é ativado, permanece assim até a morte, garantindo coerência no comportamento sem alternância errática entre patrulha e perseguição.
+
 ### IAPassiva: Defesa Apenas
 
 Um zumbi anda aleatoriamente e só ataca se for atacado primeiro:
@@ -159,9 +165,11 @@ class IAPassiva implements EstrategiaIa {
 }
 ```
 
+> **Nota:** A estratégia passiva depende do seu código de combate (não mostrado) para atualizar o flag `foiAtacada = true` quando este inimigo sofre dano. Depois disso, funciona como a estratégia agressiva. Este é um exemplo de comunicação entre a IA e o sistema de combate através de estado mutável.
+
 ## Integrando Strategy no Inimigo
 
-Modifique a classe Inimigo para usar uma estratégia.
+Modifique a classe `Inimigo` para usar uma estratégia.
 
 **Quando você integra Strategy:**
 
@@ -231,7 +239,8 @@ class AcaoAtacar implements Acao {
   }
 
   @override
-  String get descricao => "${atacante.nome} ataca ${alvo.nome} por $dano!";
+  String get descricao =>
+      "${atacante.nome} ataca ${alvo.nome} por $dano!";
 }
 ```
 
@@ -395,7 +404,7 @@ Dragão (BossComFases): adapta tática a cada fase, inteligente
 
 ## Pergaminho do Capítulo
 
-Neste capítulo, você aprendeu dois padrões de design que transformam inimigos estáticos em adversários inteligentes e comportamentos previsíveis. O padrão Strategy permite que cada inimigo tenha sua própria "mente" (uma agressiva persegue você ferozmente, outra patrulha e dispara quando detectada, outra foge quando ferida), tudo sem modificar a classe Inimigo. Você implementou cinco estratégias diferentes (IAAgressiva, IACovardia, IAPatrulha, IAPassiva e BossComFases), cada uma definindo como um inimigo decide agir em um turno. O padrão Command encapsula cada ação (ataque, movimento, espera) como um objeto reversível, permitindo que você construa um histórico completo, desfaça ações e implemente replay de combates. Juntos, Strategy e Command eliminam if/else aninhados, criam inimigos que "pensam" e proveem a base para sistemas de IA sofisticados que respeitam a elegância do código.
+Neste capítulo, você aprendeu dois padrões de design que transformam inimigos estáticos em adversários inteligentes e comportamentos previsíveis. O padrão Strategy permite que cada inimigo tenha sua própria "mente" (uma agressiva persegue você ferozmente, outra patrulha e dispara quando detectada, outra foge quando ferida), tudo sem modificar a classe `Inimigo`. Você implementou cinco estratégias diferentes (`IAAgressiva`, `IACovardia`, `IAPatrulha`, `IAPassiva` e `BossComFases`), cada uma definindo como um inimigo decide agir em um turno. O padrão Command encapsula cada ação (ataque, movimento, espera) como um objeto reversível, permitindo que você construa um histórico completo, desfaça ações e implemente replay de combates. Juntos, Strategy e Command eliminam if/else aninhados, criam inimigos que "pensam" e proveem a base para sistemas de IA sofisticados que respeitam a elegância do código.
 
 ::: dica
 **Dica do Mestre:** Strategy e Command são padrões que vão muito além de jogos. Em aplicações reais, use Strategy sempre que tiver múltiplas formas de executar um algoritmo que pode mudar em runtime, e Command sempre que precisar de histórico, undo/redo, ou logging de operações. Um exemplo: um sistema de pagamentos que pode usar Visa, Mastercard, ou Pix; cada é uma Strategy. Um editor de documentos que permite desfazer múltiplas edições; cada edição é um Command. O investimento em aprender esses padrões numa masmorra digital te torna um desenvolvedor melhor em qualquer contexto.
@@ -415,10 +424,26 @@ Neste capítulo, você aprendeu dois padrões de design que transformam inimigos
 
 **Boss Final 34.5. Crie um sistema de "Comportamento Adaptativo" onde um inimigo começa com `IAPatrulha` e, após sofrer 3 ataques consecutivos sem conseguir contra-atacar, muda para `IAAgressiva`. Use um contador interno que reseta quando consegue atacar.
 
+**Desafio 34.6. Implemente uma estratégia `IAMago` para um inimigo mago que:
+- Mantém distância mínima de 3 tiles do herói
+- Lança um ataque mágico (`AcaoLancarMagia`) a cada 2 turnos se o herói está em linha de visão
+- Se o herói se aproxima a menos de 3 tiles, recua (como `IACovardia` mas com limiteHP = 100%)
+- A magia custará um novo atributo `mana`, que regenera 5 pontos por turno quando não está em combate
+
+**Desafio 34.7. Implemente um comando `AcaoDesfazerMultiplo` que desfaz as últimas N ações de uma vez. Modifique `GerenciadorAcoes` para suportar `desfazerN(int n)` e `refazerN(int n)`, permitindo replay rápido de segmentos de combate durante debug.
+
+**Desafio 34.8. Crie uma estratégia `IACompostaAgressiva` que combina múltiplas estratégias em sequência:
+- Primeiros 3 turnos: `IAPatrulha` (patrulha até detectar)
+- Próximos 5 turnos após detectar: `IAAgressiva` (ataque direto)
+- Se HP < 50%: `IACovardia` (foge)
+- Mantém um state machine interno que controla qual sub-estratégia usar em cada fase
+
 ***
 
 O padrão Strategy transformou inimigos passivos em adversários inteligentes. Command permitiu que cada ação fosse registrada e revertida. Juntos, eles formam a base de IA sofisticada. A próxima fronteira é multiplicar esses inimigos inteligentes de forma eficiente e fazer o mundo todo reagir aos eventos do combate.
 
 > *"A inteligência sem ação é mera reflexão. A ação sem inteligência é mera sorte. Um rei verdadeiro domina ambas."*
 
-No próximo capítulo você verá como usar Factory para criar centenas de inimigos variados de forma escalável e Observer para fazer o mundo inteiro reagir aos eventos sem acoplamento.
+## Próximo Capítulo
+
+No Capítulo 35, você verá como usar **Factory** para criar centenas de inimigos variados de forma escalável (centralizada, orientada a dados) e **Observer** para fazer o mundo inteiro reagir aos eventos do combate sem acoplamento direto. Factory define que tipo de inimigo é criado e com que parâmetros; Observer faz cada sistema (log, XP, som, UI) reagir a eventos sem modificar o código de combate.

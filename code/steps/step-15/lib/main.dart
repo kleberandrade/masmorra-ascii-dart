@@ -1,7 +1,7 @@
 // bin/main.dart - Ponto de entrada do jogo
 
 import 'dart:io';
-import 'package:step_15_grid_2d/dungeon.dart';
+import 'package:step_15_grid_2d/mapa_masmorra.dart';
 import 'package:step_15_grid_2d/tile.dart';
 
 void main() {

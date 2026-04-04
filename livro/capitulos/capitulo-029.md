@@ -11,6 +11,7 @@ Testes não eliminam todos os bugs (nenhuma masmorra é completamente segura), m
 ### Cenário 1: Sem Testes
 
 ```dart
+// lib/combate/calculadorDano.dart
 class CalculadorDano {
   int calcular(Jogador atacante, Inimigo alvo) {
     return atacante.ataque - alvo.defesa;
@@ -31,6 +32,7 @@ int calcular(Jogador atacante, Inimigo alvo) {
 Com testes automatizados, você detecta o erro instantaneamente. Você escreve um teste que diz: "calculadora deve retornar 7 quando ataco com 10 e defendo com 3". Agora qualquer mudança acidental é flagrada. Não existe "alguém reclamou horas depois". O teste falha nos primeiros segundos, na sua máquina, antes de você fazer commit.
 
 ```dart
+// test/combate/calculadorDano_test.dart
 void main() {
   test('CalculadorDano: calcular dano simples', () {
     final calc = CalculadorDano();
@@ -73,7 +75,6 @@ Estrutura básica:
 
 ```dart
 // test/exemplo_test.dart
-
 import 'package:test/test.dart';
 
 void main() {
@@ -127,7 +128,6 @@ Convenção: `lib/combate/combate.dart` → `test/combate/combate_test.dart` (sn
 
 ```dart
 // test/modelos/jogador_test.dart
-
 import 'package:test/test.dart';
 import 'package:masmorra_ascii/modelos/jogador.dart';
 
@@ -246,8 +246,7 @@ test('matchers comuns', () {
 ## Testando Combate
 
 ```dart
-// test/sistemas/combate_test.dart
-
+// test/combate/combate_test.dart
 import 'package:test/test.dart';
 import 'package:masmorra_ascii/modelos/jogador.dart';
 import 'package:masmorra_ascii/modelos/inimigo.dart';
@@ -313,7 +312,6 @@ void main() {
 
 ```dart
 // test/jogo/parseador_test.dart
-
 import 'package:test/test.dart';
 import 'package:masmorra_ascii/jogo/parseador.dart';
 
@@ -368,7 +366,6 @@ void main() {
 
 ```dart
 // test/suporte/aleatorio_falso.dart
-
 import 'dart:math';
 
 class AleatorioFalso implements Random {
@@ -403,7 +400,6 @@ Uso:
 
 ```dart
 // test/jogo/lancador_test.dart
-
 import 'package:test/test.dart';
 import 'package:masmorra_ascii/jogo/lancador.dart';
 import '../suporte/aleatorio_falso.dart';
@@ -443,8 +439,7 @@ Testes agora são **determinísticos**: sempre o mesmo resultado.
 Às vezes você quer verificar que um sistema funciona corretamente em média:
 
 ```dart
-// test/economia/tabelaDropTest.dart
-
+// test/economia/tabelaDrop_test.dart
 import 'package:test/test.dart';
 import 'package:masmorra_ascii/economia/tabelaDrop.dart';
 
@@ -544,4 +539,6 @@ Testes são investimento. Primeiro você escreve mais código (testes + implemen
 Assim você tem confiança de que refatorações não quebraram nada. Cada teste que passa é um save point. Você pode caminhar pela caverna escura com segurança.
 :::
 
-No próximo capítulo você vai aprender async/await e JSON, salvando o estado do jogo em arquivo. Testes vão ser essenciais para garantir que save/load funciona corretamente.
+## Próximo Capítulo
+
+No Capítulo 30, o jogo ganha dimensão temporal. `async`, `await` e `Stream` permitirão operações assíncronas como leitura de arquivos, delays cinematográficos e sistemas de eventos reativos.

@@ -1,12 +1,19 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:step_20_entidades/andar_masmorra.dart';
+import 'package:step_20_entidades/gerador_entidades.dart';
 import 'package:step_20_entidades/tile.dart';
 import 'package:step_20_entidades/tela_ascii.dart';
 import 'package:step_20_entidades/campo_visao.dart';
-import 'package:step_20_entidades/entidade.dart';
+import 'package:step_20_entidades/entidade_escada.dart';
+import 'package:step_20_entidades/entidade_inimigo.dart';
+import 'package:step_20_entidades/entidade_item.dart';
+import 'package:step_20_entidades/jogador.dart';
+import 'package:step_20_entidades/mapa_masmorra.dart';
 
 void main() {
   final mapa = MapaMasmorra(largura: 50, altura: 20);
+  final fov = CampoVisao();
 
   for (int y = 0; y < 20; y++) {
     for (int x = 0; x < 50; x++) {
@@ -34,6 +41,7 @@ void main() {
   final spawner = GeradorEntidades(
     mapa: mapa,
     andarAtual: 0,
+    random: Random(),
   );
 
   final andar = AndarMasmorra(
@@ -52,14 +60,13 @@ void main() {
   while (rodando) {
     tela.limpar();
 
-    // Renderizar mapa
     for (int y = 0; y < mapa.altura; y++) {
       for (int x = 0; x < mapa.largura; x++) {
         final char = tileParaChar(mapa.tileEm(x, y));
 
-        if (mapa.fov.estaVisivel(x, y)) {
+        if (fov.estaVisivel(x, y)) {
           tela.desenharChar(x, y, char);
-        } else if (mapa.fov.foiExplorado(x, y)) {
+        } else if (fov.foiExplorado(x, y)) {
           final esfum = switch (char) {
             '#' => '░',
             '.' => '·',
@@ -71,14 +78,12 @@ void main() {
       }
     }
 
-    // Renderizar entidades
     for (final entidade in andar.entidades) {
-      entidade.renderizarNaTela(tela, mapa.fov);
+      entidade.renderizarNaTela(tela, fov);
     }
 
-    jogador.renderizarNaTela(tela, mapa.fov);
+    jogador.renderizarNaTela(tela, fov);
 
-    // HUD
     final hudY = mapa.altura + 1;
     tela.desenharString(0, hudY, '═' * tela.largura);
     tela.desenharString(
@@ -90,14 +95,17 @@ void main() {
 
     tela.renderizar();
 
-    // Input
     stdout.write('> ');
     final cmd = stdin.readLineSync() ?? '';
+    final c = cmd.toLowerCase();
 
-    switch (cmd.toLowerCase()) {
-      case 'w' || 'a' || 's' || 'd':
-        final novoX = jogador.x + (cmd.toLowerCase() == 'd' ? 1 : cmd.toLowerCase() == 'a' ? -1 : 0);
-        final novoY = jogador.y + (cmd.toLowerCase() == 's' ? 1 : cmd.toLowerCase() == 'w' ? -1 : 0);
+    switch (c) {
+      case 'w':
+      case 'a':
+      case 's':
+      case 'd':
+        final novoX = jogador.x + (c == 'd' ? 1 : c == 'a' ? -1 : 0);
+        final novoY = jogador.y + (c == 's' ? 1 : c == 'w' ? -1 : 0);
 
         if (mapa.ehPassavel(novoX, novoY)) {
           final entidade = andar.encontrarEntidadeEm(novoX, novoY);
@@ -129,7 +137,7 @@ void main() {
           }
         }
 
-        mapa.fov.calcularShadowcast(
+        fov.calcularShadowcast(
           Point(jogador.x, jogador.y),
           8,
           mapa,
@@ -138,7 +146,7 @@ void main() {
       case 'q':
         rodando = false;
       default:
-        // Ignorar
+        break;
     }
   }
 

@@ -1,30 +1,44 @@
 import 'dart:io';
 import 'dart:math';
-import 'package:step_18_geracao_procedural/dungeon.dart';
+import 'package:step_18_geracao_procedural/mapa_masmorra.dart';
 import 'package:step_18_geracao_procedural/tela_ascii.dart';
+import 'package:step_18_geracao_procedural/gerador_masmorra_robusta.dart';
 
 void main() {
   print('=== MASMORRA ASCII: Geração Procedural ===\n');
   print('1. Random Walk');
   print('2. Rooms and Corridors');
-  stdout.write('Escolha (1-2): ');
+  print('3. Rooms and Corridors (com validação robusta)');
+  stdout.write('Escolha (1-3): ');
 
   final escolha = stdin.readLineSync() ?? '1';
   final random = Random(42);
 
-  final mapa = escolha == '2'
-      ? MapaMasmorra.comSalasECorredores(
-          largura: 50,
-          altura: 20,
-          random: random,
-          numSalas: 8,
-        )
-      : MapaMasmorra.comRandomWalk(
-          largura: 50,
-          altura: 20,
-          random: random,
-          numPassos: 2000,
-        );
+  late MapaMasmorra mapa;
+
+  if (escolha == '2') {
+    mapa = MapaMasmorra.comSalasECorredores(
+      largura: 50,
+      altura: 20,
+      random: random,
+      numSalas: 8,
+    );
+  } else if (escolha == '3') {
+    final gerador = GeradorMasmorraRobusta();
+    mapa = gerador.gerarValidado(
+      largura: 50,
+      altura: 20,
+      numSalas: 8,
+      maxTentativas: 10,
+    );
+  } else {
+    mapa = MapaMasmorra.comRandomWalk(
+      largura: 50,
+      altura: 20,
+      random: random,
+      numPassos: 2000,
+    );
+  }
 
   final jogador = Jogador(
     nome: 'Aldric',

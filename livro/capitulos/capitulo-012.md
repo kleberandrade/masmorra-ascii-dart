@@ -163,7 +163,8 @@ class ComandoAjuda extends ComandoJogo {
 
   @override
   String executar() =>
-      'Comandos: norte/sul/leste/oeste, atacar, pegar, inv, status, olhar, ajuda, sair';
+      'Comandos: norte/sul/leste/oeste, atacar, pegar, inv, '
+      'status, olhar, ajuda, sair';
 }
 
 class ComandoSair extends ComandoJogo {
@@ -444,3 +445,7 @@ Neste capítulo você aprendeu:
 ::: dica
 **Dica do Mestre:** `sealed class` + `switch` exaustivo = refatoração segura. Imagine que você adiciona um novo comando `ComandoMagia` num projeto grande. Com `sealed class`, o compilador anuncia cada lugar onde você faz `switch` sobre `ComandoJogo`, dizendo "ei, você esqueceu de tratar `ComandoMagia`!". Em linguagens sem `sealed class`, você recebe silenciosamente um `default` anônimo e a lógica fica incompleta. `sealed class` transformam erros em tempo de execução em avisos em tempo de compilação. Isso é refatoração segura.
 :::
+
+## Próximo Capítulo
+
+No próximo capítulo, entramos na Parte III. O herói ganha ouro, armas e um inventário real. A masmorra começa a ter economia.

@@ -69,7 +69,9 @@ class Jogador with Combatente {
   }
 
   @override
-  String toString() => '$nome [$classe, nível $nivel], ${mostrarBarraVida()}';
+  String toString() =>
+      '$nome [$classe, nível $nivel], '
+      '${mostrarBarraVida()}';
 
   void adicionarItem(Item item) {
     inventario.add(item);
@@ -133,7 +135,11 @@ Quando você diz `extends`, você está dizendo "isto é um tipo especializado d
 ## Um exemplo prático
 
 ```dart
-final jogador = Jogador(nome: 'Herói', classe: 'Guerreiro', hpInicial: 30);
+final jogador = Jogador(
+  nome: 'Herói',
+  classe: 'Guerreiro',
+  hpInicial: 30,
+);
 final zumbi = Zumbi();
 
 jogador.sofrerDano(5);
@@ -278,5 +284,9 @@ Neste capítulo você aprendeu:
 Mixins são particularmente úteis em jogos, onde muitos tipos diferentes de entidades (jogador, inimigos, objetos) compartilham capacidades (receber dano, mover, descrição).
 
 ::: dica
-**Dica do Mestre:** Mixins resolvem a "Maldição dos Diamantes" melhor que herança múltipla. Em linguagens como C++, herança múltipla pode criar confusão sobre qual classe-mãe fornece qual método. Dart evita isso: é explícito (`with` te diz que é um `mixin`). Se uma `class` `Zumbi` usa `with Combatente, Envenenavel, Descritivel`, toda gente sabe que tem esses comportamentos. Quando há dúvida sobre compartilhar código, mixins são geralmente a resposta mais limpa do que herança profunda.
+**Dica do Mestre:** Mixins resolvem o *Diamond Problem* melhor que herança múltipla. Em linguagens como C++, herança múltipla pode criar confusão sobre qual classe-mãe fornece qual método. Dart evita isso: é explícito (`with` te diz que é um `mixin`). Se uma `class` `Zumbi` usa `with Combatente, Envenenavel, Descritivel`, toda gente sabe que tem esses comportamentos. Quando há dúvida sobre compartilhar código, mixins são geralmente a resposta mais limpa do que herança profunda.
 :::
+
+## Próximo Capítulo
+
+No próximo capítulo, organizamos os comandos do jogo. Enums e um parser transformam texto digitado em ações do herói.

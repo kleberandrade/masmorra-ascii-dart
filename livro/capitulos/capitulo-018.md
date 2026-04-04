@@ -52,7 +52,7 @@ Desvantagens: sem estrutura (sem salas claras), pode ficar muito aberto ou muito
 A implementação é simples: comece no centro, escolha uma direção aleatória a cada passo, e marque a célula como chão. Use boundary checks para não sair do mapa. Quanto mais passos, mais "furos" o mapa terá. Com 1000 passos você tem uma caverna exploável; com 100 fica muito linear.
 
 ```dart
-// dungeon_generator.dart
+// mapa_masmorra.dart
 
 class MapaMasmorra {
   static MapaMasmorra comRandomWalk({
@@ -97,7 +97,7 @@ class MapaMasmorra {
 
 ### O Conceito
 
-Este é o algoritmo clássico dos roguelikes antigos (Rogue, Nethack, Angband). A ideia:
+Este é o algoritmo clássico dos *roguelikes* antigos (Rogue, Nethack, Angband). A ideia:
 
 1. Gerar N retângulos aleatórios (salas)
 2. Descartar sobreposições (para não ter salas dentro de salas)
@@ -154,14 +154,20 @@ class Sala {
     final x2 = outra.centro.x;
     final y2 = outra.centro.y;
 
-    for (int xx = (x1 < x2 ? x1 : x2); xx <= (x1 > x2 ? x1 : x2); xx++) {
-      if (xx >= 0 && xx < grade[0].length && y1 >= 0 && y1 < grade.length) {
+    for (int xx = (x1 < x2 ? x1 : x2);
+        xx <= (x1 > x2 ? x1 : x2);
+        xx++) {
+      if (xx >= 0 && xx < grade[0].length &&
+          y1 >= 0 && y1 < grade.length) {
         grade[y1][xx] = Tile.chao;
       }
     }
 
-    for (int yy = (y1 < y2 ? y1 : y2); yy <= (y1 > y2 ? y1 : y2); yy++) {
-      if (yy >= 0 && yy < grade.length && x2 >= 0 && x2 < grade[yy].length) {
+    for (int yy = (y1 < y2 ? y1 : y2);
+        yy <= (y1 > y2 ? y1 : y2);
+        yy++) {
+      if (yy >= 0 && yy < grade.length &&
+          x2 >= 0 && x2 < grade[yy].length) {
         grade[yy][x2] = Tile.chao;
       }
     }
@@ -174,7 +180,7 @@ class Sala {
 Este método é a "factory" que constrói um mapa completo com salas e corredores. Ele tenta criar N salas aleatórias, mas só adiciona se não se sobreporem com salas existentes. Depois, desenha cada sala e conecta-as com corredores. O resultado é um mapa exploável e estruturado, perfeito para masmorras construídas.
 
 ```dart
-// dungeon_generator.dart
+// mapa_masmorra.dart
 
 class MapaMasmorra {
   static MapaMasmorra comSalasECorredores({
@@ -193,8 +199,10 @@ class MapaMasmorra {
     final salas = <Sala>[];
 
     for (int i = 0; i < numSalas; i++) {
-      final w = minTamanho + random.nextInt(maxTamanho - minTamanho + 1);
-      final h = minTamanho + random.nextInt(maxTamanho - minTamanho + 1);
+      final w = minTamanho +
+          random.nextInt(maxTamanho - minTamanho + 1);
+      final h = minTamanho +
+          random.nextInt(maxTamanho - minTamanho + 1);
       final x = 1 + random.nextInt(largura - w - 2);
       final y = 1 + random.nextInt(altura - h - 2);
 
@@ -238,14 +246,19 @@ class MapaMasmorra {
 Um mapa "bom" tem um caminho do jogador até as escadas (saída). Isso é chamado "validação de conectividade". O método usa **BFS** (Breadth-First Search) para verificar se existe um caminho entre o centro (onde o jogador começa) e as escadas. Se não houver, o mapa é inválido e você deve gerar de novo. Isto garante que o jogo é sempre ganhável.
 
 ```dart
-// dungeon_map.dart
+// mapa_masmorra.dart
 
 class MapaMasmorra {
   bool validar() {
     final escadas = _encontrarEscadas();
     if (escadas == null) return false;
 
-    return _temCaminhoAte(largura ~/ 2, altura ~/ 2, escadas.x, escadas.y);
+    return _temCaminhoAte(
+      largura ~/ 2,
+      altura ~/ 2,
+      escadas.x,
+      escadas.y,
+    );
   }
 
   Point<int>? _encontrarEscadas() {
@@ -277,7 +290,8 @@ class MapaMasmorra {
         final ny = ponto.y + dy;
 
         if (nx >= 0 && nx < largura && ny >= 0 && ny < altura) {
-          if (ehPassavel(nx, ny) && !visitadas.contains(Point(nx, ny))) {
+          if (ehPassavel(nx, ny) &&
+              !visitadas.contains(Point(nx, ny))) {
             fila.add(Point(nx, ny));
           }
         }
@@ -305,7 +319,8 @@ class ValidadorSalas {
     int alturaMinima = 24,
   }) {
     // Verifica se fica dentro dos limites do mapa
-    if (novaSala.xMax >= larguraMinima || novaSala.yMax >= alturaMinima) {
+    if (novaSala.xMax >= larguraMinima ||
+        novaSala.yMax >= alturaMinima) {
       return false;
     }
 
@@ -331,13 +346,28 @@ class ValidadorSalas {
   }) {
     int colocadas = 0;
 
-    for (int tentativa = 0; tentativa < quantasGenerar * 3; tentativa++) {
-      final largura = minTamanho + random.nextInt(maxTamanho - minTamanho + 1);
-      final altura = minTamanho + random.nextInt(maxTamanho - minTamanho + 1);
-      final x = 1 + random.nextInt((larguraMapa - largura).clamp(1, larguraMapa));
-      final y = 1 + random.nextInt((alturaMapa - altura).clamp(1, alturaMapa));
+    for (int tentativa = 0;
+        tentativa < quantasGenerar * 3;
+        tentativa++) {
+      final largura = minTamanho +
+          random.nextInt(maxTamanho - minTamanho + 1);
+      final altura = minTamanho +
+          random.nextInt(maxTamanho - minTamanho + 1);
+      final x = 1 +
+          random.nextInt(
+            (larguraMapa - largura).clamp(1, larguraMapa),
+          );
+      final y = 1 +
+          random.nextInt(
+            (alturaMapa - altura).clamp(1, alturaMapa),
+          );
 
-      final novaSala = Sala(x: x, y: y, largura: largura, altura: altura);
+      final novaSala = Sala(
+        x: x,
+        y: y,
+        largura: largura,
+        altura: altura,
+      );
 
       if (salaEValida(novaSala, salasDestino, margem: 2)) {
         salasDestino.add(novaSala);
@@ -407,6 +437,10 @@ class ConectorCorredores {
 }
 ```
 
+Percebeu o que aconteceu? Começamos com a validação inline no factory `comSalasECorredores` — funcional, mas tudo misturado num só lugar. Depois extraímos cada responsabilidade para uma classe própria: `ValidadorSalas` cuida da colocação, `ConectorCorredores` cuida das ligações, `ValidadorMapa` cuida da integridade. Agora o factory fica limpo — ele apenas *orquestra* as classes que fazem o trabalho real.
+
+Abra `code/steps/step-18/lib/mapa_masmorra.dart` e veja: o método `comSalasECorredores` delega para `ValidadorSalas` e `ConectorCorredores` em vez de conter toda a lógica. Essa é a evolução natural: do código que funciona para o código que *se explica*.
+
 ### Teste de Conectividade Completa
 
 Após gerar e conectar as salas, valide que o mapa inteiro é explorável:
@@ -447,7 +481,8 @@ class ValidadorMapa {
     }
 
     // 3. Verifica se escada está na maior região
-    final maiorRegiao = regioes.reduce((a, b) => a.length > b.length ? a : b);
+    final maiorRegiao = regioes.reduce((a, b) =>
+        a.length > b.length ? a : b);
     if (!maiorRegiao.contains(escada)) {
       return MapaValidacaoResultado(
         valido: false,
@@ -501,7 +536,8 @@ class ValidadorMapa {
         final nx = ponto.x + dx;
         final ny = ponto.y + dy;
 
-        if (nx >= 0 && nx < mapa.largura && ny >= 0 && ny < mapa.altura) {
+        if (nx >= 0 && nx < mapa.largura &&
+            ny >= 0 && ny < mapa.altura) {
           final prox = Point(nx, ny);
           if (!visitadas.contains(prox) && mapa.ehPassavel(nx, ny)) {
             fila.add(prox);
@@ -600,4 +636,4 @@ Neste capítulo você aprendeu:
 
 **Desafio 18.5. Detector de regiões desconexas.** Crie uma função `int contarRegioesDesconexas(MapaMasmorra mapa)` que usa BFS para contar "ilhas" de floor desconectadas. Mapas válidos devem ter apenas 1 região. Rejeite automaticamente mapas com múltiplas regiões. Teste com Random Walk pouco iterado (ele gera ilhas).
 
-**Boss Final 18.6. Sistema de Sementes reproduzível.** Modifique MapaMasmorra para aceitar seed opcional. Gere 10 mapas com mesma seed: todos devem ser idênticos. Implemente modo "debug" que exibe a seed na HUD ("Seed: 12345"). Permite que jogadores compartilhem sementes para "desafios reproduzíveis": "Vence essa seed em 20 minutos!" Isso torna o jogo estratégico.
+**Boss Final 18.6. Sistema de Sementes reproduzível.** Modifique `MapaMasmorra` para aceitar seed opcional. Gere 10 mapas com mesma seed: todos devem ser idênticos. Implemente modo "debug" que exibe a seed na HUD ("Seed: 12345"). Permite que jogadores compartilhem sementes para "desafios reproduzíveis": "Vence essa seed em 20 minutos!" Isso torna o jogo estratégico.

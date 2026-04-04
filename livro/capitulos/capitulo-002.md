@@ -144,6 +144,7 @@ void exibirStatus(String nome, int nivel, int ouro) {
 Vamos usar todas essas funções juntas:
 
 ```dart
+// main.dart
 import 'dart:io';
 
 void exibirBanner() {
@@ -302,6 +303,7 @@ Vamos usar `tryParse` sempre que o jogador puder digitar algo que não é um nú
 Vamos expandir o programa para algo que já começa a parecer um jogo. O programa vai pedir o nome, apresentar uma descrição de sala, e oferecer opções ao jogador:
 
 ```dart
+// main.dart
 import 'dart:io';
 
 void exibirBanner() {
@@ -421,3 +423,7 @@ No Capítulo 3, você adicionará loops e decisões mais complexas para manter o
 ::: dica
 **Dica do Mestre:** Em jogos de texto, a regra de ouro é nunca ignore o input do jogador. Mesmo que o comando não faça sentido, responda. Um simples "Não entendi, tente novamente" é infinitamente melhor que silêncio. O jogador precisa saber que o jogo está ouvindo, caso contrário, vai achar que travou.
 :::
+
+## Próximo Capítulo
+
+No próximo capítulo, suas variáveis ganham poder de decisão. Com `if`, `else` e `switch`, o jogo começará a reagir às escolhas do jogador. Prepare-se para loops que dão vida ao combate.

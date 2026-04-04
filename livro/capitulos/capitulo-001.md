@@ -12,9 +12,9 @@ Antes de construir masmorras, criar monstros ou gerar mapas procedurais, precisa
 
 Dart é uma linguagem criada pelo Google, conhecida principalmente por ser a base do Flutter. Mas Dart não é apenas Flutter. É uma linguagem completa, com tipagem estática, **null safety** nativo, compilação ahead-of-time (AOT) e just-in-time (JIT), e um ecossistema maduro de pacotes.
 
-Para um **roguelike** no terminal, Dart oferece vantagens reais. A tipagem estática captura erros antes de o programa rodar, e num jogo com dezenas de classes interagindo (jogador, inimigos, itens, salas), isso evita bugs que só apareceriam em runtime. O null safety, que vamos explorar no Capítulo 4, impede aquele crash clássico de tentar acessar algo que não existe. E a sintaxe é limpa o suficiente para que o código seja legível mesmo durante o aprendizado.
+Para um *roguelike* no terminal, Dart oferece vantagens reais. A tipagem estática captura erros antes de o programa rodar, e num jogo com dezenas de classes interagindo (jogador, inimigos, itens, salas), isso evita bugs que só apareceriam em runtime. O null safety, que vamos explorar no Capítulo 4, impede aquele crash clássico de tentar acessar algo que não existe. E a sintaxe é limpa o suficiente para que o código seja legível mesmo durante o aprendizado.
 
-Um **roguelike** clássico combina morte permanente (**permadeath**), exploração de dungeon, combate por turnos, e **geração procedural** para criar infinitos mundos únicos.
+Um *roguelike* clássico combina morte permanente (*permadeath*), exploração de dungeon, combate por turnos, e **geração procedural** para criar infinitos mundos únicos.
 
 Além disso, tudo que aprender aqui se aplica diretamente ao Flutter. Quando terminar o livro, a transição para interfaces gráficas será natural, a lógica do jogo e os padrões já estarão prontos.
 
@@ -104,6 +104,7 @@ cd masmorra_ascii
 Crie o arquivo `lib/main.dart`. Este será o programa principal do nosso jogo durante todo o livro. Escreva:
 
 ```dart
+// main.dart
 void main() {
   print('Bem-vindo à Masmorra ASCII!');
   print('Prepare-se para explorar o desconhecido.');
@@ -153,6 +154,7 @@ Esse é o seu primeiro programa Dart compilado e executado com sucesso. Pode par
 Vamos dar um passo além. Altere o `main` para usar uma variável:
 
 ```dart
+// main.dart
 void main() {
   var nomeJogo = 'Masmorra ASCII';
   var versao = 1;
@@ -258,7 +260,7 @@ Vamos personalizar um pouco:
 
 ```yaml
 name: masmorra_ascii
-description: Um roguelike em ASCII construído com Dart puro.
+description: Um *roguelike* em ASCII construído com Dart puro.
 version: 0.1.0
 
 environment:
@@ -294,6 +296,7 @@ Pode parecer excessivo para um projeto simples, mas essas regras vão nos salvar
 Nosso programa funciona, mas o banner está nu demais. Vamos usar os caracteres box-drawing do Unicode para dar um ar de jogo ao terminal. Substitua o conteúdo de `lib/main.dart`:
 
 ```dart
+// main.dart
 void main() {
   var nomeJogo = 'Masmorra ASCII';
   var versao = '0.1.0';
@@ -328,10 +331,10 @@ Execute `dart lib/main.dart` e veja o banner:
 
 O jogo ainda não é um jogo, é uma placa na porta da masmorra. Mas a fundação está sólida: o projeto existe, compila sem erros, e você já sabe como analisar e formatar o código.
 
-Observe que todo nosso código vive em `lib/main.dart`. À medida que o jogo crescer, vamos criar mais arquivos em `lib/` para organizar classes e funções, mas o ponto de entrada será sempre `lib/main.dart`. O arquivo `lib/masmorra_ascii.dart` gerado pelo `dart create` serve como declaração da biblioteca:
+Observe que todo nosso código vive em `lib/main.dart`. À medida que o jogo crescer, vamos criar mais arquivos em `lib/` para organizar classes e funções, mas o ponto de entrada será sempre `lib/main.dart`. O arquivo `lib/masmorra_ascii.dart`, gerado pelo `dart create`, serve como declaração da biblioteca:
 
 ```dart
-/// Masmorra ASCII, um roguelike em Dart puro.
+/// Masmorra ASCII, um *roguelike* em Dart puro.
 ///
 /// Biblioteca principal do jogo.
 library;
@@ -351,7 +354,7 @@ Ele ficará útil quando começarmos a importar módulos entre arquivos.
 
 **Desafio 1.4. Múltiplas linhas com quebra de linha.** Em vez de usar vários `print()`, tente criar uma única string multilinha usando `\n` ou aspas triplas (`'''`). Execute e compare qual abordagem você acha mais legível no código.
 
-**Boss Final 1.5. **ASCII art** de portal mágico.** Crie uma arte ASCII de um portal mágico ou de uma inscrição antiga na parede da masmorra, usando apenas `print()`. Comece simples (5-10 linhas) e incremente. Teste caracteres especiais: `◆`, `◊`, `✦`, `✧` para efeitos visuais. O objetivo é dominar a saída no terminal e entender como texto visual funciona num roguelike.
+**Boss Final 1.5. **ASCII art** de portal mágico.** Crie uma arte ASCII de um portal mágico ou de uma inscrição antiga na parede da masmorra, usando apenas `print()`. Comece simples (5-10 linhas) e incremente. Teste caracteres especiais: `◆`, `◊`, `✦`, `✧` para efeitos visuais. O objetivo é dominar a saída no terminal e entender como texto visual funciona num *roguelike*.
 
 *Dica do Mestre: Comece com caracteres simples como `*`, `#` e `-` para desenhar a forma geral, depois refine com box-drawing como `╔`, `║`, `═`. Linhas de symmetry ajudam: desenha metade, depois copia e inverte.*
 

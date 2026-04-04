@@ -26,6 +26,8 @@ Todo o código fica em **`code/`** na raiz do repositório. O site aponta para o
 | `masmorra_ascii/` | Jogo completo: `dart lib/main.dart`. É o destino do link "solução final" no site do livro. |
 | `steps/step-NN/` | Estado do código ao fim do capítulo NN; ver o `README.md` dentro da pasta e o índice em `steps/README.md`. |
 
+**Convenção:** em `steps/` e `masmorra_ascii/lib/`, preferir **uma classe ou enum público por ficheiro** (nome do ficheiro alinhado com o tipo), para navegação e imports claros. A pasta `solucoes/` contém scripts de desafio avulsos e está **excluída** da análise em conjunto (`code/analysis_options.yaml`).
+
 ## Requisitos
 
 - [Dart SDK](https://dart.dev/get-dart) (versão compatível com cada `pubspec.yaml`: em geral **3.11+** para `masmorra_ascii` e para os steps recentes).

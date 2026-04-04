@@ -1,16 +1,16 @@
 import 'entrada_saque.dart';
 import 'economia_constants.dart';
-import 'roller.dart';
+import 'rolador.dart';
 
 /// Sistema de economia: drops, preços, balanceamento
 class Economia {
   final Map<String, List<EntradaSaque>> tabelasDrops;
-  final Roller roller;
+  final Rolador rolador;
 
   Economia({
     required this.tabelasDrops,
-    Roller? roller,
-  }) : roller = roller ?? Roller();
+    Rolador? rolador,
+  }) : rolador = rolador ?? Rolador();
 
   /// Resolve os drops de um inimigo derrotado
   List<String> resolverDrop(String nomeInimigo) {
@@ -22,8 +22,8 @@ class Economia {
     final resultado = <String>[];
 
     for (final entry in drops) {
-      if (roller.teste(entry.chance)) {
-        final qtd = entry.resolverQuantidade(roller.random);
+      if (rolador.teste(entry.chance)) {
+        final qtd = entry.resolverQuantidade(rolador.random);
         resultado.add('${entry.itemId}:$qtd');
       }
     }
@@ -59,7 +59,7 @@ class Economia {
 
   /// Retorna dificuldade escalonada para um andar
   double getDificuldadeAndar(int numero) {
-    return 1.0 + (numero * EconomiaConstants.kAumentoHpPorAndar);
+    return 1.0 + (numero * EconomiaConstants.kAumentoHPPorAndar);
   }
 
   /// Retorna recompensa escalonada para um andar

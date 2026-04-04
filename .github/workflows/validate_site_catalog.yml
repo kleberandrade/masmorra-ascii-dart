@@ -40,3 +40,17 @@ jobs:
             exit 1
           fi
           echo "OK: $n_steps steps alinhados com o catálogo."
+
+      - name: Validate chapterSolutionPaths length
+        run: |
+          set -euo pipefail
+          n=$(jq '.chapters | length' site/site_catalog.json)
+          ns=$(jq '.chapterSolutionPaths | length' site/site_catalog.json)
+          if [[ "$n" != "$ns" ]]; then
+            echo "Erro: chapterSolutionPaths ($ns) ≠ chapters ($n)"
+            exit 1
+          fi
+          echo "OK: chapterSolutionPaths alinhado com chapters."
+
+      - name: Verify catalog matches generator output
+        run: python3 scripts/generate_catalog.py --check

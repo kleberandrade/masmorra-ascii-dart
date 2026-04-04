@@ -5,11 +5,11 @@
 
 ## O Que Vamos Aprender
 
-Neste capítulo você vai aprender a separar totalmente modelo e visão usando a classe TelaAscii. Este é o padrão MVC simplificado que profissionais usam.
+Neste capítulo você vai aprender a separar totalmente modelo e visão usando a classe `TelaAscii`. Este é o padrão MVC simplificado que profissionais usam.
 
 Especificamente:
 - Entender por que separar renderização da lógica do jogo: flexibilidade, reutilização, testes
-- Criar a classe TelaAscii com um buffer 2D de caracteres
+- Criar a classe `TelaAscii` com um buffer 2D de caracteres
 - Implementar métodos: `limpar()`, `desenharChar()`, `desenharString()`, `renderizar()`
 - Usar StringBuffer para construir a frame eficientemente
 - Renderizar a camada de fundo (tiles do mapa)
@@ -17,7 +17,7 @@ Especificamente:
 - Desenhar uma HUD abaixo do mapa (HP, ouro, nível, turno)
 - Aplicar códigos de escape ANSI para limpar tela
 - Entender o conceito de frame rate: ciclo limpar → desenhar → renderizar
-- Exemplo completo: MapaMasmorra + Jogador + HUD através de TelaAscii
+- Exemplo completo: `MapaMasmorra` + `Jogador` + HUD através de `TelaAscii`
 
 Ao final, você terá um sistema de renderização profissional e escalável.
 
@@ -26,7 +26,7 @@ Ao final, você terá um sistema de renderização profissional e escalável.
 
 ### O Problema do Enfoque Anterior
 
-No capítulo anterior, MapaMasmorra.renderizarComJogador() faz renderização. Isso funciona, mas tem problemas:
+No capítulo anterior, `MapaMasmorra.renderizarComJogador()` faz renderização. Isso funciona, mas tem problemas:
 
 1. Acoplamento: mapa sabe como renderizar. E se quiser renderizar em arquivo em vez de terminal?
 2. Difícil testar: não pode verificar se o output é correto sem capturar stdout
@@ -137,7 +137,7 @@ Notas importantes:
 Integrar `MapaMasmorra` com `TelaAscii` é simples: o mapa itera sobre seus tiles e chama `tela.desenharChar()` para cada um. Isto desacopla a renderização da lógica; `MapaMasmorra` não sabe que está desenhando num buffer ou escrevendo em stdout. Segue o princípio da injeção de dependência.
 
 ```dart
-// dungeon.dart (adição)
+// mapa_masmorra.dart (adição)
 
 import 'tela_ascii.dart';
 
@@ -167,7 +167,7 @@ Sobrepor entidades (jogador, inimigos, itens) requer que você desenhe em camada
 // 1. Background (tiles)
 // 2. Items (itens no chão)
 // 3. Enemies (inimigos)
-// 4. Player (jogador no topo)
+// 4. Jogador (jogador no topo)
 
 abstract class Entidade {
   int x;

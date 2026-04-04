@@ -29,5 +29,6 @@ Para desativar o fetch remoto e usar só o asset embutido no Flutter, defina `bo
 ## Formato
 
 - `chapters`: lista de títulos (ordem = número do passo no site).
+- `chapterSolutionPaths`: lista paralela a `chapters` (mesmo comprimento); cada item é `null` ou caminho relativo à raiz do repo (ex.: `code/solucoes/boss-final-cap01.dart`). Preenchido pelo `generate_catalog.py` a partir de `code/solucoes/boss-final-cap*.dart`.
 - `parts`: objetos com `number`, `title`, `description`.
-- `resources`: lista de objetos com `title`, `description`, `url`, `icon`.
+- `resources`: lista de objetos com `title`, `subtitle`, `path`, `iconHint`.

@@ -1,0 +1,30 @@
+flowchart TB
+  subgraph client[APRESENTAÇÃO — Cliente]
+    direction TB
+    c1[Terminal local]
+    c2[WebSocket client]
+    c3[Interpreta mensagens JSON]
+  end
+  ws[WebSocket — JSON ou texto]
+  subgraph transport[TRANSPORTE — Servidor]
+    direction TB
+    t1[HttpServer e WebSocket]
+    t2[Gerencia conexões]
+    t3[Roteia mensagens]
+  end
+  q[Fila de eventos]
+  subgraph logic[LÓGICA DE NEGÓCIO]
+    direction TB
+    l1[Mundo, Sala, Inimigo, Jogador]
+    l2[Estado do combate]
+    l3[Geração procedural do dungeon]
+  end
+  cb[Callbacks e eventos]
+  subgraph persist[PERSISTÊNCIA — opcional]
+    direction TB
+    p1[Saves em JSON]
+    p2[Estado do mundo]
+  end
+  client --> ws --> transport
+  transport --> q --> logic
+  logic --> cb --> persist

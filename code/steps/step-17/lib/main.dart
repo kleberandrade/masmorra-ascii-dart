@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:step_17_aleatoriedade/dungeon.dart';
+import 'package:step_17_aleatoriedade/mapa_masmorra.dart';
 import 'package:step_17_aleatoriedade/tela_ascii.dart';
 import 'package:step_17_aleatoriedade/tile.dart';
 

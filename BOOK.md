@@ -6,6 +6,8 @@ O site Flutter (**masmorra.io**) é um repositório à parte; este repositório 
 
 ## Build
 
+**Diagramas Mermaid (PDF/EPUB/DOCX):** vários capítulos e o Apêndice B usam PNGs em `assets/diagrams/`, gerados a partir dos ficheiros `.mmd` homónimos por [`scripts/render_mermaid_diagrams.sh`](scripts/render_mermaid_diagrams.sh) (invocado no início de [`scripts/build.sh`](scripts/build.sh)). Exemplos: capítulos 21 e 36–37, `apendice-b-camadas-rede`. Para **regenerar** os PNGs é necessário **Node.js** com `npx` (o script executa `npx -y @mermaid-js/mermaid-cli …` para cada `.mmd`). Se não houver Node, o build continua desde que cada PNG referenciado já exista no repositório (versionado).
+
 **Dependência Python (DOCX):** o alvo DOCX usa [`scripts/make_reference_docx.py`](scripts/make_reference_docx.py), que precisa do pacote `python-docx`. O [`scripts/build.sh`](scripts/build.sh) usa `python3` do sistema ou, se existir, `.venv/bin/python3` na **raiz do repositório**. Recomendado:
 
 ```bash

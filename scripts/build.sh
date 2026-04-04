@@ -40,6 +40,9 @@ SYNTAX_EPUB="tango"
 
 mkdir -p "$OUTPUT_DIR"
 
+echo "Rendering Mermaid diagrams (assets/diagrams)..."
+bash "$REPO_ROOT/scripts/render_mermaid_diagrams.sh"
+
 if [ -f "$CHAPTERS_FILE" ]; then
     echo "Generating book from chapters file: $CHAPTERS_FILE"
     INPUT_ARGS=()

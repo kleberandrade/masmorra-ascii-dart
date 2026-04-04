@@ -1,5 +1,5 @@
-import 'src/game/game_session.dart';
+import 'src/jogo/sessao_jogo.dart';
 
 Future<void> main() async {
-  await GameSession().run();
+  await SessaoJogo().run();
 }
