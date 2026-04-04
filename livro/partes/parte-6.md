@@ -10,11 +10,11 @@
 \vspace{1em}
 \hrule
 \vspace{1em}
-\large \textit{A Mente dos Monstros}
+\LARGE \textit{A MENTE DOS MONSTROS}
 
 \vspace{5em}
 \small
-\textit{Padrões dão nome ao instinto. IA dá propósito à ameaça. O jogo completo abre os olhos.}
+\textit{Padrões dão nome ao instinto bruto. IA dá propósito deliberado à ameaça. Aqui, os inimigos deixam de ser pedaços de máquina e ganham vontade aparente, comportamento visível, o fantasma da inteligência. E quando o jogo todo se ergue — código, arte, lógica, intriga — as máquinas e os jogadores se olham face a face. Abrem-se os olhos. Vence quem melhor compreende o outro.}
 \vspace*{\fill}
 \end{center}
 \newpage
@@ -22,13 +22,13 @@
 \null
 \newpage
 \pagecolor{white}
-\global\color{black}
+\color{black}
 ```
 
 ```{=html}
 <div class="part-page">
   <div class="part-title">PARTE VI</div>
-  <div class="part-subtitle">A Mente dos Monstros</div>
-  <p class="part-intro">Padrões dão nome ao instinto. IA dá propósito à ameaça. O jogo completo abre os olhos.</p>
+  <div class="part-subtitle">A MENTE DOS MONSTROS</div>
+  <p class="part-intro">Padrões dão nome ao instinto bruto. IA dá propósito deliberado à ameaça. Aqui, os inimigos deixam de ser pedaços de máquina e ganham vontade aparente, comportamento visível, o fantasma da inteligência. E quando o jogo todo se ergue — código, arte, lógica, intriga — as máquinas e os jogadores se olham face a face. Abrem-se os olhos. Vence quem melhor compreende o outro.</p>
 </div>
 ```

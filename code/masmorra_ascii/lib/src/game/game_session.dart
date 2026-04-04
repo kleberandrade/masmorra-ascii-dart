@@ -145,7 +145,7 @@ class GameSession {
         return;
       }
       if (_jogador.hp <= 0) {
-        _log('Morreste. Reinicia o programa.');
+        _log('Você morreu. Reinicie o programa.');
         return;
       }
     }
@@ -165,6 +165,7 @@ class GameSession {
         } else {
           _jogador.roomId = destino;
         }
+        return true;
       case CmdInventario():
         if (_jogador.inventario.isEmpty) {
           _log('Inventário vazio.');
@@ -178,22 +179,27 @@ class GameSession {
             _log('Equipada: ${_jogador.armaEquipada!.nome}');
           }
         }
+        return true;
       case CmdEquipar(:final id):
         if (_jogador.equiparArmaPorId(id)) {
-          _log('Equipaste $id.');
+          _log('Equipou $id.');
         } else {
           _mostrarAviso('Você não tem essa arma.');
         }
+        return true;
       case CmdAtacar():
         _tentarCombateNaSala();
+        return true;
       case CmdDescer():
         if (_jogador.roomId == 'portao') {
           _correrMasmorra();
         } else {
           _mostrarAviso('Só há escadas no portão.');
         }
+        return true;
       case CmdSubir():
         _mostrarAviso('Já estás na superfície.');
+        return true;
       case CmdLojaListar():
         if (!sala.temLoja) {
           _mostrarAviso('Não há loja aqui.');
@@ -203,6 +209,7 @@ class GameSession {
             _log('${w.id} — ${w.nome} (+${w.dano}) : ${w.preco} ouro');
           }
         }
+        return true;
       case CmdComprar(:final id):
         if (!sala.temLoja) {
           _mostrarAviso('Não há loja aqui.');
@@ -211,23 +218,25 @@ class GameSession {
           if (arma == null) {
             _mostrarAviso('Item desconhecido.');
           } else if (tentarComprar(_jogador, arma)) {
-            _log('Compraste ${arma.nome}.');
+            _log('Comprou ${arma.nome}.');
           } else {
             _mostrarAviso('Ouro insuficiente.');
           }
         }
+        return true;
       case CmdVender(:final slot):
         if (!sala.temLoja) {
           _mostrarAviso('Não há loja aqui.');
         } else if (tentarVender(_jogador, slot)) {
-          _log('Vendeste o item $slot.');
+          _log('Vendeu o item $slot.');
         } else {
           _mostrarAviso('Índice inválido.');
         }
+        return true;
       case CmdDesconhecido(:final trecho):
         _mostrarAviso('Comando? ($trecho)');
+        return true;
     }
-    return true;
   }
 
   void _tentarCombateNaSala() {
@@ -257,7 +266,7 @@ class GameSession {
       print(mapa.paraEcran());
       _log('HP ${_jogador.hp} | Ouro ${_jogador.ouro}');
       if (mapa.naSaida) {
-        _log('Você saiu da masmorra.');
+        _log('Saiu da masmorra.');
         _jogador.roomId = 'portao';
         _jogador.emMasmorra = false;
         return;

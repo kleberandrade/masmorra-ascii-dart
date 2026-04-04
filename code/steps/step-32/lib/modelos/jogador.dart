@@ -20,9 +20,7 @@ class Jogador {
     this.nivel = 1,
     this.xp = 0,
     this.inventario = const [],
-  }) {
-    hpAtual = hpMax;
-  }
+  }) : hpAtual = hpMax;
 
   bool get estaVivo => hpAtual > 0;
 

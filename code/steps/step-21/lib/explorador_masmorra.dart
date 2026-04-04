@@ -117,7 +117,7 @@ class ExploradorMasmorra {
     tela.desenharString(
       0,
       hudY + 2,
-      'Ouro: ${jogador.ouro} | Inimigos: ${totalInimigosDefeitos}',
+      'Ouro: ${jogador.ouro} | Inimigos: $totalInimigosDefeitos',
     );
     tela.desenharString(0, hudY + 3, '[W]cima [A]esq [S]baixo [D]dir [I]nventário [Q]uit');
   }
@@ -237,19 +237,19 @@ class ExploradorMasmorra {
   void _mostrarGameOver() {
     print('\n╔════════════════════════════════════════╗');
     if (vitoria) {
-      print('║       ESCAPASTE DA MASMORRA!          ║');
+      print('║       ESCAPOU DA MASMORRA!           ║');
       print('║           PARABÉNS!                   ║');
     } else {
       print('║            GAME OVER                  ║');
-      print('║        Caíste na masmorra...          ║');
+      print('║        Caiu na masmorra...           ║');
     }
     print('╠════════════════════════════════════════╣');
     print('║ Estatísticas Finais:                   ║');
-    print('║ Turnos: $turno'.padRight(40) + '║');
-    print('║ Maior Andar: $maiorAndarAlcancado'.padRight(40) + '║');
-    print('║ Inimigos Derrotados: $totalInimigosDefeitos'.padRight(40) + '║');
-    print('║ Ouro Total: ${jogador.ouro}'.padRight(40) + '║');
-    print('║ Itens Coletados: ${jogador.inventario.length}'.padRight(40) + '║');
+    print('${'║ Turnos: $turno'.padRight(40)}║');
+    print('${'║ Maior Andar: $maiorAndarAlcancado'.padRight(40)}║');
+    print('${'║ Inimigos Derrotados: $totalInimigosDefeitos'.padRight(40)}║');
+    print('${'║ Ouro Total: ${jogador.ouro}'.padRight(40)}║');
+    print('${'║ Itens Coletados: ${jogador.inventario.length}'.padRight(40)}║');
     print('╚════════════════════════════════════════╝\n');
   }
 }

@@ -6,7 +6,7 @@
 
 No capítulo anterior, você criou `Inimigo` com o método `sofrerDano()`. Agora você tem um `Jogador` que também precisa de `sofrerDano()`, e mais tarde talvez tenha `Besta` ou `Golem` com a mesma lógica. Se você copiar a implementação várias vezes, quando tiver de corrigir um bug ou mudar as regras, tem de editar em muitos lugares.
 
-**Mixins** são a solução: é um "pacote reutilizável de comportamento" que você pode aplicar a várias classes sem necessidade de herança.
+**Mixins** são a solução: é um pacote reutilizável de comportamento que você pode aplicar a várias classes sem necessidade de herança.
 
 ## Entender `mixin` e **with**
 
@@ -38,14 +38,14 @@ mixin Combatente {
   bool get estaVivo => hp > 0;
 
   String mostrarBarraVida() {
-    final preenchimento = '█' * (hp ~/ (maxHp ~/ 10));
+    final preenchimento = '█' * (hp ~/ (maxHp ~/ 10 + 1));
     final vazio = '░' * (10 - preenchimento.length);
     return '[$preenchimento$vazio] $hp/$maxHp';
   }
 }
 ```
 
-Agora, quando você criar um `Jogador`, aplica este mixin com a palavra-chave `with`:
+Agora, quando você criar um `Jogador`, aplique este mixin com a palavra-chave `with`:
 
 ```dart
 // lib/jogador.dart
@@ -128,7 +128,7 @@ Isso é crucial para entender quando usar cada um:
 | `extends` | IS-A | `class Zumbi extends Inimigo`: "Um Zumbi IS-A (é um) tipo de Inimigo" |
 | `with` | HAS-A-BEHAVIOR | `class Jogador with Combatente`: "Um Jogador HAS-A comportamento Combatente" |
 
-Quando você diz `extends`, você está dizendo "isto é um tipo especializado daquilo". Quando você diz `with`, você está dizendo "isto partilha este conjunto de comportamentos, mas a sua natureza é diferente".
+Quando você diz `extends`, você está dizendo "isto é um tipo especializado daquilo". Quando você diz `with`, você está dizendo "isto compartilha este conjunto de comportamentos, mas a sua natureza é diferente".
 
 ## Um exemplo prático
 
@@ -150,7 +150,7 @@ if (jogador is Combatente && zumbi is Combatente) {
 
 ## Restrições de mixins: on keyword
 
-Por vezes, um `mixin` depende de propriedades específicas. Por exemplo, um `mixin` `Envenenavel` precisa de acesso ao campo `hp` e ao método `sofrerDano()`. Use a palavra-chave `on` para declarar isto:
+Por vezes, um `mixin` depende de propriedades específicas. Por exemplo, um `mixin` `Envenenavel` precisa de acesso ao campo `hp` e ao método `sofrerDano()`. Use a palavra-chave `on` para declarar isso:
 
 ```dart
 // lib/envenenavel.dart
@@ -275,8 +275,8 @@ Neste capítulo você aprendeu:
 - Múltiplos `mixin` são poderosos: `class Zumbi with Combatente, Envenenavel, Descritivel`.
 - Quando há conflito de nomes (dois `mixin` com `atacar()`), o último `mixin` ganha. Melhor: usar nomes distintos.
 
-`mixin` são particularmente úteis em jogos, onde muitos tipos diferentes de entidades (jogador, inimigos, objetos) compartilham capacidades (receber dano, mover, descrição).
+Mixins são particularmente úteis em jogos, onde muitos tipos diferentes de entidades (jogador, inimigos, objetos) compartilham capacidades (receber dano, mover, descrição).
 
 ::: dica
-**Dica do Mestre:** Mixins resolvem a "Maldição dos Diamantes" melhor que herança múltipla. Em linguagens como C++, herança múltipla pode criar confusão sobre qual classe-mãe fornece qual método. Dart evita isso: é explícito (`with` te diz que é um `mixin`). Se uma `class` `Zumbi` usa `with Combatente, Envenenavel, Descritivel`, toda a gente sabe que tem esses comportamentos. Quando há dúvida sobre compartilhar código, `mixin` são geralmente a resposta mais limpa do que herança profunda.
+**Dica do Mestre:** Mixins resolvem a "Maldição dos Diamantes" melhor que herança múltipla. Em linguagens como C++, herança múltipla pode criar confusão sobre qual classe-mãe fornece qual método. Dart evita isso: é explícito (`with` te diz que é um `mixin`). Se uma `class` `Zumbi` usa `with Combatente, Envenenavel, Descritivel`, toda gente sabe que tem esses comportamentos. Quando há dúvida sobre compartilhar código, mixins são geralmente a resposta mais limpa do que herança profunda.
 :::

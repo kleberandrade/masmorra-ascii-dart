@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:masmorra_ascii/jogador.dart';
 import 'package:masmorra_ascii/sala.dart';
 import 'package:masmorra_ascii/mundo_texto.dart';
-import 'package:masmorra_ascii/inimigo.dart';
 
 void exibirBanner() {
   // ignore: avoid_print
@@ -171,7 +170,7 @@ Comandos disponíveis:
           // ignore: avoid_print
           print('Você ataca ${inimigo.nome}!');
           // ignore: avoid_print
-          print('${inimigo.descreverAcao()}');
+          print(inimigo.descreverAcao());
           inimigo.sofrerDano(jogador.ataque);
           if (inimigo.estaVivo) {
             // ignore: avoid_print

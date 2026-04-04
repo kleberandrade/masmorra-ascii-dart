@@ -27,7 +27,7 @@ Ao final, você terá mapas únicos e procedurais.
 
 ### O Conceito
 
-Imagina um bêbado começando no meio da masmorra e andando aleatoriamente. Cada passo que dá converte a parede em chão. Depois de muitos passos, deixa um traço de um caminho sinuoso. Isso simula como as cavernas naturais surgem: água ou criaturas erodindo rochas ao longo de séculos. O resultado é mapas muito orgânicos e exploráveis.
+Imagina um bêbado começando no meio da masmorra e andando aleatoriamente. Cada passo que dá converte a parede em chão. Depois de muitos passos, deixa um traço de um caminho sinuoso. Isso simula como as cavernas naturais surgem: água ou criaturas erodindo rochas ao longo de séculos. O resultado: mapas muito orgânicos e exploráveis.
 
 ```text
 Passo 1: Start no (5, 5), marca como chão
@@ -44,8 +44,8 @@ Passos 2-50: Anda N/S/E/O aleatoriamente, marcando chão
 Resultado: caverna natural, conexões orgânicas
 ```
 
-Vantagens: Fácil de implementar. Mapas parecem cavernas naturais. Gasto computacional mínimo.
-Desvantagens: Sem estrutura (sem salas claras). Pode ficar muito aberto ou muito cheio.
+Vantagens: fácil de implementar, mapas parecem cavernas naturais, gasto computacional mínimo.
+Desvantagens: sem estrutura (sem salas claras), pode ficar muito aberto ou muito cheio.
 
 ### Implementação
 
@@ -97,13 +97,13 @@ class MapaMasmorra {
 
 ### O Conceito
 
-Este é o algoritmo clássico dos roguelikes antigos (Rogue, Nethack, Angband). A ideia é:
+Este é o algoritmo clássico dos roguelikes antigos (Rogue, Nethack, Angband). A ideia:
 
 1. Gerar N retângulos aleatórios (salas)
 2. Descartar sobreposições (para não ter salas dentro de salas)
 3. Ligar salas com corredores em forma de L (horizontal-depois-vertical)
 
-Resultado: masmorra estruturada, com salas distintas e corredores conectando-as. Fácil de navegar, visual clara, muito mais "construída" que Random Walk.
+Resultado: masmorra estruturada com salas distintas e corredores conectando-as. Fácil de navegar, visual clara, muito mais "construída" que Random Walk.
 
 ### Classe Sala
 
@@ -235,7 +235,7 @@ class MapaMasmorra {
 
 ## Parte 3: Validação de Mapas
 
-Um mapa "bom" tem um caminho do jogador até as escadas (saída). Isso é chamado "connectivity validation". O método usa **BFS** (Breadth-First Search) para verificar se existe um caminho entre o centro (onde o jogador começa) e as escadas. Se não houver, o mapa é inválido e você deve gerar de novo. Isso garante que o jogo é sempre ganhável.
+Um mapa "bom" tem um caminho do jogador até as escadas (saída). Isso é chamado "validação de conectividade". O método usa **BFS** (Breadth-First Search) para verificar se existe um caminho entre o centro (onde o jogador começa) e as escadas. Se não houver, o mapa é inválido e você deve gerar de novo. Isto garante que o jogo é sempre ganhável.
 
 ```dart
 // dungeon_map.dart
@@ -528,11 +528,10 @@ class MapaValidacaoResultado {
   });
 }
 ```
-```
 
 ### Estratégia de Geração Iterativa
 
-Para mapas mais robustos, você pode usar uma abordagem iterativa: gera um mapa, valida, e se for inválido, regenera automaticamente com ajustes:
+Para mapas mais robustos, você pode usar uma abordagem iterativa: gera um mapa, valida-o, e se for inválido, regenera automaticamente com ajustes:
 
 ```dart
 // gerador_com_retentativas.dart
@@ -586,7 +585,7 @@ Neste capítulo você aprendeu:
 - Regeneração inteligente: recriar mapas que falhem validação, com limite de tentativas
 
 ::: dica
-**Dica do Mestre:** Em produção, muitos estúdios combinam Random Walk para subcavernas internas (caves, cavernas naturais) e Rooms & Corridors para estrutura macro (fortalezas, dungeons construídas). Use testes de validação agressivos: regenere mapas inválidos automaticamente, nunca deixe o jogador preso. Alguns jogos armazenam seeds para permitir "recriação" de masmorras já exploradas — útil para speedruns ou competições.
+**Dica do Mestre:** Em produção, muitos estúdios combinam Random Walk para subcavernas internas (caves, cavernas naturais) e Rooms & Corridors para estrutura macro (fortalezas, dungeons construídas). Use testes de validação agressivos: regenere mapas inválidos automaticamente, nunca deixe o jogador preso. Alguns jogos armazenam seeds para permitir "recriação" de masmorras já exploradas. Útil para speedruns ou competições.
 :::
 
 ## Desafios da Masmorra

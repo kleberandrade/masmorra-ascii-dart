@@ -29,5 +29,5 @@ class EntradaSaque {
   @override
   String toString() =>
       '$nomeItem (${(chance * 100).toStringAsFixed(1)}%): '
-      '$quantidadeMin-$quantidadeMax';
+      '$quantidadeMin—$quantidadeMax';
 }

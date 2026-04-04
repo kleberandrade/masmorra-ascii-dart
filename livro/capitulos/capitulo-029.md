@@ -4,7 +4,7 @@
 
 Todo aventureiro experiente testa seu equipamento antes de descer para um andar perigoso. Verifica se a espada está afiada, se o escudo não rachou, se as poções não expiraram. **Testes unitários** (por exemplo com `package:test`) são a versão do programador desse ritual. Você escreve uma série de pequenos testes que verificam se cada pedaço do seu código funciona como esperado.
 
-Testes não eliminam todos os bugs (nenhuma masmorra é completamente segura), mas eliminam os piores: aqueles que quebram coisas que funcionavam, aqueles que ignoram casos extremos, aqueles que parecem pequenos mas destroem sua aventura horas depois. Um jogo com testes é um jogo que você consegue manter, refatorar e expandir durante meses ou anos. Sem testes, cada mudança é um salto no escuro.
+Testes não eliminam todos os bugs (nenhuma masmorra é completamente segura), mas eliminam os piores: aqueles que quebram coisas que funcionavam, aqueles que ignoram casos extremos, aqueles que parecem pequenos mas destroem sua aventura horas depois. A masmorra é escura e cheia de bugs, mas os testes são sua tocha na escuridão. Um jogo com testes é um jogo que você consegue manter, refatorar e expandir durante meses ou anos. Sem testes, cada mudança é um salto no escuro.
 
 ## Por Que Testar?
 
@@ -28,7 +28,7 @@ int calcular(Jogador atacante, Inimigo alvo) {
 
 ### Cenário 2: Com Testes
 
-Com testes automatizados, você detecta o erro instantaneamente. Você escreve um teste que diz: "calculadora deve retornar 7 quando ataco com 10 e defendo com 3". Agora qualquer mudança acidental é flagrada. Não existe "alguém reclamou horas depois" — o teste falha nos primeiros segundos, na sua máquina, antes de você fazer commit.
+Com testes automatizados, você detecta o erro instantaneamente. Você escreve um teste que diz: "calculadora deve retornar 7 quando ataco com 10 e defendo com 3". Agora qualquer mudança acidental é flagrada. Não existe "alguém reclamou horas depois". O teste falha nos primeiros segundos, na sua máquina, antes de você fazer commit.
 
 ```dart
 void main() {
@@ -129,13 +129,14 @@ Convenção: `lib/combate/combate.dart` → `test/combate/combate_test.dart` (sn
 // test/modelos/jogador_test.dart
 
 import 'package:test/test.dart';
-import 'package:masmorra/modelos/jogador.dart';
+import 'package:masmorra_ascii/modelos/jogador.dart';
 
 void main() {
   group('Jogador', () {
     late Jogador jogador;
 
     setUp(() {
+      // Checkpoint: como uma fogueira em Dark Souls, mas sem Hollow.
       // Executado antes de cada teste
       jogador = Jogador(
         nome: 'Aragorn',
@@ -245,12 +246,12 @@ test('matchers comuns', () {
 ## Testando Combate
 
 ```dart
-// test/combate/combate_test.dart
+// test/sistemas/combate_test.dart
 
 import 'package:test/test.dart';
-import 'package:masmorra/modelos/jogador.dart';
-import 'package:masmorra/modelos/inimigo.dart';
-import 'package:masmorra/combate/combate.dart';
+import 'package:masmorra_ascii/modelos/jogador.dart';
+import 'package:masmorra_ascii/modelos/inimigo.dart';
+import 'package:masmorra_ascii/sistemas/combate.dart';
 
 void main() {
   group('Combate', () {
@@ -314,7 +315,7 @@ void main() {
 // test/jogo/parseador_test.dart
 
 import 'package:test/test.dart';
-import 'package:masmorra/jogo/parseador.dart';
+import 'package:masmorra_ascii/jogo/parseador.dart';
 
 void main() {
   group('Parseador', () {
@@ -404,7 +405,7 @@ Uso:
 // test/jogo/lancador_test.dart
 
 import 'package:test/test.dart';
-import 'package:masmorra/jogo/lancador.dart';
+import 'package:masmorra_ascii/jogo/lancador.dart';
 import '../suporte/aleatorio_falso.dart';
 
 void main() {
@@ -445,7 +446,7 @@ Testes agora são **determinísticos**: sempre o mesmo resultado.
 // test/economia/tabelaDropTest.dart
 
 import 'package:test/test.dart';
-import 'package:masmorra/economia/tabelaDrop.dart';
+import 'package:masmorra_ascii/economia/tabelaDrop.dart';
 
 void main() {
   group('TabelaDrop', () {
@@ -511,11 +512,11 @@ All tests passed! 15 tests in 0.2s
 
 **Desafio 29.1. Seu Primeiro Escudo.** Testes são rede de segurança. Escreva o primeiro teste: uma classe simples como `Item` ou `Arma`. Teste cria instância, verifica atributos com `expect(item.nome, equals('Espada'))`, `expect(item.dano, equals(10))`. Use `group('Item', () { ... })` e `setUp()` para reutilizar. Execute `dart test` e veja verde. Agora você tem confiança de que Item não quebrou. Dica: um teste por funcionalidade.
 
-**Desafio 29.2. Defendendo Mochila.** Escolha `Inventario` (classe que muda estado). Escreva 5 testes: (1) adicionar item aumenta tamanho, (2) remover diminui, (3) mochila cheia recusa novo item, (4) buscar por nome acha corretamente, (5) usar item (ex: poção) remove do inventário. Use `setUp()` que cria mochila fresca para cada teste. Execute—todos devem passar. Agora refatore `Inventario` com segurança: testes protegem você. Dica: cada teste deve caber em 5-10 linhas.
+**Desafio 29.2. Defendendo Mochila.** Escolha `Inventario` (classe que muda estado). Escreva 5 testes: (1) adicionar item aumenta tamanho, (2) remover diminui, (3) mochila cheia recusa novo item, (4) buscar por nome acha corretamente, (5) usar item (ex: poção) remove do inventário. Use `setUp()` que cria mochila fresca para cada teste. Execute; todos devem passar. Agora refatore `Inventario` com segurança: testes protegem você. Dica: cada teste deve caber em 5-10 linhas.
 
-**Desafio 29.3. Erros Esperados.** Nem sempre sucesso é erro—falhas controladas são comportamento. Teste 3 exceções: (1) acessar inventário em índice negativo lança exceção, (2) dividir HP por zero, (3) carregar arquivo inexistente. Use `expect(() => inventario[-1], throwsA(isA<RangeError>()))`. Teste que exceções são lançadas corretamente. Dica: exceções são first-class behavior que merecem testes.
+**Desafio 29.3. Erros Esperados.** Nem sempre sucesso é erro. Falhas controladas são comportamento. Teste 3 exceções: (1) acessar inventário em índice negativo lança exceção, (2) dividir HP por zero, (3) carregar arquivo inexistente. Use `expect(() => inventario[-1], throwsA(isA<RangeError>()))`. Teste que exceções são lançadas corretamente. Dica: exceções são comportamento de primeira classe que merecem testes.
 
-**Desafio 29.4. RNG Determinístico.** Testes com `Random` real falham aleatoriamente—inútil. Crie `RandomFalso extends Random` que retorna valores fixos: próximo valor sempre 42, próximo sempre 0.5. Use em testes: com `RandomFalso`, tabelas de drops são previsíveis. Teste que `Rolador.rolar('d6', randomFalso)` sempre retorna mesmo resultado. Dica: fakes tornam testes determinísticos.
+**Desafio 29.4. RNG Determinístico.** Testes com `Random` real falham aleatoriamente; inútil. Crie `RandomFalso extends Random` que retorna valores fixos: próximo valor sempre 42, próximo sempre 0.5. Use em testes: com `RandomFalso`, tabelas de drops são previsíveis. Teste que `Rolador.rolar('d6', randomFalso)` sempre retorna mesmo resultado. Dica: fakes tornam testes determinísticos.
 
 **Boss Final 29.5. Suite de Defesa.** Escolha classe complexa: `Inimigo` ou `Combate`. Escreva 9 testes: (1-5) casos normais (criar, atacar, levar dano, morrer, saudar), (6-7) extremos (HP 0, dano negativo), (8) exceção (dividir por zero), (9) com fake. Organize em `group()`, use `setUp()` compartilhado, execute `dart test`. Se todos verdes, suite protege você contra regressões. Refatore a classe com confiança. Dica: suite robusta = código que dura.
 
@@ -531,13 +532,13 @@ Você aprendeu a escrever testes que protegem seu código:
 - Organização de testes em espelho de `lib/`
 - `dart test` para executar toda a suite
 
-Testes são investimento. Primeiro você escreve mais código (testes + implementação). Mas depois você refatora com confiança, debuga em segundos em vez de horas, e dorme sabendo que o código funciona. Um jogo com 30 funcionalidades e nenhum teste é improvável de ser mantido. Um com 5 funcionalidades e suite completa de testes é sólido.
+Testes são investimento. Primeiro você escreve mais código (testes + implementação). Mas depois você refatora com confiança, debuga em segundos em vez de horas, e dorme sabendo que o código funciona. Um jogo com 30 funcionalidades e nenhum teste é improvável que seja mantido. Um com 5 funcionalidades e suite completa de testes é sólido.
 
 ::: dica
-**Dica do Mestre:** Escreva testes **antes** de refatorar. Isto é chamado TDD (Test-Driven Development) em sua forma suave:
+**Dica do Mestre:** Escreva testes **antes** de refatorar. Isso é chamado TDD (Test-Driven Development) em sua forma suave:
 
-1. Escreva um teste que falha
-2. Escreva código mínimo para passar
+1. Escreva um teste que falha (Testar você deve)
+2. Escreva código mínimo para passar (Não há tentativa de meias-medidas)
 3. Refatore com segurança (testes protegem você)
 
 Assim você tem confiança de que refatorações não quebraram nada. Cada teste que passa é um save point. Você pode caminhar pela caverna escura com segurança.

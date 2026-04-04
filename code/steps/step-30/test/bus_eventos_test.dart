@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:test/test.dart';
 
-import '../lib/bus_eventos.dart';
-import '../lib/evento_jogo.dart';
+import 'package:masmorra_ascii/bus_eventos.dart';
+import 'package:masmorra_ascii/evento_jogo.dart';
 
 void main() {
   late BusEventos bus;

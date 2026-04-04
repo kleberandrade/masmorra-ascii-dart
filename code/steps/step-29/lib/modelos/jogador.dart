@@ -19,9 +19,7 @@ class Jogador {
     this.nivel = 1,
     this.xp = 0,
     this.inventario = const [],
-  }) {
-    hpAtual = hpMax;
-  }
+  }) : hpAtual = hpMax;
 
   /// Verifica se o jogador está vivo
   bool get estaVivo => hpAtual > 0;

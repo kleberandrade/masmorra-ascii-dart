@@ -2,7 +2,7 @@
 
 > *Você abre a gaveta de ferramentas. Está tudo lá: martelos, pregos, parafusos, serras. Mas está misturado. Gasta 10 minutos procurando a chave inglesa. Um carpinteiro experiente tem tudo organizado. Encontra em 2 segundos. Um projeto Dart bem organizado é assim.*
 
-Um aventureiro não guardaria todas as suas armas, poções, mapas e tesouro no mesmo bolso. Mistura tudo, tudo se quebra, nada se encontra. Um aventureiro profissional tem mochilas temáticas: armas em um compartimento, poções em outro, ouro guardado com cuidado, mapas enrolados separados.
+Um aventureiro não guardaria todas as suas armas, poções, mapas e tesouro no mesmo bolso. Mistura tudo, tudo se quebra, nada se encontra. Um aventureiro profissional tem mochilas temáticas: armas em um compartimento; poções em outro; ouro guardado com cuidado; mapas enrolados separados.
 
 Um projeto Dart precisa da mesma organização profissional. Código de modelo em `lib/modelos/`, código de interface em `lib/ui/`, o ponto de entrada em `lib/main.dart`, testes em `test/`, configuração em `pubspec.yaml`. Você não coloca tudo em um único arquivo na raiz do projeto. Use **dart test** para rodar testes e **dart create** para gerar novos projetos. A **analysis_options.yaml** define regras de linting. Estrutura profissional torna fácil encontrar código, adicionar funcionalidades novas, reutilizar código em outros projetos, trabalhar em equipe.
 
@@ -45,7 +45,7 @@ masmorra_ascii/
 `lib/` contém código importável por outros projetos:
 
 ```dart
-import 'package:masmorra/model/jogador.dart';
+import 'package:masmorra_ascii/modelos/jogador.dart';
 ```
 
 Organize por responsabilidade: `model/`, `ui/`, `jogo/`, `combate/`, `mundo/`. O ponto de entrada fica em `lib/main.dart`.
@@ -225,7 +225,7 @@ Esperado: zero avisos.
 
 ## Desafios da Masmorra
 
-**Desafio 32.1. Arquitetura Profissional.** Todo projeto grande precisa estrutura. Crie: `lib/model/` (dados), `lib/ui/` (renderização), `lib/jogo/` (loop principal), `lib/combate/` (batalha), `lib/mundo/` (mapa/geração), `lib/config/` (constantes), `lib/persistencia/` (save/load), `test/` (testes). Use `mkdir -p lib/model lib/ui lib/jogo lib/combate lib/mundo lib/config lib/persistencia test`. O ponto de entrada fica em `lib/main.dart`. Estrutura é como anatomia de um ser vivo—cada órgão em seu lugar. Dica: organize por domínio de negócio, não por tipo de código.
+**Desafio 32.1. Arquitetura Profissional.** Todo projeto grande precisa de estrutura. Crie: `lib/model/` (dados), `lib/ui/` (renderização), `lib/jogo/` (loop principal), `lib/combate/` (batalha), `lib/mundo/` (mapa/geração), `lib/config/` (constantes), `lib/persistencia/` (save/load), `test/` (testes). Use `mkdir -p lib/model lib/ui lib/jogo lib/combate lib/mundo lib/config lib/persistencia test`. O ponto de entrada fica em `lib/main.dart`. Estrutura é como anatomia de um ser vivo: cada órgão em seu lugar. Dica: organize por domínio de negócio, não por tipo de código.
 
 **Desafio 32.2. Reorganizar com Cuidado.** Mova cada arquivo para sua pasta: `Jogador` → `lib/model/jogador.dart`, `TelaAscii` → `lib/ui/tela.dart`, `MapaMasmorra` → `lib/mundo/mapa.dart`. Depois, atualize importações de `'jogador.dart'` para `'model/jogador.dart'`. Teste: `dart analyze` deve passar com zero erros. Se errar um import, código quebraria. Execute `dart lib/main.dart` para confirmar—jogo funciona igual. Dica: refatore arquivo por arquivo, não tudo de uma vez.
 
@@ -244,7 +244,7 @@ Estrutura profissional:
 - `analysis_options.yaml` impondo qualidade
 - Imports relativos em `lib/`, `package:` em `test/`
 
-Um projeto bem organizado é 10x mais fácil de manter.
+Um projeto bem organizado é dez vezes mais fácil de manter.
 
 ::: dica
 **Dica do Mestre:** Use `.gitignore`:

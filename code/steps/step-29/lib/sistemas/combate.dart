@@ -22,6 +22,7 @@ class Combate {
   final Inimigo inimigo;
   late CalculadorDano calculador;
   bool _terminou = false;
+  int defesa = 0;
 
   Combate({
     required this.jogador,
@@ -58,8 +59,6 @@ class Combate {
   }
 
   /// Jogador se defende (reduz dano em 50%)
-  int defesa = 0;
-
   void defender() {
     defesa = 1;
   }

@@ -16,9 +16,7 @@ class Jogador {
     this.defesa = 1,
     this.nivel = 1,
     this.xp = 0,
-  }) {
-    hpAtual = hpMax;
-  }
+  }) : hpAtual = hpMax;
 
   bool get estaVivo => hpAtual > 0;
 

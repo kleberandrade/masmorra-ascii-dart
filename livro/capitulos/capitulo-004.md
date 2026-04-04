@@ -2,7 +2,7 @@
 
 > *O aventureiro abre um baú. Dentro, encontra... nada. Não uma espada, não uma poção, não um mapa, literalmente nada. Em muitas linguagens, tentar usar esse nada causaria um crash. Em Dart, o compilador já teria avisado: "esse baú pode estar vazio. Trate isso antes de enfiar a mão."*
 
-Se você veio de linguagens como JavaScript, Python ou Java, provavelmente já encontrou a infame null pointer exception, um erro que acontece quando o código tenta usar um valor que não existe. É o bug mais comum do mundo, responsável por bilhões de dólares em prejuízo.
+Se você veio de linguagens como JavaScript, Python ou Java, provavelmente já encontrou a infame null pointer exception: um erro que acontece quando o código tenta usar um valor que não existe. É o bug mais comum do mundo, responsável por bilhões de dólares em prejuízo.
 
 Dart resolveu esse problema de forma elegante com o **null safety**: o sistema de tipos distingue entre valores que sempre existem e valores que podem ser nulos. O compilador força você a tratar a possibilidade de nulo antes de o programa rodar. Este capítulo explica como isso funciona e por que vai salvar seu jogo de crashes misteriosos.
 
@@ -22,7 +22,7 @@ String? nome = null;
 String? nome2 = 'Aldric';
 ```
 
-Pense assim: `String` é um contrato que diz "aqui sempre haverá texto". `String?` diz "aqui pode haver texto ou pode não haver nada". O ponto de interrogação é o sinal visual de "cuidado, pode estar vazio".
+Pense assim: `String` é um contrato que diz "aqui sempre haverá texto". `String?` diz "aqui pode haver texto ou não haverá nada". O ponto de interrogação é o sinal visual de "cuidado, pode estar vazio".
 
 Essa distinção existe para todos os tipos:
 
@@ -56,7 +56,7 @@ Dart oferece quatro operadores para trabalhar com valores nullable. Cada um reso
 
 ### 1. O operador ?., acesso condicional
 
-O `?.` chama um método ou acessa uma propriedade somente se o valor não for null. Se for null, o resultado inteiro é null. Pense nele como uma forma de dizer "se isso existir, me dá aquilo; se não existir, me dá null em vez de crashar":
+O `?.` chama um método ou acessa uma propriedade somente se o valor não for `null`. Se for `null`, o resultado inteiro é `null`. Pense nele como uma forma de dizer "se isso existir, me dá aquilo; se não existir, me dá `null` em vez de crashar":
 
 ```dart
 String? texto = obterTexto();
@@ -81,7 +81,7 @@ O `??` fornece um valor substituto quando algo é null. É um operador muito pr�
 var nome = entrada ?? 'Aventureiro';
 ```
 
-Se `entrada` não for null, `nome` recebe `entrada`. Se for null, recebe `'Aventureiro'`.
+Se `entrada` não for `null`, `nome` recebe `entrada`. Se for `null`, recebe `'Aventureiro'`.
 
 O operador `??` pode ser encadeado:
 
@@ -91,7 +91,7 @@ var local = salaAtual ?? salaAnterior ?? 'Praça Central';
 
 ### 3. O operador ??=, atribuição se nulo
 
-O `??=` é um atalho que combina verificação e atribuição: atribui um valor somente se a variável for null, fazendo tudo em uma linha. Você vai vê-lo muito em inicializações defaults:
+O `??=` é um atalho que combina verificação e atribuição: atribui um valor somente se a variável for `null`, fazendo tudo em uma linha. Você vai vê-lo muito em inicializações padrão:
 
 ```dart
 String? apelido;
@@ -100,18 +100,18 @@ apelido ??= 'Outro Nome';
 print(apelido);
 ```
 
-A primeira atribuição funciona porque `apelido` é `null`. A segunda não atribui porque já tem valor.
+A primeira atribuição funciona porque `apelido` é `null`. A segunda não atribui porque a variável já possui um valor.
 
 ### 4. O operador !, asserção de não-nulo
 
-O `!` é o operador mais perigoso dos quatro. Ele diz ao compilador: "eu tenho certeza de que isso não é null neste momento, confie em mim". Se você estiver errado, o programa crasha. Use com extrema cautela:
+O `!` é o operador mais perigoso dos quatro. Ele diz ao compilador: "eu tenho certeza de que isso não é `null` neste momento, confie em mim". Se você estiver errado, o programa crasha. Use com extrema cautela:
 
 ```dart
 String? texto = obterTexto();
 var tamanho = texto!.length;
 ```
 
-Se `texto` for null, o programa lança uma exceção em tempo de execução. Use `!` com extrema cautela, ele desativa exatamente a proteção que null safety oferece. Neste livro, evitaremos `!` sempre que possível.
+Se `texto` for `null`, o programa lança uma exceção em tempo de execução. Use `!` com extrema cautela: ele desativa exatamente a proteção que null safety oferece. Neste livro, evitaremos `!` sempre que possível.
 
 ## Promoção de tipo (type promotion)
 
@@ -121,12 +121,13 @@ Uma das funcionalidades mais inteligentes do Dart é a promoção de tipo. Quand
 String? entrada = stdin.readLineSync();
 
 if (entrada != null) {
+  // There is no spoon... e não há null também.
   var tamanho = entrada.length;
   print('Você digitou: ${entrada.trim()}');
 }
 ```
 
-Fora do `if`, `entrada` continua sendo `String?`. Mas dentro do bloco onde verificamos `!= null`, Dart promove para `String`, e todos os métodos ficam disponíveis sem operadores especiais.
+Fora do `if`, `entrada` continua sendo `String?`. Mas dentro do bloco onde verificamos `!= null`, Dart promove o tipo para `String`, e todos os métodos ficam disponíveis sem operadores especiais.
 
 A promoção funciona com vários tipos de verificação:
 
@@ -190,7 +191,7 @@ int? interpretarInput(String input) {
 }
 ```
 
-Repare como o `null` flui naturalmente pelo código. A função `interpretarComoNumero()` retorna `null` se não for número. A função `interpretarComoPalavra()` retorna `null` se não for palavra conhecida. O operador `??` encadeia as duas tentativas.
+Repare como o `null` flui naturalmente pelo código. A função `interpretarComoNumero()` retorna `null` se não for um número. A função `interpretarComoPalavra()` retorna `null` se não for uma palavra conhecida. O operador `??` encadeia as duas tentativas.
 
 ```dart
 void main() {
@@ -228,7 +229,7 @@ void main() {
 
 Esse código nunca crasha por causa de `null`. Toda possibilidade de valor ausente é tratada explicitamente. Esse é o poder do null safety.
 
-## Padrão, leitura segura com validação
+## Padrão de leitura segura com validação
 
 Aqui está um padrão que vamos reutilizar ao longo de todo o livro:
 
@@ -286,13 +287,13 @@ void mostrarHUD() {
 }
 ```
 
-O **late** diz ao Dart: essa variável será inicializada antes de ser acessada, confie em mim. Use `late` quando a inicialização depende de algo que acontece depois da declaração.
+O `late` diz ao Dart: essa variável será inicializada antes de ser acessada, confie em mim. Use `late` quando a inicialização depende de algo que acontece depois da declaração.
 
 ***
 
 ## Desafios da Masmorra
 
-**Desafio 4.1. Validação de nome robusto.** Reescreva `pedirNome()` para recusar nomes com menos de 2 caracteres ou mais de 20. Se inválido, mostre exatamente o motivo ("Muito curto", "Muito longo") e peda novamente em vez de usar um padrão. Use promoção de tipo dentro de um `if (entrada != null)` para garantir segurança.
+**Desafio 4.1. Validação de nome robusta.** Reescreva `pedirNome()` para recusar nomes com menos de 2 caracteres ou mais de 20. Se inválido, mostre exatamente o motivo ("Muito curto", "Muito longo") e peça novamente em vez de usar um padrão. Use promoção de tipo dentro de um `if (entrada != null)` para garantir segurança.
 
 **Desafio 4.2. Menu com confirmação bilateral.** Crie uma função `confirmar(String mensagem) -> bool` que mostra a mensagem, aceita s/sim/y/yes para verdadeiro e n/não/no para falso. Se o jogador digitar algo inválido, repita a pergunta. Use `??` para proteger `readLineSync()`.
 
@@ -300,7 +301,9 @@ O **late** diz ao Dart: essa variável será inicializada antes de ser acessada,
 
 **Desafio 4.4. Função parametrizada pedirTexto.** Escreva `String pedirTexto(String prompt, {int minLength = 1, int maxLength = 50})` com parâmetros nomeados e valores padrão. A função repete até receber um texto com tamanho válido. Use `texto.length` e lance exceção (ou retorne padrão) se sair do intervalo.
 
-**Boss Final 4.5. Cadeia de null safety (Sala inicial).** Crie um mapa representando três salas: `salaPraca`, `salaCorredo`, `salaTesouraria`, cada uma como `String?`. Algumas salas podem ser `null` (não existem). Implemente um getter `salaAtual() -> String` que usa encadeamento `??` para sempre garantir que o jogador está em uma sala válida, caindo para "Praça Central" se tudo mais for nulo. Demonstre que o encadeamento funciona mesmo com múltiplos níveis de null.
+**Boss Final 4.5. Cadeia de null safety (Sala inicial).** Crie um mapa representando três salas: `salaPraca`, `salaCorredo`, `salaTesouraria`, cada uma como `String?`. Algumas salas podem ser `null` (não existem). Implemente um getter `salaAtual() -> String` que usa encadeamento `??` para sempre garantir que o jogador está em uma sala válida, caindo para "Praça Central" se tudo mais for `null`. Demonstre que o encadeamento funciona mesmo com múltiplos níveis de `null`.
+
+*Dica do Mestre: A chave é encadeamento: `var atual = salaPraca ?? salaCorredo ?? salaTesouraria ?? 'Praça Central';`. Teste atribuindo `null` a cada uma e observe como a cadeia "cai" para a próxima opção.*
 
 ## Pergaminho do Capítulo
 
@@ -309,5 +312,5 @@ Neste capítulo você aprendeu o que é null safety e por que Dart o implementa,
 O código do jogo agora é robusto contra qualquer input do jogador. Nenhuma combinação de Enter vazio, texto aleatório ou números fora do intervalo causa crash. No Capítulo 5, vamos dar memória real ao jogo com coleções: listas para o inventário, mapas para as salas, e conjuntos para itens únicos.
 
 ::: dica
-**Dica do Mestre:** Em Dart, prefira `??` e promoção de tipo ao operador `!`. O `!` é a última opção, não a primeira. Sempre que você escreve `!`, está dizendo se eu estiver errado, o programa pode crashar. Com `??`, você está dizendo se estiver vazio, use isso, o programa nunca crasha. Código de jogo que não crasha é código de jogo que os jogadores respeitam.
+**Dica do Mestre:** Em Dart, prefira `??` e promoção de tipo ao operador `!`. O `!` é a última opção, não a primeira. Sempre que você escreve `!`, está dizendo "se eu estiver errado, o programa pode crashar". Com `??`, você está dizendo "se estiver vazio, use isso"; o programa nunca crasha. Código de jogo que não crasha é código de jogo que os jogadores respeitam.
 :::

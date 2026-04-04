@@ -1,3 +1,5 @@
+import 'dart:math' show Point;
+
 import 'tela_ascii.dart';
 import 'campo_visao.dart';
 
@@ -35,13 +37,13 @@ class Jogador extends Entidade {
   List<Item> inventario = [];
 
   Jogador({
-    required String nome,
-    required int x,
-    required int y,
+    required super.nome,
+    required super.x,
+    required super.y,
     required this.hpMax,
     required this.ouro,
   })  : hpAtual = hpMax,
-        super(x: x, y: y, simbolo: '@', nome: nome);
+        super(simbolo: '@');
 
   bool mover(int novoX, int novoY, MapaMasmorra mapa) {
     if (!mapa.ehPassavel(novoX, novoY)) return false;
@@ -78,21 +80,20 @@ class Inimigo extends Entidade {
   int hpAtual;
 
   Inimigo({
-    required String nome,
-    required int x,
-    required int y,
+    required super.nome,
+    required super.x,
+    required super.y,
     required this.hpMax,
-    required String simbolo,
-  })  : hpAtual = hpMax,
-        super(x: x, y: y, simbolo: simbolo, nome: nome);
+    required super.simbolo,
+  })  : hpAtual = hpMax;
 }
 
 class Item extends Entidade {
   Item({
-    required String nome,
-    required int x,
-    required int y,
-  }) : super(x: x, y: y, simbolo: '!', nome: nome);
+    required super.nome,
+    required super.x,
+    required super.y,
+  }) : super(simbolo: '!');
 
   @override
   bool aoTocada(Jogador jogador) {
@@ -106,12 +107,10 @@ class EntidadeInimigo extends Entidade {
   final Inimigo inimigo;
 
   EntidadeInimigo({
-    required int x,
-    required int y,
+    required super.x,
+    required super.y,
     required this.inimigo,
   }) : super(
-    x: x,
-    y: y,
     simbolo: inimigo.simbolo,
     nome: inimigo.nome,
   );
@@ -126,12 +125,10 @@ class EntidadeItem extends Entidade {
   final Item item;
 
   EntidadeItem({
-    required int x,
-    required int y,
+    required super.x,
+    required super.y,
     required this.item,
   }) : super(
-    x: x,
-    y: y,
     simbolo: '!',
     nome: item.nome,
   );
@@ -148,12 +145,10 @@ class EntidadeEscada extends Entidade {
   final int andarAtual;
 
   EntidadeEscada({
-    required int x,
-    required int y,
+    required super.x,
+    required super.y,
     required this.andarAtual,
   }) : super(
-    x: x,
-    y: y,
     simbolo: '>',
     nome: 'Escada Descendente',
   );

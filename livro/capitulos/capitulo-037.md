@@ -1,6 +1,6 @@
 # Capítulo 37 - Síntese: O Jogo Completo, Polido e Pronto
 
-> *Você começou com um "print('Olá')". Agora tem um roguelike funcional com IA inteligente, máquinas de estado, padrões de design profissionais, save/load, e uma economia de jogo. Isso não é um exercício. É um artefato real. Um produto que você construiu do zero e que pode mostrar com orgulho. E mais ainda, é uma porta aberta. Dart conhece. Design patterns você domina. O mundo inteiro está esperando.*
+> *Você começou com um `print('Olá')`. Agora tem um roguelike funcional com IA inteligente, máquinas de estado, padrões de design profissionais, save/load, e uma economia de jogo. Isso não é um exercício. É um artefato real. Um produto que você construiu do zero e que pode mostrar com orgulho. E mais ainda, é uma porta aberta. Dart conhece. Design patterns você domina. O mundo inteiro está esperando.*
 
 Neste capítulo final você vai ver a visão geral completa do que construiu, polirá a interface visual, revisitará todos os padrões de design em contexto, e aprenderá os próximos passos.
 
@@ -37,7 +37,7 @@ Isto é um produto real.
 
 ### Splash Screen ASCII
 
-Um splash screen é a primeira coisa que o jogador vê. É a porta de entrada do seu jogo. Pode ser simples (texto e bordas ASCII), mas deve ser bem feito. Limpe a tela, desenhe arte ASCII criativa, explique o que é o jogo. Faz diferença na experiência.
+Uma splash screen é a primeira coisa que o jogador vê. É a porta de entrada do seu jogo. Pode ser simples (texto e bordas ASCII), mas deve ser bem feita. Limpe a tela, desenhe arte ASCII criativa, explique o que é o jogo. Faz diferença na experiência.
 
 ```dart
 void mostrarSplash() {
@@ -97,7 +97,7 @@ void mostrarMenu() {
 void mostrarCreditos() {
   limparTela();
 
-  // Créditos não é apenas cortesia. É o lugar onde você documenta a jornada.
+  // Créditos não são apenas cortesia. É o lugar onde você documenta a jornada.
   // "Programação e Design: Você" não é modéstia — é verdade. Você construiu
   // isso do zero. Agradeça as influências e reconheça a si mesmo. Créditos
   // bem feitos fazem o jogo parecer profissional.
@@ -133,7 +133,7 @@ void mostrarCreditos() {
 
 Aqui está como tudo se conecta:
 
-Veja o diagrama abaixo. `LoopJogo` é o orquestrador central. Ele gerencia `EstadoJogo` (dados), `MapaMasmorra` (dungeon), `Jogador` (você), lista de `Inimigo` (adversários), lista de `Item` (loot), `BarramentoEventos` (reações), `GerenciadorSave` (persistência), e `TelaAscii` (renderização). Cada componente é independente e reutilizável. `LoopJogo` conecta tudo.
+Veja o diagrama abaixo. `LoopJogo` é o orquestrador central. Ele gerencia `EstadoJogo` (dados), `MapaMasmorra` (dungeon), `Jogador` (você), lista de `Inimigo` (adversários), lista de `Item` (loot), `BarramentoEventos` (reações), `GerenciadorSalve` (persistência) e `TelaAscii` (renderização). Cada componente é independente e reutilizável. `LoopJogo` conecta tudo.
 
 ```text
 ┌─────────────────────────────────────────────────────────┐
@@ -184,7 +184,7 @@ Você aprendeu 5 padrões. Aqui está como eles trabalham juntos:
 
 Cada inimigo tem uma `EstrategiaIA` que pode ser trocada em tempo de execução. Um lobo agressivo pode virar covarde se ferido.
 
-Strategy permite que comportamento seja desacoplado da classe. Você não modifica `Inimigo` para mudar comportamento — você apenas troca sua estratégia. É como trocar um cartucho em um videogame: a máquina fica igual, o comportamento muda.
+Strategy permite que comportamento seja desacoplado da classe. Você não modifica `Inimigo` para mudar comportamento; você apenas troca sua estratégia. É como trocar um cartucho em um videogame: o console fica igual, o comportamento muda.
 
 ```dart
 var lobo = Inimigo(
@@ -203,7 +203,7 @@ Vantagem: Comportamento desacoplado da classe.
 
 Cada ação é um objeto que pode ser executado e desfeito. Permite replay e undo.
 
-Command encapsula uma solicitação como um objeto. Permite manter histórico completo do jogo, desfazer movimentos (útil para testes e debug), e replay de combates. Sem Command, desfazer seria impossível — você teria que guardar snapshots do estado inteiro.
+Command encapsula uma solicitação como um objeto. Permite manter histórico completo do jogo, desfazer movimentos (útil para testes e debug), e replay de combates. Sem Command, desfazer seria impossível; você teria que guardar snapshots do estado inteiro.
 
 ```dart
 var acao = AcaoAtacar(inimigo, heroi);
@@ -218,7 +218,7 @@ Vantagem: Histórico completo e capacidade de undo.
 
 Todos os inimigos e itens são criados por factories, não espalhados no código.
 
-Factory centraliza conhecimento de como criar objetos. Balanço, parâmetros, configuração — tudo em um lugar. Se mudar o HP de um zumbi, muda em um lugar. Quer suportar carregar config de JSON? Muda em um lugar. Factory também permite testes: você pode facilmente criar inimigos de teste sem saber todos os detalhes de construção.
+Factory centraliza conhecimento de como criar objetos. Balanço, parâmetros, configuração: tudo em um lugar. Se mudar o HP de um zumbi, muda em um lugar. Quer suportar carregar config de JSON? Muda em um lugar. Factory também permite testes: você pode facilmente criar inimigos de teste sem saber todos os detalhes de construção.
 
 ```dart
 var inimigo = FabricaInimigo.criarAleatorio(andar: 3);
@@ -329,7 +329,7 @@ dart pub publish
 
 ## Pergaminho do Capítulo
 
-Neste capítulo final você revisitou tudo que construiu ao longo de 36 capítulos: de um simples "print('Olá')" até um roguelike funcional com IA inteligente, padrões de design profissionais, save/load, economia e mais. Viu a arquitetura completa, como LoopJogo orquestra MapaMasmorra, Jogador, Inimigos, Items, BarramentoEventos, GerenciadorSave e TelaAscii. Revisitou os cinco padrões de design aprendidos (Strategy para comportamentos plugáveis, Command para ações reversíveis, Factory para criação centralizada, Observer para reações desacopladas, State para máquinas de estado) e viu como trabalham juntos. Entendeu que aprendeu Dart profissional e está pronto para os próximos passos: Flutter, networking, publicação em pub.dev.
+Neste capítulo final você revisitou tudo que construiu ao longo de 36 capítulos: de um simples "print('Olá')" até um roguelike funcional com IA inteligente, padrões de design profissionais, save/load, economia e mais. Viu a arquitetura completa, como LoopJogo orquestra MapaMasmorra, Jogador, Inimigos, Items, BarramentoEventos, GerenciadorSalve e TelaAscii. Revisitou os cinco padrões de design aprendidos (Strategy para comportamentos plugáveis, Command para ações reversíveis, Factory para criação centralizada, Observer para reações desacopladas, State para máquinas de estado) e viu como trabalham juntos. Entendeu que aprendeu Dart profissional e está pronto para os próximos passos: Flutter, networking, publicação em pub.dev.
 
 ***
 
@@ -379,7 +379,7 @@ Cada parte adiciona novas camadas ao jogo. Compare com o início e veja o quanto
 
 ## Reflexão Final
 
-Você chegou aqui. 36 capítulos, de "print('Olá')" até um roguelike profissional. Isso não é pouco. Isso é uma jornada real de aprendizado em:
+Você chegou aqui. Trinta e seis capítulos, de "print('Olá')" até um roguelike profissional. Isso não é pouco. Isso é uma jornada real de aprendizado em:
 
 - Linguagem (Dart)
 - Engenharia (arquitetura, padrões)
@@ -398,9 +398,9 @@ Bem-vindo ao outro lado.
 
 ## Recursos para Continuar
 
-- Documentação oficial Dart: https://dart.dev/guides
-- Flutter: https://flutter.dev
-- Pub.dev (packages): https://pub.dev
+- [Documentação oficial Dart](https://dart.dev/guides)
+- [Flutter](https://flutter.dev)
+- [Pub.dev (packages)](https://pub.dev)
 - Design Patterns: "Gang of Four" (livro clássico)
 - Game Development: "Game Programming Patterns" (livro online gratuito)
 - Comunidade Dart: Discord, GitHub, Stack Overflow

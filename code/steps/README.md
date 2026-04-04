@@ -4,7 +4,7 @@ Cada pasta `step-XX` corresponde ao estado do código ao final do capítulo XX.
 
 ## Solução final executável (`masmorra_ascii`)
 
-O **jogo completo** de referência (MUD + masmorra em grade, testes, save/load) está em [`../masmorra_ascii/`](../masmorra_ascii/README.md), não em `step-36`. A pasta `step-36` marca o capítulo 36 no livro; o código runnable final usa o pacote `masmorra_ascii` (irmão desta pasta em `code/`) — o mesmo destino do link “solução final” no site.
+O **jogo completo** de referência (MUD + masmorra em grade, FSM no combate, testes, save/load) está em [`../masmorra_ascii/`](../masmorra_ascii/README.md), não nas pastas `step-36` / `step-37` (marcadores de capítulo). O código runnable final usa o pacote `masmorra_ascii` — o mesmo destino do link “solução final” no site.
 
 ```bash
 cd ../masmorra_ascii
@@ -26,7 +26,7 @@ dart lib/main.dart
 
 Guias rápidos: [QUICKSTART-15-21.md](QUICKSTART-15-21.md) · [QUICKSTART-29-36.md](QUICKSTART-29-36.md).
 
-**Requisitos:** Dart compatível com cada `pubspec.yaml` (os steps 29+ pedem tipicamente Dart 3.11+; `masmorra_ascii` usa SDK ^3.5 — ver o respetivo arquivo).
+**Requisitos:** Dart compatível com cada `pubspec.yaml` (em geral **3.11+** para `masmorra_ascii` e steps recentes — ver o respetivo arquivo).
 
 ## Estrutura dos steps
 
@@ -68,6 +68,7 @@ Guias rápidos: [QUICKSTART-15-21.md](QUICKSTART-15-21.md) · [QUICKSTART-29-36.
 | step-34 | Cap 34: Factory/Observer | Eventos reativos |
 | step-35 | Cap 35: State machines | Inimigos com estados |
 | step-36 | Cap 36: Sintese | Marco VI no livro; código final em `masmorra_ascii/` |
+| step-37 | Cap 37: Encerramento | Pasta editorial; solução final em `masmorra_ascii/` |
 
 ## Compilar e validar
 

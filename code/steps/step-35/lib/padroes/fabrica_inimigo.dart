@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:convert';
 import '../modelos/inimigo.dart';
 import 'estrategia_ia.dart';
 
@@ -9,7 +10,7 @@ class DefinicaoInimigo {
   final int danoBase;
   final int defesaBase;
   final double raridade;
-  final EstrategiaIA estrategia;
+  final EstrategiaIa estrategia;
 
   DefinicaoInimigo({
     required this.nome,
@@ -81,5 +82,31 @@ class FabricaInimigo {
     }
 
     return criar('zumbi', andar);
+  }
+
+  /// Carrega definições de inimigos a partir de JSON
+  static void carregarDoJSON(String json) {
+    var mapa = jsonDecode(json) as Map<String, dynamic>;
+    for (var tipo in mapa.keys) {
+      var dados = mapa[tipo] as Map<String, dynamic>;
+      catalogo[tipo] = DefinicaoInimigo(
+        nome: dados['nome'] as String,
+        hpBase: dados['hp'] as int,
+        danoBase: dados['dano'] as int,
+        defesaBase: dados['defesa'] as int,
+        raridade: dados['raridade'] as double,
+        estrategia: _criarEstrategia(dados['estrategia'] as String),
+      );
+    }
+  }
+
+  /// Cria estratégia de IA baseado no tipo
+  static EstrategiaIa _criarEstrategia(String tipo) {
+    return switch (tipo) {
+      'agressiva' => IAAgressiva(),
+      'covardia' => IACovardia(),
+      'passiva' => IAPassiva(),
+      _ => IAAgressiva(),
+    };
   }
 }

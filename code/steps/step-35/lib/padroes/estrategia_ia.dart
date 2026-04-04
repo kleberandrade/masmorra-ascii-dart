@@ -2,12 +2,12 @@ import '../modelos/inimigo.dart';
 import 'acao.dart';
 
 /// Interface para estratégias de IA
-abstract class EstrategiaIA {
+abstract class EstrategiaIa {
   Acao decidir(Inimigo self, dynamic alvo, dynamic mapa);
 }
 
 /// Estratégia agressiva: persegue e ataca
-class IAAgressiva implements EstrategiaIA {
+class IAAgressiva implements EstrategiaIa {
   @override
   Acao decidir(Inimigo self, dynamic alvo, dynamic mapa) {
     return AcaoAtacar(self, alvo);
@@ -15,7 +15,7 @@ class IAAgressiva implements EstrategiaIA {
 }
 
 /// Estratégia covarde: foge quando ferido
-class IACovardia implements EstrategiaIA {
+class IACovardia implements EstrategiaIa {
   final int limiteHP;
 
   IACovardia({this.limiteHP = 30});
@@ -30,7 +30,7 @@ class IACovardia implements EstrategiaIA {
 }
 
 /// Estratégia passiva: ignora até ser atacado
-class IAPassiva implements EstrategiaIA {
+class IAPassiva implements EstrategiaIa {
   bool foiAtacada = false;
 
   @override

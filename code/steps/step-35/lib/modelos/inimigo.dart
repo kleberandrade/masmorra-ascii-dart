@@ -7,7 +7,7 @@ class Inimigo {
   int hpAtual;
   int ataque;
   int defesa;
-  EstrategiaIA estrategia;
+  EstrategiaIa estrategia;
 
   Inimigo({
     required this.nome,
@@ -15,9 +15,7 @@ class Inimigo {
     this.ataque = 3,
     this.defesa = 0,
     required this.estrategia,
-  }) {
-    hpAtual = hpMax;
-  }
+  }) : hpAtual = hpMax;
 
   bool get estaVivo => hpAtual > 0;
 

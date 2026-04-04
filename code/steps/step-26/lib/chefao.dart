@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'inimigo.dart';
+import 'jogador.dart';
 
 /// Fases do chefão durante o combate
 enum FaseChefao {
@@ -10,6 +11,7 @@ enum FaseChefao {
 
 /// Boss final com sistema de fases
 class Chefao extends Inimigo {
+  final Random _rng = Random();
   late int hpMaxOriginal;
   FaseChefao faseAtual = FaseChefao.normal;
   int ataqueBaseOriginal = 0;
@@ -18,11 +20,10 @@ class Chefao extends Inimigo {
   bool usouAtaqueEspecial = false;
 
   Chefao({
-    String nome = 'Rei da Masmorra',
+    super.nome = 'Rei da Masmorra',
     int hpMax = 150,
     int danoBase = 12,
   }) : super(
-    nome: nome,
     hpMax: hpMax,
     ataque: danoBase,
     descricao: 'O senhor ancião da masmorra. Seus olhos brilham com malevolência.',
@@ -60,21 +61,21 @@ class Chefao extends Inimigo {
   }
 
   @override
-  void executarTurno() {
+  void executarTurno(Jogador jogador) {
     atualizarFase();
 
     print('\n--- Turno do $nome ---');
 
     if (faseAtual == FaseChefao.desesperado &&
         !usouAtaqueEspecial &&
-        Random().nextDouble() < 0.4) {
-      _ataqueEspecial();
+        _rng.nextDouble() < 0.4) {
+      _ataqueEspecial(jogador);
       usouAtaqueEspecial = true;
     } else {
       final dano = ataqueBaseOriginal + modificadorDanoFase;
       final variacao = (dano * 0.15).toInt();
       final danoFinal =
-          dano - variacao + Random().nextInt(variacao * 2);
+          dano - variacao + _rng.nextInt(variacao * 2 + 1);
 
       print('> $nome ataca com fúria!');
 
@@ -85,14 +86,18 @@ class Chefao extends Inimigo {
       } else {
         print('   (Ataque desesperado: $danoFinal dano!!!)');
       }
+
+      jogador.sofrerDano(danoFinal);
     }
   }
 
-  void _ataqueEspecial() {
+  void _ataqueEspecial(Jogador jogador) {
     print('\n* O Rei invoca um poder ancestral!');
-    print('   > RAIO ANCESTRAL!');
+    print('   > RAIO ANCESTRAL atinge ${jogador.nome}!');
 
     final danoCritico = (ataqueBaseOriginal * 2.5).toInt();
+    jogador.sofrerDano(danoCritico);
+
     print('   Dano crítico: $danoCritico!');
   }
 
@@ -101,17 +106,15 @@ class Chefao extends Inimigo {
     final faseTexto = switch (faseAtual) {
       FaseChefao.normal => '[OK] Normal',
       FaseChefao.furia => '[FÚRIA] Fúria (+50% dano)',
-      FaseChefao.desesperado => '[CRITICO] Desesperado (+crítico)',
+      FaseChefao.desesperado => '[CRÍTICO] Desesperado (+crítico)',
     };
 
     return '''
-╔════════════════════════════════════════╗
-║         REI DA MASMORRA                ║
-╠════════════════════════════════════════╣
-║ HP: $hp / $hpMax (${percentualHp.toStringAsFixed(0)}%)
-║ Fase: $faseTexto
-║ Descrição: $descricao
-╚════════════════════════════════════════╝
+REI DA MASMORRA
+────────────────────────────────────────
+HP: $hp / $hpMax (${percentualHp.toStringAsFixed(0)}%)
+Fase: $faseTexto
+Descrição: $descricao
     ''';
   }
 

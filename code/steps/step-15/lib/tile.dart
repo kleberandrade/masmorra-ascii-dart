@@ -16,6 +16,6 @@ String tileParaChar(Tile tile) {
   };
 }
 
-bool ehPassavel(Tile tile) {
+bool ehPassavelTile(Tile tile) {
   return tile == Tile.chao || tile == Tile.porta || tile == Tile.escadaDesce;
 }

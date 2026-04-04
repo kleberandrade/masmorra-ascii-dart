@@ -1,3 +1,6 @@
+import 'jogador.dart';
+import 'inimigo.dart';
+
 /// Classe base abstrata para todas as habilidades
 abstract class Habilidade {
   final String nome;
@@ -10,21 +13,18 @@ abstract class Habilidade {
     required this.nivelRequerido,
   });
 
-  bool executar();
+  bool executar(Jogador jogador, {Inimigo? alvo});
 
   String formato() {
     return '[$nome] (Nív $nivelRequerido) - $descricao';
   }
-
-  @override
-  String toString() => formato();
 }
 
 /// Habilidade: Golpe Forte
 /// Desbloqueado no nível 3
 /// Dano: 2× o ataque normal
-class GolpeFort extends Habilidade {
-  GolpeFort()
+class GolpeForte extends Habilidade {
+  GolpeForte()
       : super(
         nome: 'Golpe Forte',
         descricao: 'Ataque de 2x dano. Gasta 1 turno.',
@@ -32,10 +32,14 @@ class GolpeFort extends Habilidade {
       );
 
   @override
-  bool executar() {
-    print('\nVocê executa um GOLPE FORTE!');
-    print('   Dano: 2x');
-    return true;
+  bool executar(Jogador jogador, {Inimigo? alvo}) {
+    if (alvo == null) return false;
+
+    final danoDuplicado = jogador.ataque * 2;
+    print('\n${jogador.nome} executa um GOLPE FORTE!');
+    print('   Dano: $danoDuplicado');
+
+    return alvo.sofrerDano(danoDuplicado);
   }
 }
 
@@ -51,9 +55,15 @@ class Curar extends Habilidade {
       );
 
   @override
-  bool executar() {
-    print('\nVocê invoca CURAR!');
-    print('   Recuperou HP');
+  bool executar(Jogador jogador, {Inimigo? alvo}) {
+    final curaQuantidade = (jogador.maxHp * 0.3).toInt();
+    final hpAnterior = jogador.hp;
+    jogador.hp = (jogador.hp + curaQuantidade).clamp(0, jogador.maxHp);
+    final curaReal = jogador.hp - hpAnterior;
+
+    print('\n${jogador.nome} invoca CURAR!');
+    print('   Recuperou $curaReal HP');
+
     return true;
   }
 }
@@ -69,10 +79,19 @@ class AtaqueRapido extends Habilidade {
       );
 
   @override
-  bool executar() {
-    print('\nVocê executa ATAQUE RÁPIDO!');
-    print('   Golpe 1: 60% de dano');
-    print('   Golpe 2: 60% de dano');
-    return true;
+  bool executar(Jogador jogador, {Inimigo? alvo}) {
+    if (alvo == null) return false;
+
+    final dano1 = (jogador.ataque * 0.6).toInt();
+    final dano2 = (jogador.ataque * 0.6).toInt();
+
+    print('\n${jogador.nome} executa ATAQUE RÁPIDO!');
+    print('   Golpe 1: $dano1 de dano');
+    alvo.sofrerDano(dano1);
+
+    if (!alvo.estaVivo) return true;
+
+    print('   Golpe 2: $dano2 de dano');
+    return alvo.sofrerDano(dano2);
   }
 }

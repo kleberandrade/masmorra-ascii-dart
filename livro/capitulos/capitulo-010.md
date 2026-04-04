@@ -1,12 +1,12 @@
 # Capítulo 10 - Herança: a família dos inimigos
 
-> *Toda a masmorra é feita de famílias de criaturas. Um zumbi é um zumbi porque tem aquele espírito errante e faminto. Um esqueleto é resistente mas lento. Se você modelar cada um separadamente, o código fica repleto de cópias. Mas se você criar uma antepassada comum, uma classe `Inimigo`, você define uma vez o que qualquer criatura faz, e deixa cada descendente escolher seu próprio caminho. Assim cresce a masmorra: através de herança e extends.*
+> *Toda a masmorra é feita de famílias de criaturas. Um zumbi é um zumbi porque tem aquele espírito errante e faminto. Um esqueleto é resistente mas lento. Se você modelar cada um separadamente, o código fica repleto de cópias. Mas se você criar uma antepassada comum, uma classe `Inimigo`, você define uma vez o que qualquer criatura faz e deixa cada descendente escolher seu próprio caminho. Assim cresce a masmorra: através de herança e extends.*
 
 ## A família de inimigos: onde a herança brilha
 
-Quando você começou a desenhar a `Jogador`, copiou muito código. Linhas iguais: `int hp`, `int maxHp`, `String nome`. Agora vai criar inimigos, `Zumbi`, `Esqueleto`, `Lobo`, e pode parecer: se copiar a mesma estrutura três vezes, em seis meses quando precisar mudar "calcular dano", vai ter de editar em três lugares. Isso se chama duplicação de código, e é o sintoma clássico de que você precisa de herança.
+Quando você começou a desenhar a `Jogador`, copiou muito código. Linhas iguais: `int hp`, `int maxHp`, `String nome`. Agora vai criar inimigos: `Zumbi`, `Esqueleto`, `Lobo`, e pode parecer que, se copiar a mesma estrutura três vezes, em seis meses quando precisar mudar "calcular dano", vai ter de editar em três lugares. Isso se chama duplicação de código, e é o sintoma clássico de que você precisa de herança.
 
-**Herança** em Dart significa: uma `class` "herda" de outra. A classe-mãe (ou superclasse) define o que é comum; a classe-filha (ou subclasse) especifica o que é único.
+**Herança** em Dart significa: uma `class` "herda" de outra. A classe-mãe (ou superclasse) define o que é comum; a classe-filha (ou subclasse) especifica o que é diferente.
 
 ## O primeiro conceito: **extends**
 
@@ -46,11 +46,11 @@ abstract class Inimigo {
 }
 ```
 
-Nota bem a palavra-chave `abstract`. Uma **classe abstrata** é um contrato de **abstração**: define o que toda subclasse deve fazer, mas não é uma entidade que você pode criar diretamente com `Inimigo(...)`. Isso força os criadores de zumbis, esqueletos, etc., a respeitar a interface.
+Nota bem a palavra-chave `abstract`. Uma **classe abstrata** é um contrato de abstração: define o que toda subclasse deve fazer, mas não é uma entidade que você pode criar diretamente com `Inimigo(...)`. Isso força os criadores de zumbis, esqueletos etc. a respeitar a interface.
 
 ## As três famílias: Zumbi, Esqueleto, Lobo
 
-Agora vêm os filhos. Cada um `extends Inimigo` (herda da classe-mãe):
+Agora vêm os filhos. Cada um `extends Inimigo` (herda da classe-mãe). Nem todo baú é o que parece—alguns inimigos têm natureza enganadora, como aqueles que fingem ser simples cofres de tesouro. Mas comecemos com os mais óbvios:
 
 ```dart
 // lib/zumbi.dart
@@ -121,7 +121,30 @@ class Lobo extends Inimigo {
 }
 ```
 
-## A palavra-chave **@override**
+```dart
+// lib/mimic.dart
+
+import 'inimigo.dart';
+
+class Mimic extends Inimigo {
+  Mimic()
+      : super(
+          nome: 'Mimic',
+          simbolo: 'M',
+          hp: 12,
+          maxHp: 12,
+          ataque: 5,
+          descricao: 'Um baú vivo. Nem todo tesouro é o que parece.',
+        );
+
+  @override
+  String descreverAcao() {
+    return 'O baú se abre de repente! Garras saem de suas laterais!';
+  }
+}
+```
+
+## A palavra-chave @override
 
 Quando você redefine um método da classe-mãe (como `descreverAcao()`), marca-o com `@override`. Isso diz ao analisador Dart: "Sei que estou redefinindo isto propositalmente". Se você escrever o nome errado, o Dart avisa antes de você rodar o programa:
 
@@ -151,7 +174,7 @@ print(ini.descreverAcao());
 
 ## MundoTexto: o mapa de salas como um grafo
 
-Agora você precisa de um lugar para guardar os inimigos: as salas. Uma `Sala` pode conter um inimigo; o mapa de salas é um grafo dirigido onde os nós são `Sala` e as arestas são as direções.
+Agora você precisa de um lugar para guardar os inimigos: as salas. Uma `Sala` pode conter um inimigo. O mapa de salas é um grafo dirigido onde os nós são `Sala` e as arestas são as direções.
 
 > **Nota sobre inimigoPresente:** No Capítulo 8, usávamos `inimigoId: String?` como simples texto. Agora, armazenamos a instância do inimigo diretamente com `inimigoPresente: Inimigo?`. Isso é mais poderoso e totalmente tipado: podemos chamar métodos do inimigo (como `inimigoPresente.sofrerDano()`) sem conversões.
 
@@ -312,8 +335,8 @@ Neste capítulo você aprendeu:
 - `MundoTexto` encapsula um `Map<String, Sala>`, modelando o mapa como um grafo dirigido.
 - Salas podem conter inimigos, criando o cenário para combate no próximo capítulo.
 
-A herança é a ferramenta clássica para eliminar duplicação quando há uma relação clara "tipo de". No próximo capítulo, veremos mixins, que servem para partilhar comportamento sem forçar uma árvore de herança profunda.
+A herança é a ferramenta clássica para eliminar duplicação quando há uma relação clara "tipo de". No próximo capítulo, veremos mixins, que servem para compartilhar comportamento sem forçar uma árvore de herança profunda.
 
 ::: dica
-**Dica do Mestre:** Evita hierarquias profundas. A cada vez que você adiciona um nível de herança, aumenta a complexidade. Depois de três níveis (`Inimigo > BipedeInteligente > Zumbi`), fica difícil compreender onde cada comportamento vem. Use herança quando há uma razão clara para IS-A; caso contrário, prefira composição (guardar um objeto dentro de outro) ou `mixin`. Dart favorece composição e `mixin` para código mais limpo.
+**Dica do Mestre:** Evite hierarquias profundas. A cada vez que você adiciona um nível de herança, aumenta a complexidade. Depois de três níveis (`Inimigo > BipedeInteligente > Zumbi`), fica difícil compreender onde cada comportamento vem. Use herança quando há uma razão clara para IS-A; caso contrário, prefira composição (guardar um objeto dentro de outro) ou `mixin`. Dart favorece composição e `mixin` para código mais limpo.
 :::

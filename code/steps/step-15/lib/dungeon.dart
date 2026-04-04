@@ -36,8 +36,7 @@ class MapaMasmorra {
   }
 
   bool ehPassavel(int x, int y) {
-    final tile = tileEm(x, y);
-    return tile != Tile.parede;
+    return ehPassavelTile(tileEm(x, y));
   }
 
   void renderizarComJogador(Jogador jogador) {
@@ -58,12 +57,10 @@ class MapaMasmorra {
     }
 
     print('╠════════════════════════════════════════╣');
-    print('║ Posição: (${jogador.x}, ${jogador.y}) | HP: ${jogador.hpAtual}/${jogador.hpMax}'
-        .padRight(40) +
-        '║');
-    print('║ [W]cima [A]esq [S]baixo [D]dir [Q]uit'
-        .padRight(40) +
-        '║');
+    print('${'║ Posição: (${jogador.x}, ${jogador.y}) | HP: ${jogador.hpAtual}/${jogador.hpMax}'
+        .padRight(40)}║');
+    print('${'║ [W]cima [A]esq [S]baixo [D]dir [Q]uit'
+        .padRight(40)}║');
     print('╚════════════════════════════════════════╝\n');
   }
 }

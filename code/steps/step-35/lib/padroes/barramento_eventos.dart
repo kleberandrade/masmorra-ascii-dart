@@ -16,6 +16,17 @@ class EventoMorteInimigo extends EventoJogo {
   });
 }
 
+/// Evento de colheita de item
+class EventoColheitaItem extends EventoJogo {
+  final String nomeItem;
+  final String personagem;
+
+  EventoColheitaItem({
+    required this.nomeItem,
+    required this.personagem,
+  });
+}
+
 /// Evento de dano aplicado
 class EventoDanoAplicado extends EventoJogo {
   final String atacante;
@@ -33,7 +44,8 @@ class EventoDanoAplicado extends EventoJogo {
 class BarramentoEventos {
   static final BarramentoEventos _instancia = BarramentoEventos._();
 
-  final _controlador = StreamController<EventoJogo>.broadcast();
+  final StreamController<EventoJogo> _controlador =
+      StreamController<EventoJogo>.broadcast();
 
   BarramentoEventos._();
 
@@ -44,7 +56,7 @@ class BarramentoEventos {
   }
 
   Stream<T> on<T extends EventoJogo>() {
-    return _controlador.stream.whereType<T>();
+    return _controlador.stream.where((e) => e is T).cast<T>();
   }
 
   void fechar() {
@@ -55,7 +67,7 @@ class BarramentoEventos {
 /// Observador de log
 class ObservadorLog {
   final BarramentoEventos bus;
-  late StreamSubscription subscription;
+  late StreamSubscription<EventoJogo> subscription;
 
   ObservadorLog(this.bus) {
     subscription = bus.on<EventoJogo>().listen((evento) {
@@ -73,7 +85,7 @@ class ObservadorLog {
 /// Observador de estatísticas
 class ObservadorEstatisticas {
   final BarramentoEventos bus;
-  late StreamSubscription subscription;
+  late StreamSubscription<EventoJogo> subscription;
 
   int totalMatos = 0;
   int danoTotal = 0;

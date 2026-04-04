@@ -23,7 +23,14 @@ class Patrulhando implements EstadoIA {
 
   @override
   Acao agir(Inimigo self, dynamic alvo, dynamic mapa) {
-    return AcaoAguardar(self);
+    if (rota.isEmpty) {
+      return AcaoAguardar(self);
+    }
+
+    // Sem coordenadas no modelo: avança o índice da rota a cada agir (demonstração).
+    final proxPosicao = rota[indiceRota];
+    indiceRota = (indiceRota + 1) % rota.length;
+    return AcaoMover(self, proxPosicao);
   }
 
   @override
@@ -40,8 +47,11 @@ class Alerta implements EstadoIA {
     if (turnosAlerta > 3) {
       return Patrulhando([]); // Perdeu interesse, volta a patrulhar
     }
-    if (alvo != null && alvo.estaVivo) {
-      return Perseguindo(); // Confirmou a presença do alvo
+    if (alvo != null) {
+      final vivo = alvo.estaVivo;
+      if (vivo is bool && vivo) {
+        return Perseguindo();
+      }
     }
     return null; // Continua em alerta
   }
@@ -62,8 +72,12 @@ class Perseguindo implements EstadoIA {
     if (self.hpAtual < (self.hpMax * 30 / 100)) {
       return Fugindo();
     }
-    if (alvo == null || !alvo.estaVivo) {
-      return Patrulhando([]); // Alvo sumiu ou morreu
+    if (alvo == null) {
+      return Patrulhando([]);
+    }
+    final vivo = alvo.estaVivo;
+    if (vivo is! bool || !vivo) {
+      return Patrulhando([]);
     }
     // Simplificação: assume alcance de combate atingido
     return Atacando();

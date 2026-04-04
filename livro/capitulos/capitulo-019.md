@@ -305,12 +305,10 @@ class CampoVisaoComLanterna {
   // ... resto do código de shadowcasting
 }
 ```
-```
-
 
 ## Parte 3: Renderização com FOV
 
-Agora que você calcula o FOV, precisa usá-lo na renderização. A lógica é simples: se um tile está visível agora, desenhe com cor normal. Se foi explorado antes (mas está fora do FOV atual), desenhe esfumaçado (caracteres mais pálidos ou cinzentos). Se nunca foi visto, deixe vazio (espaço em branco). Isto cria o efeito de descoberta gradual: conforme você caminha, o mapa vai se revelando lentamente, transformando escuridão em exploração em ignorância.
+Agora que você calcula o FOV, precisa usá-lo na renderização. A lógica é simples: se um tile está visível agora, desenhe com cor normal. Se foi explorado antes (mas está fora do FOV atual), desenhe esfumaçado (caracteres mais pálidos ou cinzentos). Se nunca foi visto, deixe vazio (espaço em branco). Isto cria o efeito de descoberta gradual: conforme você caminha, o mapa vai se revelando lentamente, transformando escuridão em exploração em mistério.
 
 ### Renderização Básica com FOV
 
@@ -548,14 +546,13 @@ class CampoVisaoPreguicoso {
   }
 }
 ```
-```
 
 ## Pergaminho do Capítulo
 
-Neste capítulo você implementou um dos pilares da atmosfera em roguelikes: o campo de visão (Field of View) e a névoa de guerra. Começou estruturando os dados com dois `Set<Point<int>>`: um para tiles visíveis neste turno (calculado a cada movimento) e outro para tiles já explorados (histórico permanente). Aprendeu a decompor o algoritmo shadowcasting passo a passo: originar do jogador, escolher direção, expandir até barreira, bloquear em parede, e parar no limite de raio. Viu exemplos ASCII visuais de como o FOV se expande em 8 direções criando um padrão em "V". Implementou a versão básica que lança raios em oito direções a partir do jogador, marcando tiles visíveis até encontrar parede opaca. Expandiu para uma versão otimizada com cache, evitando recálculos quando o jogador não se move — economizando ~80% de CPU. Aprendeu a implementar lanternas dinâmicas (raio variável) e como diferentes níveis de iluminação mudam a estratégia. Integrou FOV à renderização em camadas (mapa, entidades, jogador), aplicando três estados visuais: tiles visíveis em cor normal, tiles explorados esfumaçados (caracteres pálidos), tiles nunca vistos invisíveis. Estudou otimizações profissionais: caching inteligente, limitação de raio efetivo, e avaliação preguiçosa sob demanda. Essa mecânica de revelação gradual do mapa cria tensão psicológica real — o jogador sente medo genuíno ao rodear uma esquina. A névoa de guerra transforma uma grade de caracteres num mundo com presença, mistério e emoção autêntica.
+Neste capítulo você implementou um dos pilares da atmosfera em roguelikes: o campo de visão (Field of View) e a névoa de guerra. Começou estruturando os dados com dois `Set<Point<int>>`: um para tiles visíveis neste turno (calculado a cada movimento) e outro para tiles já explorados (histórico permanente). Aprendeu a decompor o algoritmo shadowcasting passo a passo: originar do jogador, escolher direção, expandir até barreira, bloquear em parede, e parar no limite de raio. Viu exemplos ASCII visuais de como o FOV se expande em 8 direções criando um padrão em "V". Implementou a versão básica que lança raios em oito direções a partir do jogador, marcando tiles visíveis até encontrar parede opaca. Expandiu para uma versão otimizada com cache, evitando recálculos quando o jogador não se move; economizando ~80% de CPU. Aprendeu a implementar lanternas dinâmicas (raio variável) e como diferentes níveis de iluminação mudam a estratégia. Integrou FOV à renderização em camadas (mapa, entidades, jogador), aplicando três estados visuais: tiles visíveis em cor normal, tiles explorados esfumaçados (caracteres pálidos), tiles nunca vistos invisíveis. Estudou otimizações profissionais: caching inteligente, limitação de raio efetivo, e avaliação preguiçosa sob demanda. Essa mecânica de revelação gradual do mapa cria tensão psicológica real. O jogador sente medo genuíno ao rodear uma esquina. A névoa de guerra transforma uma grade de caracteres num mundo com presença, mistério e emoção autêntica.
 
 ::: dica
-**Dica do Mestre:** Em jogos profissionais, o FOV é frequentemente cacheado e apenas recalculado quando o jogador se move ou quando entidades se movem. Alguns engines usam precalculated tables para mapas estáticos, guardando resultados em memória para acesso O(1). Para performance em mapas gigantescos, considere usar apenas shadowcast numa área limitada (10-15 tiles) em vez de todo o mapa. Brogue, um roguelike aclamado, usa shadowcasting de 8 direções exatamente como descrito — prova que o algoritmo é tanto elegante quanto prático.
+**Dica do Mestre:** Em jogos profissionais, o FOV é frequentemente cacheado e apenas recalculado quando o jogador se move ou quando entidades se movem. Alguns engines usam precalculated tables para mapas estáticos, guardando resultados em memória para acesso O(1). Para performance em mapas gigantescos, considere usar apenas shadowcast numa área limitada (10-15 tiles) em vez de todo o mapa. Brogue, um roguelike aclamado, usa shadowcasting de 8 direções exatamente como descrito. Prova que o algoritmo é tanto elegante quanto prático.
 :::
 
 ## Desafios da Masmorra
@@ -570,5 +567,4 @@ Neste capítulo você implementou um dos pilares da atmosfera em roguelikes: o c
 
 **Desafio 19.5. Inimigos escondidos (Fora do FOV).** Inimigos só aparecem se dentro de FOV. Fora do FOV, não renderizam (mas continuam existindo, movendo-se). Crie um "flanqueador" que sai do FOV deliberadamente, torna-se invisível, depois toca o jogador de surpresa. Dica: renderize como `?` enquanto fora do FOV se o jogador "sentir presença".
 
-**Boss Final 19.6. FOV em múltiplos andares.** Estenda FOV para andares (subsolos). Tiles em andares abaixo são vistos com opacidade (símbolo diferente, menos perceptível). Escadas abertas aumentam raio para andares abaixo. Implemento: passe `andarAtual` como parâmetro, recalcule FOV com raio reduzido para cada andar (-50% por nível).
-```
+**Boss Final 19.6. FOV em múltiplos andares.** Estenda FOV para andares (subsolos). Tiles em andares abaixo são vistos com opacidade (símbolo diferente, menos perceptível). Escadas abertas aumentam raio para andares abaixo. Implementação: passe `andarAtual` como parâmetro, recalcule FOV com raio reduzido para cada andar (-50% por nível).

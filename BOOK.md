@@ -23,7 +23,7 @@ A partir da **raiz do repositório**:
 ./scripts/build.sh
 ```
 
-Saídas em `output/` (no `main`, os PDF/EPUB/DOCX gerados também estão versionados; volta a correr o build para atualizar).
+Saídas em `output/`. No Git, só `masmorra-ascii-dart.pdf` e `masmorra-ascii-dart.epub` são versionados; DOCX e outros ficheiros em `output/` ficam ignorados (ver `.gitignore`).
 
 ## Arquivos principais
 

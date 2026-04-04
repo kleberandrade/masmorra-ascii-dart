@@ -10,11 +10,11 @@
 \vspace{1em}
 \hrule
 \vspace{1em}
-\large \textit{A Masmorra Desperta}
+\LARGE \textit{A MASMORRA DESPERTA}
 
 \vspace{5em}
 \small
-\textit{Paredes surgem do nada. A névoa esconde o que morde. Cada partida é um mapa novo.}
+\textit{As paredes surgem do algoritmo. A névoa de guerra esconde o que morde nos recessos não explorados. Cada partida é um mapa novo, gerado por regras determinísticas que parecem caos. Aqui, aprenderá a domesticar a aleatoriedade, a dominar o grid, e a fazer a máquina criar mundos.}
 \vspace*{\fill}
 \end{center}
 \newpage
@@ -22,13 +22,13 @@
 \null
 \newpage
 \pagecolor{white}
-\global\color{black}
+\color{black}
 ```
 
 ```{=html}
 <div class="part-page">
   <div class="part-title">PARTE III</div>
-  <div class="part-subtitle">A Masmorra Desperta</div>
-  <p class="part-intro">Paredes surgem do nada. A névoa esconde o que morde. Cada partida é um mapa novo.</p>
+  <div class="part-subtitle">A MASMORRA DESPERTA</div>
+  <p class="part-intro">As paredes surgem do algoritmo. A névoa de guerra esconde o que morde nos recessos não explorados. Cada partida é um mapa novo, gerado por regras determinísticas que parecem caos. Aqui, aprenderá a domesticar a aleatoriedade, a dominar o grid, e a fazer a máquina criar mundos.</p>
 </div>
 ```

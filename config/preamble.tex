@@ -33,7 +33,11 @@
 
 % Typography
 \usepackage{fontspec}
-\setmainfont{Georgia}[
+% Georgia não cobre caixas Unicode (╔═╗), setas (↑←) nem emoji; DejaVu Serif vem no TeX Live.
+\setmainfont{DejaVuSerif.ttf}[
+    BoldFont=DejaVuSerif-Bold.ttf,
+    ItalicFont=DejaVuSerif-Italic.ttf,
+    BoldItalicFont=DejaVuSerif-BoldItalic.ttf,
     Ligatures=TeX,
     Numbers=OldStyle
 ]
@@ -51,11 +55,8 @@
     BoldItalicFont=DejaVuSansMono-BoldOblique.ttf,
     Scale=0.85
 ]
-% Georgia não cobre setas, blocos de arte ASCII e alguns símbolos; DejaVu Sans
-% vem no TeX Live e preenche esses glifos no texto corrido.
+% Símbolos que o corpo (serif) ou TeX Gyre Heros ainda não cobrem; DejaVu Sans no TEXMF.
 \usepackage{newunicodechar}
-% Carregar por arquivo (.ttf no TEXMF), como o mono acima — o nome "DejaVu Sans"
-% nem sempre resolve no XeTeX fora do fontconfig do sistema.
 \newfontfamily{\BookSymbolFallback}{DejaVuSans.ttf}[
     BoldFont=DejaVuSans-Bold.ttf,
     ItalicFont=DejaVuSans-Oblique.ttf,
@@ -67,6 +68,7 @@
 \newunicodechar{░}{{\BookSymbolFallback ░}}
 \newunicodechar{∿}{{\BookSymbolFallback ∿}}
 \newunicodechar{⌬}{{\BookSymbolFallback ⌬}}
+% ⚔ e U+FE0F não: aparecem em strings dentro de listings; \newunicodechar quebra o verbatim do Pandoc.
 \usepackage[portuguese]{babel}
 
 % Título do sumário (mais comum em livros PT-BR)

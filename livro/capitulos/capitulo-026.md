@@ -1,6 +1,6 @@
 # Capítulo 26 - Múltiplos Andares e o Boss Final
 
-> *Você desceu profundamente. Os andares anteriores foram teste. Agora, nas profundezas, sente o ar mais pesado. Os inimigos mudam de forma. E no fundo, aguardando, existe algo antigo e poderoso. Não é um goblin aleatório. É o Rei da Masmorra, o boss final. Este capítulo é onde o jogo se torna épico, como Sephiroth em Final Fantasy VII ou Ganondorf em Zelda: múltiplas fases, cada uma mais perigosa.*
+> *Você desceu profundamente. Os andares anteriores foram testes. Agora, nas profundezas, sente o ar mais pesado. Os inimigos mudam de forma. E no fundo, aguardando, existe algo antigo e poderoso. Não é um goblin aleatório. É o Rei da Masmorra, o boss final. Este capítulo é onde o jogo se torna épico, como Sephiroth em Final Fantasy VII ou Ganondorf em Zelda: múltiplas fases, cada uma mais perigosa.*
 
 ## O Que Vamos Aprender
 
@@ -68,6 +68,7 @@ enum FaseChefao {
 }
 
 class Chefao extends Inimigo {
+  final Random _rng = Random();
   late int hpMaxOriginal;
   FaseChefao faseAtual = FaseChefao.normal;
   int ataqueBaseOriginal = 0;
@@ -77,7 +78,7 @@ class Chefao extends Inimigo {
 
   Chefao({
     String nome = 'Rei da Masmorra',
-    int hpMax = 150,
+    int hpMax = 150, // It's over 9000!
     int danoBase = 12,
   }) : super(
     nome: nome,
@@ -125,14 +126,14 @@ class Chefao extends Inimigo {
 
     if (faseAtual == FaseChefao.desesperado &&
         !usouAtaqueEspecial &&
-        Random().nextDouble() < 0.4) {
+        _rng.nextDouble() < 0.4) {
       _ataqueEspecial(jogador);
       usouAtaqueEspecial = true;
     } else {
       final dano = ataqueBaseOriginal + modificadorDanoFase;
       final variacao = (dano * 0.15).toInt();
       final danoFinal =
-          dano - variacao + Random().nextInt(variacao * 2);
+          dano - variacao + _rng.nextInt(variacao * 2 + 1);
 
       print('> $nome ataca com fúria!');
 
@@ -163,7 +164,7 @@ class Chefao extends Inimigo {
     final faseTexto = switch (faseAtual) {
       FaseChefao.normal => '[OK] Normal',
       FaseChefao.furia => '[FÚRIA] Fúria (+50% dano)',
-      FaseChefao.desesperado => '[CRITICO] Desesperado (+crítico)',
+      FaseChefao.desesperado => '[CRÍTICO] Desesperado (+crítico)',
     };
 
     return '''
@@ -388,15 +389,15 @@ class TelaFimJogo {
 
 **Desafio 26.1. Fúria do Chefão.** O Chefão Antigo entra em fúria quando ferido. Mude suas fases: de 66%/33% de HP para 75%/50% (fica furioso por mais tempo, mais ameaçador). Implemente em `atualizarFase()`. Teste: lute contra o boss, veja quando muda de fase. Sente-se mais desafiador? Dica: números importam na tensão.
 
-**Desafio 26.2. Legiões da Sombra.** Ao entrar em fúria, o Chefão chama dois espectros: "Invocação de Sombras". Crie dois inimigos sombrios temporários (30% do HP do boss) que atacam ao seu lado. Implemente em `_ataqueEspecial()`. Teste: quando combater o boss na fase 2, dois aliados dele aparecem. Você precisa decidir: mata os espectros ou ataca o boss? Estratégia. Dica: use `List<Inimigo>` para gerenciar temporários.
+**Desafio 26.2. Legiões da Sombra.** Ao entrar em fúria, o Chefão chama dois espectros: "Invocação de Sombras". Crie dois inimigos sombrios temporários (30% do HP do boss) que atacam ao seu lado. Implemente em `_ataqueEspecial()`. Teste: quando combater o boss na fase 2, dois aliados dele aparecem. Você precisa decidir: mata os espectros ou ataca o boss? Estratégia vital. Dica: use `List<Inimigo>` para gerenciar temporários.
 
 **Desafio 26.3. A Arena Final.** O boss não aparece num andar procedural aleatório. Implemente `gerarSalaBoss()` que retorna uma única sala grande (80x20) limpa, só com chão. Boss no centro da sala, você spawna perto da entrada. Vasto, árido, épico. Implemente no gerador de andar final. Teste: descida ao boss deve se sentir diferente—solitário, vazio, apenas você vs ele. Dica: preencha com `Tile.chao`, coloque boss em coordenada específica.
 
 **Desafio 26.4. O Prêmio da Vitória.** Ao derrotar o Chefão, você ganha a "Espada Ancestral Lendária" que aumenta Ataque em +10 permanentemente. Implemente na sequência de vitória: após mensagem de vitória, adicione item ao inventário. Teste: derrote o boss, veja o item aparecer. Você fica significativamente mais forte. Recompensa épica pelo sacrifício. Dica: `Jogador.adicionarItem()` com um objeto especial.
 
-**Desafio 26.5. (Desafio): Jogo se Adapta a Você.** O jogo aprende de suas deficiências. Cada vitória aumenta dificuldade (+1, máx +5): inimigos 15% mais fortes. Cada derrota reduz (-1, mín -5): inimigos 15% mais fracos. Multiplicador final: `1.0 + (nível × 0.15)`. Isso cria curva de aprendizado: iniciante que morre muito fica em -5 (75% força), veterano vitorioso sobe em +5 (175% força). Teste 10 partidas com diferentes habilidades, veja dificuldade convergir. Dica: salve `nivelDificuldade` junto com stats.
+**Desafio 26.5. (Desafio): Jogo se Adapta a Você.** O jogo aprende de suas deficiências. Cada vitória aumenta dificuldade (+1, máx +5): inimigos 15% mais fortes. Cada derrota reduz (—1, mín —5): inimigos 15% mais fracos. Multiplicador final: `1.0 + (nível × 0.15)`. Isto cria curva de aprendizado: iniciante que morre muito fica em —5 (75% força), veterano vitorioso sobe em +5 (175% força). Teste 10 partidas com diferentes habilidades, veja dificuldade convergir. Dica: salve `nivelDificuldade` junto com stats.
 
-**Boss Final 26.6. Troféu de Glória.** Na tela de vitória, mostre epopeia completa: (1) Tempo total (em minutos), (2) Ratio vitórias (inimigos derrotados / inimigos encontrados), (3) Andares conquistados, (4) Item mais valioso equipado. Crie uma bela tela ASCII que celebra a vitória com números. Teste: vitória deve ser momento satisfatório com reconhecimento dos seus feitos. Dica: rastreie `tempoInicio`, `inimigosDerrota dos`, `totalInimigos` durante o jogo.
+**Boss Final 26.6. Troféu de Glória.** Na tela de vitória, mostre epopeia completa: (1) Tempo total (em minutos), (2) Ratio vitórias (inimigos derrotados / inimigos encontrados), (3) Andares conquistados, (4) Item mais valioso equipado. Crie uma bela tela ASCII que celebra a vitória com números. Teste: vitória deve ser momento satisfatório com reconhecimento dos seus feitos. Dica: rastreie `tempoInicio`, `inimigosDerrota`, `totalInimigos` durante o jogo.
 
 ## Pergaminho do Capítulo
 
@@ -414,7 +415,7 @@ Seu jogo agora é uma campanha completa: você começa fraco, progride através 
 ## Dica Profissional
 
 ::: dica
-Curva de dificuldade é arte, não ciência. Teste com diferentes grupos: iniciantes devem passar no andar 1-2 no primeiro dia, intermediários devem chegar ao andar 3-4, veteranos devem chegar ao boss. Reúna dados: em que andar a maioria morre? Quanto tempo leva? O boss é muito fácil ou muito difícil?
+Curva de dificuldade é arte, não ciência. Teste com diferentes grupos: iniciantes devem passar no andar 1-2 no primeiro dia, intermediários devem chegar ao andar 3-4, veteranos devem chegar ao boss. Reúna dados: em que andar a maioria morre? Quanto tempo leva? O boss é muito fácil ou muito difícil? Cada feedback melhora a próxima iteração.
 :::
 
 ## Próximo Capítulo

@@ -75,5 +75,5 @@ class ComandoDesconhecido extends ComandoJogo {
   const ComandoDesconhecido(this.entrada);
 
   @override
-  String executar() => 'Não entendo "$entrada". Tenta "ajuda".';
+  String executar() => 'Não entendo "$entrada". Tente "ajuda".';
 }

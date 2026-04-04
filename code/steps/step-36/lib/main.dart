@@ -12,7 +12,7 @@ void main() {
     hpMax: 50,
     ataque: 7,
     defesa: 2,
-    estadoAtual: Patrulhando([
+    estado: Patrulhando([
       'Posição A',
       'Posição B',
       'Posição C',
@@ -20,7 +20,7 @@ void main() {
   );
 
   print('${lobo.nome} HP: ${lobo.hpAtual}/${lobo.hpMax}');
-  print('Estado inicial: ${lobo.estadoAtual.nome}\n');
+  print('Estado inicial: ${lobo.estado.nome}\n');
 
   // Simular um alvo
   var jogador = Inimigo(
@@ -28,32 +28,32 @@ void main() {
     hpMax: 100,
     ataque: 8,
     defesa: 1,
-    estadoAtual: Patrulhando([]),
+    estado: Patrulhando([]),
   );
 
   // ============ TRANSIÇÕES DE ESTADO ============
   print('--- Simulando transições de estado ---\n');
 
   print('TURNO 1: Lobo em patrulha');
-  print('  Estado: ${lobo.estadoAtual.nome}');
+  print('  Estado: ${lobo.estado.nome}');
   var acao1 = lobo.obterProximaAcao(jogador, null);
   print('  Ação: $acao1\n');
 
   print('TURNO 2: Alerta (avistou o jogador)');
-  lobo.estadoAtual = Alerta();
-  print('  Estado: ${lobo.estadoAtual.nome}');
+  lobo.estado = Alerta();
+  print('  Estado: ${lobo.estado.nome}');
   var acao2 = lobo.obterProximaAcao(jogador, null);
   print('  Ação: $acao2\n');
 
   print('TURNO 3: Perseguindo (confirmou a ameaça)');
-  lobo.estadoAtual = Perseguindo();
-  print('  Estado: ${lobo.estadoAtual.nome}');
+  lobo.estado = Perseguindo();
+  print('  Estado: ${lobo.estado.nome}');
   var acao3 = lobo.obterProximaAcao(jogador, null);
   print('  Ação: $acao3\n');
 
   print('TURNO 4: Atacando (em alcance do jogador)');
-  lobo.estadoAtual = Atacando();
-  print('  Estado: ${lobo.estadoAtual.nome}');
+  lobo.estado = Atacando();
+  print('  Estado: ${lobo.estado.nome}');
   var acao4 = lobo.obterProximaAcao(jogador, null);
   print('  Ação: $acao4\n');
 
@@ -65,7 +65,7 @@ void main() {
     hpMax: 35,
     ataque: 5,
     defesa: 0,
-    estadoAtual: Patrulhando([
+    estado: Patrulhando([
       'Caverna 1',
       'Caverna 2',
       'Caverna 3',
@@ -77,32 +77,32 @@ void main() {
 
   // Turno 1: Patrulhando
   print('TURNO 1:');
-  print('  Estado: ${goblin.estadoAtual.nome}');
+  print('  Estado: ${goblin.estado.nome}');
   print('  HP: ${goblin.hpAtual}');
   print('  Ação: ${goblin.obterProximaAcao(jogador, null)}');
-  print();
+  print('');
 
   // Turno 2: Alerta
-  goblin.estadoAtual = Alerta();
+  goblin.estado = Alerta();
   print('TURNO 2: (Avistado o jogador)');
-  print('  Estado: ${goblin.estadoAtual.nome}');
+  print('  Estado: ${goblin.estado.nome}');
   print('  HP: ${goblin.hpAtual}');
   print('  Ação: ${goblin.obterProximaAcao(jogador, null)}');
-  print();
+  print('');
 
   // Turno 3: Perseguindo
-  goblin.estadoAtual = Perseguindo();
+  goblin.estado = Perseguindo();
   print('TURNO 3: (Iniciando perseguição)');
-  print('  Estado: ${goblin.estadoAtual.nome}');
+  print('  Estado: ${goblin.estado.nome}');
   print('  HP: ${goblin.hpAtual}');
   print('  Ação: ${goblin.obterProximaAcao(jogador, null)}');
-  print();
+  print('');
 
   // Turno 4-5: Atacando
-  goblin.estadoAtual = Atacando();
+  goblin.estado = Atacando();
   for (int turno = 4; turno <= 5; turno++) {
     print('TURNO $turno: (Em combate direto)');
-    print('  Estado: ${goblin.estadoAtual.nome}');
+    print('  Estado: ${goblin.estado.nome}');
     print('  HP: ${goblin.hpAtual}');
     // Simular dano do jogador
     var dano = 8;
@@ -110,33 +110,33 @@ void main() {
     print('  [Jogador causa $dano de dano]');
     print('  HP após ataque: ${goblin.hpAtual}');
     print('  Ação: ${goblin.obterProximaAcao(jogador, null)}');
-    print();
+    print('');
   }
 
   // Turno 6: Fugindo (HP baixo)
   print('TURNO 6: (HP abaixo de 30%)');
-  goblin.estadoAtual = Fugindo();
-  print('  Estado: ${goblin.estadoAtual.nome}');
+  goblin.estado = Fugindo();
+  print('  Estado: ${goblin.estado.nome}');
   print('  HP: ${goblin.hpAtual} (${(goblin.hpAtual / goblin.hpMax * 100).toStringAsFixed(1)}%)');
   print('  Ação: ${goblin.obterProximaAcao(jogador, null)}');
-  print();
+  print('');
 
   // Turno 7: Fugindo (continuação)
   print('TURNO 7: (Continuando fuga)');
-  print('  Estado: ${goblin.estadoAtual.nome}');
+  print('  Estado: ${goblin.estado.nome}');
   print('  HP: ${goblin.hpAtual}');
   print('  Ação: ${goblin.obterProximaAcao(jogador, null)}');
-  print();
+  print('');
 
   // Turno 8: Recuperação e volta para perseguição
   goblin.hpAtual = 25; // Simular cura durante fuga
   print('TURNO 8: (Recuperou alguns HP durante fuga)');
-  print('  Estado: ${goblin.estadoAtual.nome}');
+  print('  Estado: ${goblin.estado.nome}');
   print('  HP: ${goblin.hpAtual} (${(goblin.hpAtual / goblin.hpMax * 100).toStringAsFixed(1)}%)');
-  var novoEstado = goblin.estadoAtual.atualizar(goblin, jogador, null);
+  var novoEstado = goblin.estado.atualizar(goblin, jogador, null);
   if (novoEstado != null) {
-    goblin.estadoAtual = novoEstado;
-    print('  [Transição para: ${goblin.estadoAtual.nome}]');
+    goblin.estado = novoEstado;
+    print('  [Transição para: ${goblin.estado.nome}]');
   }
   print('  Ação: ${goblin.obterProximaAcao(jogador, null)}');
 

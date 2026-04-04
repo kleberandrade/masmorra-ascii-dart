@@ -18,10 +18,9 @@ class Jogador {
   Jogador({
     required this.nome,
     int hpMax = 50,
-    int ataque = 5,
+    this.ataque = 5,
   })  : hp = hpMax,
         maxHp = hpMax,
-        ataque = ataque,
         ouro = 0 {
     tabela = TabelaProgressao();
   }
@@ -69,20 +68,20 @@ class Jogador {
     switch (nivel) {
       case 3:
         if (!habilidades.any((h) => h.nome == 'Golpe Forte')) {
-          habilidades.add(GolpeFort());
-          print('* Aprendeste a habilidade: Golpe Forte!');
+          habilidades.add(GolpeForte());
+          print('* Você aprendeu a habilidade: Golpe Forte!');
         }
         break;
       case 5:
         if (!habilidades.any((h) => h.nome == 'Curar')) {
           habilidades.add(Curar());
-          print('* Aprendeste a habilidade: Curar!');
+          print('* Você aprendeu a habilidade: Curar!');
         }
         break;
       case 7:
         if (!habilidades.any((h) => h.nome == 'Ataque Rápido')) {
           habilidades.add(AtaqueRapido());
-          print('* Aprendeste a habilidade: Ataque Rápido!');
+          print('* Você aprendeu a habilidade: Ataque Rápido!');
         }
         break;
     }

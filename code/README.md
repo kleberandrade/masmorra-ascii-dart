@@ -1,6 +1,6 @@
 # Masmorra ASCII — código Dart
 
-Código de apoio ao livro **Masmorra ASCII**: jogo de referência e snapshots por capítulo (`step-01` … `step-36`).
+Código de apoio ao livro **Masmorra ASCII**: jogo de referência e snapshots por capítulo (`step-01` … `step-37`).
 
 Todo o código fica em **`code/`** na raiz do repositório. O site aponta para os links `tree/main/code/steps/step-NN`.
 
@@ -13,11 +13,11 @@ Todo o código fica em **`code/`** na raiz do repositório. O site aponta para o
 ├── README.md              # este arquivo
 ├── .gitignore
 ├── scripts/
-│   └── validate_all.sh    # valida todos os steps (pub get + analyze)
+│   └── validate_all.sh    # valida steps 01–37 + masmorra_ascii (pub get + analyze --fatal-warnings)
 ├── masmorra_ascii/        # solução final executável (MUD + masmorra, testes)
 └── steps/
     ├── README.md          # índice dos capítulos e tabela dos steps
-    ├── step-01/ … step-36/
+    ├── step-01/ … step-37/
     └── …                  # guias opcionais (QUICKSTART-*, STEPS-29-36.md, …)
 ```
 
@@ -28,7 +28,7 @@ Todo o código fica em **`code/`** na raiz do repositório. O site aponta para o
 
 ## Requisitos
 
-- [Dart SDK](https://dart.dev/get-dart) (versão compatível com cada `pubspec.yaml`: em geral **3.5+** para `masmorra_ascii`, **3.11+** para muitos steps recentes).
+- [Dart SDK](https://dart.dev/get-dart) (versão compatível com cada `pubspec.yaml`: em geral **3.11+** para `masmorra_ascii` e para os steps recentes).
 
 ## Compilar e executar
 
@@ -39,7 +39,7 @@ cd masmorra_ascii
 dart pub get
 dart lib/main.dart
 dart test
-dart analyze
+dart analyze --fatal-warnings
 ```
 
 ### Um step isolado
@@ -52,7 +52,7 @@ dart lib/main.dart
 
 Consulte o `README.md` do step e o [índice](steps/README.md) para mais detalhes.
 
-### Validar todos os steps
+### Validar todos os steps e `masmorra_ascii`
 
 A partir desta pasta (`code/` na raiz do repositório):
 

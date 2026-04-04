@@ -25,6 +25,7 @@ Future<void> guardarJogo(Player jogador, String caminho, {Set<String>? salasLimp
   final mapa = <String, dynamic>{
     'name': jogador.name,
     'hp': jogador.hp,
+    'defesa': jogador.defesa,
     'ouro': jogador.ouro,
     'roomId': jogador.roomId,
     'emMasmorra': jogador.emMasmorra,
@@ -56,6 +57,7 @@ Future<SaveData?> carregarJogo(String caminho) async {
     hp: m['hp'] as int,
     ouro: m['ouro'] as int,
     roomId: m['roomId'] as String,
+    defesa: m['defesa'] as int? ?? 0,
   );
   p.emMasmorra = m['emMasmorra'] as bool? ?? false;
   final inv = m['inventario'] as List<dynamic>? ?? [];

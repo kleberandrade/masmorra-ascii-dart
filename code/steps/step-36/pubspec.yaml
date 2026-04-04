@@ -1,6 +1,6 @@
 name: masmorra_ascii
-version: 0.35.0
-description: Masmorra ASCII - Step 35 - Máquinas de Estado para IA Inteligente
+version: 0.36.0
+description: Masmorra ASCII - Step 36 - Máquinas de estado (FSM) para IA
 publish_to: none
 
 environment:
@@ -10,4 +10,4 @@ dependencies:
 
 dev_dependencies:
   test: ^1.24.0
-  lints: ^4.0.0
+  lints: ^5.0.0

@@ -2,11 +2,11 @@
 
 > *Você testou comportamento—HP sobe, XP conta. Mas há uma dimensão que os testes nunca capturaram: o desenho na tela. Uma golden test captura a imagem de hoje e compara com amanhã. Se mudou sem permissão, o teste grita aviso.*
 
-Você testou comportamento. HP sobe quando bebe poção, XP conta quando mata inimigo, combate funciona. Mas há uma dimensão ninguém testava: o desenho. Como sabe se a HUD fica alinhada? Se as caixas não estão desalinhadas? Se uma refatoração invisível quebrou a aparência?
+Você testou comportamento. HP sobe quando bebe poção, XP conta quando mata inimigo, combate funciona. Mas há uma dimensão que ninguém testava: o desenho. Como sabe se a HUD fica alinhada? Se as caixas estão desalinhadas? Se uma refatoração invisível quebrou a aparência?
 
 Golden tests são screenshots testados. Você captura a saída ASCII exatamente como deveria parecer, salva esse "golden" (padrão de ouro), e depois, em cada mudança futura, compara. Se o desenho mudou, o teste falha. Você fica sabendo: foi intencional ou acidental?
 
-Antes da batalha final, todo herói polida sua armadura. HUD polida e testes golden são esse polimento final. Não é apenas funcional, é profissional.
+Antes da batalha final, todo herói polida sua armadura. HUD polida e testes golden são esse polimento final. Não é apenas funcional; é profissional.
 
 ### Por que Testes Golden Importam?
 
@@ -94,7 +94,7 @@ void main() {
 
 Uma HUD profissional não é apenas texto amontoado. Ela alinha itens visualmente, usa linhas simples para organizar informações, mostra barras visuais em vez de números crus (uma barra de HP preenchida é mais intuitiva que "45/50"). Você vai criar um `Renderizador` que constrói strings complexas com layout limpo.
 
-**Por que isso importa:** Em um roguelike ASCII, a interface é tudo que o jogador vê. Não há gráficos 3D para compensar uma layout ruim. Informações bem alinhadas, barras bem preenchidas, números bem espaçados—tudo isso comunica profissionalismo e torna o jogo mais legível em combate intenso.
+**Por que isso importa:** Em um roguelike ASCII, a interface é tudo que o jogador vê. Não há gráficos 3D para compensar um layout ruim. Informações bem alinhadas, barras bem preenchidas, números bem espaçados—tudo isso comunica profissionalismo e torna o jogo mais legível em combate intenso.
 
 **Técnicas chave:**
 - **StringBuffer:** Construir strings linha por linha é eficiente. Em vez de concatenar com `+` a cada linha, você acumula tudo em um buffer e chama `toString()` ao final.
@@ -240,7 +240,7 @@ Cada parte adiciona novas camadas ao jogo. Compare com o início e veja o quanto
 ***
 
 
-**Desafio 33.1. Padrão de Ouro.** Golden tests são screenshots de texto: você captura a HUD "perfeita", salva em arquivo, e valida que futuros testes batem. Crie um: Jogador "Aventureiro" com HP 30/40, nível 3, ataque 7. Chame `render.renderizarStatus(jogador)`. Primeira execução cria arquivo golden `test/golden/status.txt`. Execute novamente: deve passar (saída bate). É seu seguro contra regressões visuais. Dica: golden_test é padrão em testes visuais.
+**Desafio 33.1. Padrão de Ouro.** Golden tests são screenshots de texto: você captura a HUD "perfeita", salva em arquivo, e valida que futuros testes batem. Crie um: Jogador "Aventureiro" com HP 30/40, nível 3, ataque 7. Chame `render.renderizarStatus(jogador)`. Primeira execução cria arquivo golden `test/golden/status.txt`. Execute novamente: deve passar (saída confere). É seu seguro contra regressões visuais. Dica: golden test é padrão em testes visuais.
 
 **Desafio 33.2. Artesão de Barras.** Barra de progresso é arte. Implemente `_barra(atual, max, largura)` que retorna string com blocos: `█` cheio, `░` vazio. Teste 4 casos: (1) barra cheia (50/50), (2) metade (25/50), (3) quase vazia (5/50), (4) vazia (0/50). Valide percentuais: `50/50` → "100%", `25/50` → "50%". Trate `max == 0` sem dividir por zero. Barras visuais contam história do progresso. Dica: `(current * width) ~/ max` calcula quantos blocos.
 
@@ -254,18 +254,18 @@ Cada parte adiciona novas camadas ao jogo. Compare com o início e veja o quanto
 
 ## Pergaminho do Capítulo
 
-**Golden tests** são screenshots de saída textual. Você captura a HUD exatamente como deve parecer, salva em arquivo, e compara em testes futuros. Se mudou, o teste falha—avisando se foi acidental ou intencional.
+**Golden tests** são screenshots de saída textual. Você captura a HUD exatamente como deve parecer, salva em arquivo, e compara em testes futuros. Se mudou, o teste falha, avisando se foi acidental ou intencional.
 
-**HUD polida** usa `StringBuffer` para construir strings eficientemente, metodos helpers para evitar repetição, e box drawing characters para aparecer profissional. Tudo linha por linha, alinhado.
+**HUD polida** usa `StringBuffer` para construir strings eficientemente, métodos helpers para evitar repetição, e box drawing characters para parecer profissional. Tudo linha por linha, alinhado.
 
 **Quando usar:**
-- Refatorar código de renderização → Golden tests garantem nada quebrou visualmente
+- Refatorar código de renderização → Golden tests garantem que nada quebrou visualmente
 - Colaborar em time → Rastreie mudanças de UI no git
 - Testar casos complexos → Barras em 7%, inimigos em posições específicas, nomes longos
 
 **Workflow:**
 1. Primeira execução: teste cria o golden (arquivo `.txt`)
-2. Próximas execuções: teste valida que saída bate
+2. Próximas execuções: teste valida que saída confere
 3. Se refatorou propositalmente: revisa mudanças e atualiza goldens
 
 Golden tests são seu seguro contra a regressão visual. Em um roguelike ASCII, a interface é tudo.
@@ -292,4 +292,4 @@ Ataque: 12 | XP: 450
 ────────────────────────────────────────────────────────────────────────────
 ```
 
-No próximo capítulo você vai implementar **Strategy e Command patterns** para IA inteligente e sistemas de combate flexíveis. Seus inimigos deixarão de ser marionetes burras e virarão adversários com táticas reais.
+No próximo capítulo você vai implementar **Strategy e Command patterns** para IA inteligente e sistemas de combate flexíveis. Seus inimigos deixarão de ser marionetes burras e se tornarão adversários com táticas reais.

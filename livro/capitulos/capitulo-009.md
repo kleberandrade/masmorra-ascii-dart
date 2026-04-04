@@ -1,12 +1,12 @@
 # Capítulo 9 - Construtores e encapsulamento
 
-> *O ferreiro não deixa qualquer um enfiar a mão na forja. Há uma porta para pedidos e uma janela para entregas. O que acontece lá dentro, o martelar, o temperar, o polir, é problema dele. Em código, chamamos isso de encapsulamento.*
+> *O ferreiro não deixa qualquer um enfiar a mão na forja. Há uma porta para pedidos e uma janela para entregas. O que acontece lá dentro (o martelar, o temperar, o polir) é problema dele. Em código, chamamos isso de encapsulamento.*
 
-Trataremos de **construtores** e **encapsulamento**: no capítulo anterior, criamos classes com campos públicos. Qualquer parte do código pode ler e modificar `jogador.hp` diretamente. Isso funciona, mas à medida que o jogo cresce, o acesso irrestrito vira fonte de bugs: alguém pode setar `hp = -50` sem querer, ou mudar `salaAtual` para uma sala que não existe. Neste capítulo, vamos aprender a proteger o estado interno das classes com **static** e a criar múltiplas formas de construir objetos.
+Trataremos de **construtores** e **encapsulamento**: no capítulo anterior, criamos classes com campos públicos. Qualquer parte do código pode ler e modificar `jogador.hp` diretamente. Isso funciona, mas à medida que o jogo cresce, o acesso irrestrito vira fonte de bugs; alguém pode setar `hp = -50` sem querer, ou mudar `salaAtual` para uma sala que não existe. Neste capítulo, vamos aprender a proteger o estado interno das classes e a criar múltiplas formas de construir objetos.
 
 ## O sublinhado `_`: privacidade em Dart
 
-Em Dart, a privacidade funciona no nível da biblioteca (ou seja, do arquivo). Qualquer identificador que comece com `_` é invisível fora daquele arquivo. Isso permite que você mantenha detalhes internos da classe privados, forçando o código externo a usar a API pública (**getters** e métodos) que você expôs. Use `_nomeVariavel` para campos privados, e crie getters públicos apenas para o que realmente precisa ser lido de fora.
+Em Dart, a privacidade funciona no nível da biblioteca (ou seja, do arquivo). Qualquer identificador que comece com `_` é invisível fora daquele arquivo. Isso permite que você mantenha detalhes internos da classe privados, forçando o código externo a usar a API pública (getters e métodos) que você expôs. Use `_nomeVariavel` para campos privados e crie getters públicos apenas para o que realmente precisa ser lido de fora.
 
 ```dart
 // lib/jogador.dart
@@ -83,13 +83,13 @@ O getter `inventario` retorna `List.unmodifiable(_inventario)`, uma visão da li
 
 ## O campo `final`: imutável após construção
 
-O `nome` do jogador é `final`, definido no construtor e nunca mais alterado. Isso faz sentido: o aventureiro não muda de nome no meio da partida. Marcar um campo como `final` diz ao compilador (e aos futuros leitores do código) que esse valor é um atributo permanente do objeto. Use `final` para campos imutáveis, tanto por clareza quanto por segurança:
+O `nome` do jogador é `final`: definido no construtor e nunca mais alterado. Isso faz sentido, o aventureiro não muda de nome no meio da partida. Marcar um campo como `final` diz ao compilador (e aos futuros leitores do código) que esse valor é um atributo permanente do objeto. Use `final` para campos imutáveis, tanto por clareza quanto por segurança:
 
 ```dart
 final String nome;
 ```
 
-Já `_hp` é mutável (sem `final`) porque o HP muda durante o jogo. A regra prática: se um campo não deveria mudar após a criação do objeto, marque como `final`.
+Já `_hp` é mutável (sem `final`) porque o HP muda durante o jogo. A regra prática: se um campo não deve mudar após a criação do objeto, marque como `final`.
 
 Para a `class` `Sala`, quase tudo é `final`:
 
@@ -105,11 +105,11 @@ class Sala {
 }
 ```
 
-Uma distinção sutil: `final List<String> itens` significa que a variável `itens` sempre aponta para a mesma lista, mas o conteúdo da lista pode mudar (itens adicionados ou removidos). Se quiséssemos impedir até isso, usaríamos uma lista imutável usando `const` ou `List.unmodifiable()` no construtor.
+Uma distinção sutil: `final List<String> itens` significa que a variável `itens` sempre aponta para a mesma lista, mas o conteúdo da lista pode mudar (itens adicionados ou removidos). Se quiséssemos impedir até isso, usaríamos uma lista imutável usando `const` ou `List.unmodifiable()` no construtor de forma mais robusta.
 
 ## Construtores nomeados
 
-Dart permite ter múltiplos construtores com nomes diferentes. Enquanto o construtor principal faz inicialização genérica, construtores nomeados podem oferecer formas especializadas de criar objetos. No jogo, queremos criar um recruta fraco para modo fácil, um veterano forte para modo difícil, ou carregar um jogador salvo de um arquivo. Cada situação é um construtor nomeado, tornando o código que cria o jogador legível e expressivo.
+Dart permite ter múltiplos construtores com nomes diferentes. Enquanto o construtor principal faz inicialização genérica, construtores nomeados podem oferecer formas especializadas de criar objetos. No jogo, queremos criar um recruta fraco para modo fácil, um veterano forte para modo difícil ou carregar um jogador salvo de um arquivo. Cada situação é um construtor nomeado, tornando o código que cria o jogador legível e expressivo.
 
 ```dart
 class Jogador {
@@ -158,7 +158,7 @@ O construtor `Jogador.deArquivo` é uma prévia do sistema de save/load que cons
 
 ## **Factory constructors**
 
-Um **factory constructor** é um construtor que tem poderes especiais: pode retornar uma instância já existente (útil para cache), pode fazer lógica complexa antes de criar o objeto, pode retornar uma subclasse em vez do tipo original. Diferente de um construtor normal, um factory não tem acesso a `this` porque pode não estar criando um novo objeto. No nosso jogo, usaremos factory constructors para construir inimigos a partir de dados, aplicando rules e validações antes de criar a instância final.
+Um **factory constructor** é um construtor que tem poderes especiais: pode retornar uma instância já existente (útil para cache), pode fazer lógica complexa antes de criar o objeto e pode retornar uma subclasse em vez do tipo original. Diferente de um construtor normal, um factory não tem acesso a `this` porque pode não estar criando um novo objeto. No nosso jogo, usaremos factory constructors para construir inimigos a partir de dados, aplicando regras e validações antes de criar a instância final.
 
 ```dart
 class Sala {
@@ -186,13 +186,13 @@ class Sala {
 }
 ```
 
-O `factory` é diferente de um construtor normal porque pode retornar um objeto já existente (do cache), pode retornar uma instância de uma subclasse, e não tem acesso a `this` no corpo.
+O `factory` é diferente de um construtor normal porque pode retornar um objeto já existente (do cache), pode retornar uma instância de uma subclasse e não tem acesso a `this` no corpo.
 
-No nosso jogo, `factory` constructors serão muito úteis quando criarmos inimigos a partir de dados (JSON/tabelas).
+No nosso jogo, factory constructors serão muito úteis quando criarmos inimigos a partir de dados (JSON/tabelas).
 
 ## O método paraMap: preparando para persistência
 
-O inverso de `deArquivo` é `paraMap()`, que converte o objeto para um mapa que pode ser salvo como JSON ou convertido em string. Esse par de métodos é fundamental para save/load: você salva o objeto convertendo-o para um mapa (que é facilmente serializado em JSON), e o carrega criando um novo objeto a partir de um mapa.
+O inverso de `deArquivo` é `paraMap()`, que converte o objeto para um mapa que pode ser salvo como JSON ou convertido em string. Esse par de métodos é fundamental para save/load: você salva o objeto convertendo-o para um mapa (facilmente serializado em JSON) e o carrega criando um novo objeto a partir de um mapa.
 
 ```dart
 class Jogador {
@@ -220,7 +220,7 @@ O par `paraMap()`/`deArquivo()` é um padrão essencial em Dart, é assim que ob
 
 ## Movimentação encapsulada
 
-Agora que temos campos privados, podemos adicionar métodos que modificam o estado interno de forma controlada. O método `moverPara()` permite que o jogador se mova, mas apenas atualizando a sala interna. Ninguém de fora pode setar `_salaAtual = 'invalida'`, podem apenas chamar `moverPara()` e confiarem que a lógica interna está correta.
+Agora que temos campos privados, podemos adicionar métodos que modificam o estado interno de forma controlada. O método `moverPara()` permite que o jogador se mova, mas apenas atualizando a sala interna. Ninguém de fora pode setar `_salaAtual = 'invalida'`: podem apenas chamar `moverPara()` e confiar que a lógica interna está correta.
 
 ```dart
   void moverPara(String novaSalaId) {
@@ -261,10 +261,10 @@ Cada objeto cuida do que é seu. A sala sabe quais saídas tem (via `saidaPara()
 
 ## Pergaminho do Capítulo
 
-Neste capítulo você aprendeu privacidade com `_` (no nível do arquivo), getters como interface pública controlada, `final` para campos imutáveis, construtores nomeados para múltiplas formas de criação, factory constructors para lógica antes da instanciação, e o par `paraMap`/`deArquivo` para serialização.
+Neste capítulo você aprendeu privacidade com `_` (no nível do arquivo), getters como interface pública controlada, `final` para campos imutáveis, construtores nomeados para múltiplas formas de criação, factory constructors para lógica antes da instanciação e o par `paraMap`/`deArquivo` para serialização.
 
 O modelo do jogo agora é robusto: campos protegidos, validação interna, e uma API clara. No Capítulo 10, vamos usar herança para criar uma família de inimigos, `Zumbi`, `Esqueleto`, `Lobo`, cada um com stats e comportamentos diferentes, todos compartilhando uma base comum `Inimigo`.
 
 ::: dica
-**Dica do Mestre:** Em Dart, a regra é: torne privado por padrão, exponha por necessidade. Se um campo não precisa ser lido de fora, não crie getter. Se precisa ser lido mas não escrito, crie getter sem **setter**. Só exponha o mínimo necessário. Quanto menos superfície de API, menos formas o código externo tem de criar bugs no seu objeto.
+**Dica do Mestre:** Em Dart, a regra é: torne privado por padrão, exponha por necessidade. Se um campo não precisa ser lido de fora, não crie getter. Se precisa ser lido mas não escrito, crie getter sem setter. Só exponha o mínimo necessário. Quanto menos superfície de API, menos formas o código externo tem de criar bugs no seu objeto.
 :::

@@ -40,7 +40,7 @@ Problemas:
 
 ### FabricaInimigo: Solução Centralizada
 
-Agora toda definição está em um único lugar. Um `Map` de catálogo mapeia tipo (string) para definição. Métodos estáticos criam inimigos: `criar('zumbi', 3)` cria um zumbi no andar 3, com HP e dano escalonados por andar. Mudar HP de um zumbi? Mude em um lugar. Quer um novo tipo? Adicione ao catálogo. O resto do código nunca vê os detalhes construtivos — sempre vai through a factory. Isso é elegância.
+Agora toda definição está em um único lugar. Um `Map` de catálogo mapeia tipo (string) para definição. Métodos estáticos criam inimigos: `criar('zumbi', 3)` cria um zumbi no andar 3, com HP e dano escalonados por andar. Mudar HP de um zumbi? Mude em um lugar. Quer um novo tipo? Adicione ao catálogo. O resto do código nunca vê os detalhes construtivos; sempre vai through a factory. Isso é elegância.
 
 ```dart
 class FabricaInimigo {
@@ -157,9 +157,9 @@ var aleatorio = FabricaInimigo.criarAleatorio(5);
 
 É como o spawner de monstros em Minecraft: tudo vem de um único lugar, balanceado por andar.
 
-### FabricaItem Similamente
+### ### FabricaItem: Similarmente
 
-Itens também precisam de factory. Aqui, cada item tem nome, descrição, valor, raridade, e um `criador` (uma função que constrói o item real). Isso permite criar diferentes tipos de poções, armas e armaduras sem espalhar lógica de construção por todo o código.
+Itens também precisam de factory. Aqui, cada item tem nome, descrição, valor, raridade e um `criador` (uma função que constrói o item real). Isso permite criar diferentes tipos de poções, armas e armaduras sem espalhar lógica de construção por todo o código.
 
 ```dart
 class FabricaItem {
@@ -211,7 +211,7 @@ class DefinicaoItem {
 
 ## Observer: Sistema de Reações
 
-O padrão Observer permite que múltiplos observadores se inscrevam em eventos sem que o disparador conheça os observadores. Usa Dart **Stream** e `StreamController`.
+O padrão Observer permite que múltiplos observadores se inscrevam em eventos sem que o disparador conheça os observadores. Usa `Stream` Dart e `StreamController` para desacoplar totalmente.
 
 ### O Problema: Acoplamento
 
@@ -235,7 +235,7 @@ Tudo em uma função. Novo observador? Edita aqui. Ruim.
 
 ### BarramentoEventos: Solução
 
-Em vez de `matarInimigo` saber de tudo, ele apenas emite um evento: "um inimigo morreu". Quem se importa? Log, UI, som, conquistas, estatísticas. Todos escutam. Nenhum conhece o outro. `matarInimigo` não precisa saber de nada além do evento básico. Quer adicionar um novo sistema que reage a morte? Cria um novo observador e o registra. Zero mudança no código de combate.
+Em vez de `matarInimigo` saber de tudo, ele apenas emite um evento: "um inimigo morreu". Quem se importa? Log, UI, som, conquistas, estatísticas. Todos escutam. Nenhum conhece o outro. `matarInimigo` não precisa saber de nada além do evento básico. Quer adicionar um novo sistema que reage a mortes? Cria um novo observador e o registra. Zero mudança no código de combate.
 
 ```dart
 abstract class EventoJogo {
@@ -374,7 +374,7 @@ class ObservadorSom {
 }
 ```
 
-É como o sistema de notificações do celular: quando algo acontece, múltiplos apps reagem. Nenhum conhece o outro.
+É como o sistema de notificações do dispositivo móvel: quando algo acontece, múltiplos apps reagem. Nenhum conhece o outro.
 
 ## Integrando Factory e Observer
 
@@ -465,7 +465,7 @@ Feito. Nenhuma alteração em código de combate.
 
 ## Pergaminho do Capítulo
 
-Neste capítulo você aprendeu como Factory centraliza a criação de objetos, removendo lógica de construção espalhada por todo o código. Implementou FabricaInimigo que define balanceamento em um único lugar e FabricaItem para itens, ambas permitindo fácil extensão e carregamento de dados via JSON. O padrão Observer permitiu que múltiplos sistemas (log, UI, som, estatísticas, conquistas) reajam a eventos do jogo (morte, dano, colheita) sem conhecerem um ao outro, eliminando acoplamento e simplificando a adição de novos comportamentos. Juntos, Factory e Observer transformam um jogo de um sistema monolítico em um ecossistema modular e extensível, onde novos inimigos e novos observadores se adicionam sem tocar em código existente.
+Neste capítulo você aprendeu como Factory centraliza a criação de objetos, removendo lógica de construção espalhada por todo o código. Implementou FabricaInimigo que define balanceamento em um único lugar e FabricaItem para itens, ambas permitindo fácil extensão e carregamento de dados via JSON. O padrão Observer permitiu que múltiplos sistemas (log, UI, som, estatísticas, conquistas) reajam a eventos do jogo (morte, dano, colheita) sem conhecerem um ao outro, eliminando acoplamento e simplificando a adição de novos comportamentos. Juntos, Factory e Observer transformam um jogo de um sistema monolítico em um ecossistema modular e extensível, onde novos inimigos e novos observadores se adicionam sem modificar código existente.
 
 ::: dica
 **Dica do Mestre:** Factory Pattern é essencial em desenvolvimento real. Qualquer sistema que cria múltiplos objetos de tipos variados deve centralizar essa criação. Em aplicações web, factories criam modelos de banco de dados. Em sistemas de configuração, factories parseiam dados e constroem objetos. Em testes, factories criam fixtures. Observer é igualmente crucial: é a base de qualquer sistema event-driven profissional. Desde sistemas de notificação em apps até pipelines de data processing, Observer permite que sistemas desacoplados se comuniquem. O investimento em aprender esses padrões agora te preparará para código profissional em qualquer contexto.
@@ -487,7 +487,7 @@ Neste capítulo você aprendeu como Factory centraliza a criação de objetos, r
 
 ***
 
-Factory transformou criação de inimigos em um processo escalável e data-driven. Observer transformou sistemas isolados em um ecossistema de reações elegante. Juntos, eles permitem crescimento sem acoplamento: novos observadores se adicionam sem tocar em código anterior, balanço se muda via JSON.
+Factory transformou criação de inimigos em um processo escalável e orientado a dados. Observer transformou sistemas isolados em um ecossistema de reações elegante. Juntos, eles permitem crescimento sem acoplamento: novos observadores se adicionam sem modificar código anterior, balanço muda via JSON.
 
 > *"A verdadeira elegância de um sistema reside não no que ele faz hoje, mas em quanto pode crescer amanhã sem quebrar o que já funciona."*
 

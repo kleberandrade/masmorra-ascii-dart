@@ -40,3 +40,11 @@ Thumbs.db
 # Ambiente
 .env
 .env.local
+
+# Outros
+docs/
+
+# output/: versionar apenas EPUB e PDF finais (ignorar DOCX, scripts, etc.)
+output/*
+!output/masmorra-ascii-dart.epub
+!output/masmorra-ascii-dart.pdf

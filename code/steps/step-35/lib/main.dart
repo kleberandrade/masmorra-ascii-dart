@@ -48,7 +48,7 @@ void main() async {
     dano: 8,
   );
   barramento.emitir(eventoDano1);
-  await Future.delayed(Duration(milliseconds: 100)); // Pequeno delay para evento processar
+  await Future<void>.delayed(const Duration(milliseconds: 100));
 
   // Evento 2: Outro dano
   print('[EVENTO] Aplicando mais dano...');
@@ -58,7 +58,7 @@ void main() async {
     dano: 5,
   );
   barramento.emitir(eventoDano2);
-  await Future.delayed(Duration(milliseconds: 100));
+  await Future<void>.delayed(const Duration(milliseconds: 100));
 
   // Evento 3: Morte de inimigo
   print('[EVENTO] Inimigo derrotado...');
@@ -67,7 +67,7 @@ void main() async {
     xpRecompensa: 50,
   );
   barramento.emitir(eventoMorte);
-  await Future.delayed(Duration(milliseconds: 100));
+  await Future<void>.delayed(const Duration(milliseconds: 100));
 
   // Evento 4: Mais dano
   print('[EVENTO] Aplicando último dano...');
@@ -77,7 +77,7 @@ void main() async {
     dano: 3,
   );
   barramento.emitir(eventoDano3);
-  await Future.delayed(Duration(milliseconds: 100));
+  await Future<void>.delayed(const Duration(milliseconds: 100));
 
   print('\n--- Estatísticas Coletadas ---');
   print('Total de inimigos derrotados: ${observadorEstat.totalMatos}');

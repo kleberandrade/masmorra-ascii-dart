@@ -90,7 +90,7 @@ void main() {
         break;
 
       default:
-        print('Comando desconhecido. Digita "ajuda".');
+        print('Comando desconhecido. Digite "ajuda".');
     }
 
     print('');

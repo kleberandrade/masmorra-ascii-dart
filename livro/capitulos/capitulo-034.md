@@ -43,7 +43,7 @@ Uma estratégia recebe o inimigo, o alvo e o mapa, e retorna uma **Acao** (que v
 
 Um lobo não hesita. Vê você, vai atrás.
 
-A estratégia agressiva é simples mas efetiva: se o alvo está longe, ande em sua direção. Se está perto (1 tile), ataque. Se você não conseguir traçar uma linha reta até o alvo (há paredes no caminho), apenas ande aleatoriamente. Observe como a decisão retorna uma `Acao` (que veremos em breve) — o padrão Command encapsula o que fazer.
+A estratégia agressiva é simples mas efetiva: se o alvo está longe, ande em sua direção. Se está perto (1 tile), ataque. Se você não conseguir traçar uma linha reta até o alvo (há paredes no caminho), apenas ande aleatoriamente. Observe como a decisão retorna uma `Acao` (que veremos em breve); o padrão Command encapsula o que fazer.
 
 ```dart
 class IAAgressiva implements EstrategiaIa {
@@ -99,7 +99,7 @@ class IACovardia implements EstrategiaIa {
 
 Um esqueleto segue uma rota. Se você aparecer no seu campo de visão, passa a atacar:
 
-Patrulha é mais sofisticada. O inimigo caminha por uma rota predefinida. Se deteta o alvo, passa para combate direto. Note o `emCombate` — uma vez em combate, o inimigo permanece assim até a morte ou vitória. Sem isso, um inimigo poderia ficar alternando entre patrulha e perseguição infinitamente. Esse flag garante coerência no comportamento.
+Patrulha é mais sofisticada. O inimigo caminha por uma rota predefinida. Se detecta o alvo, passa para combate direto. Note o `emCombate`: uma vez em combate, o inimigo permanece assim até a morte ou vitória. Sem isso, um inimigo poderia ficar alternando entre patrulha e perseguição infinitamente. Esse flag garante coerência no comportamento.
 
 ```dart
 class IAPatrulha implements EstrategiaIa {
@@ -138,7 +138,7 @@ class IAPatrulha implements EstrategiaIa {
 
 Um zumbi anda aleatoriamente e só ataca se for atacado primeiro:
 
-Passiva é o oposto de agressiva. O inimigo ignora você até ser atacado. Depois, reage. Isso simula zumbis que estão dormindo ou distraídos, ou animais selvagens que fogem de humanos mas atacam se provocados. Note como `foiAtacada` é um flag que nunca volta a falso — uma vez despertado, o zumbi permanece hostil.
+Passiva é o oposto de agressiva. O inimigo ignora você até ser atacado. Depois, reage. Isso simula zumbis que estão dormindo ou distraídos, ou animais selvagens que fogem de humanos mas atacam se provocados. Note como `foiAtacada` é um flag que nunca volta a falso: uma vez despertado, o zumbi permanece hostil.
 
 ```dart
 class IAPassiva implements EstrategiaIa {
@@ -161,7 +161,9 @@ class IAPassiva implements EstrategiaIa {
 
 ## Integrando Strategy no Inimigo
 
-Modifique a classe Inimigo para usar uma estratégia:
+Modifique a classe Inimigo para usar uma estratégia.
+
+**Quando você integra Strategy:**
 
 ```dart
 class Inimigo {
@@ -193,7 +195,7 @@ Strategy diz *o quê fazer*. Command diz *como fazer* de forma reversível e his
 
 Defina a interface:
 
-Em vez de métodos que executam diretamente, cada ação é um objeto que sabe como se executar, desfazer e descrever a si mesma. Isso permite construir um histórico de ações — útil para replay de combates, undo, e logging. A interface é simples: `executar()` faz a coisa, `desfazer()` desfaz, e `descricao` descreve.
+Em vez de métodos que executam diretamente, cada ação é um objeto que sabe como se executar, desfazer e descrever a si mesma. Isso permite construir um histórico de ações (útil para replay de combates, undo e logging). A interface é simples: `executar()` faz a coisa, `desfazer()` desfaz, e `descricao` descreve.
 
 ```dart
 abstract class Acao {
@@ -205,7 +207,7 @@ abstract class Acao {
 
 ### AcaoAtacar
 
-A ação de ataque captura o estado antes (HP anterior) e depois (dano aplicado). Isso permite desfazer: basta restaurar `hp` para o valor anterior. Observe como `dano` é calculado e armazenado em `executar()` — é necessário porque em `desfazer()` você precisa saber quanto dano foi aplicado para poder reverter.
+A ação de ataque captura o estado antes (HP anterior) e depois (dano aplicado). Isso permite desfazer: basta restaurar `hp` para o valor anterior. Observe como `dano` é calculado e armazenado em `executar()`; é necessário porque em `desfazer()` você precisa saber quanto dano foi aplicado para poder reverter.
 
 ```dart
 class AcaoAtacar implements Acao {
@@ -235,7 +237,7 @@ class AcaoAtacar implements Acao {
 
 ### AcaoMover
 
-Movimento também é uma ação. Captura a posição original, move, permite desfazer restaurando a posição. Note que `ePassavel()` garante que você não anda através de paredes — se o destino é inválido, a ação não muda `pos`. Importante: sempre validar antes de modificar estado.
+Movimento também é uma ação. Captura a posição original, move, permite desfazer restaurando a posição. Note que `ePassavel()` garante que você não anda através de paredes; se o destino é inválido, a ação não muda a posição. Importante: sempre validar antes de modificar estado.
 
 ```dart
 class AcaoMover implements Acao {
@@ -351,7 +353,7 @@ void executarTurnoInimigo(
 
 Um padrão avançado: um chefe que muda de estratégia conforme seu HP cai:
 
-Um boss não é apenas um inimigo forte. É um combate progredindo. Conforme o herói inflige dano, o chefe muda de tática. Assim como em Dark Souls, onde o boss fica desesperado quando está perto de morrer. Aqui, `BossComFases` muda a estratégia interna baseado no HP. O resto do código não precisa saber disso — para o jogo principal, é apenas mais uma `EstrategiaIa`.
+Um boss não é apenas um inimigo forte. É um combate progredindo. Conforme o herói inflige dano, o chefe muda de tática. Assim como em Dark Souls, onde o boss fica desesperado quando está perto de morrer. Aqui, `BossComFases` muda a estratégia interna baseado no HP. O resto do código não precisa saber disso; para o jogo principal, é apenas mais uma `EstrategiaIa`.
 
 ```dart
 class BossComFases implements EstrategiaIa {
@@ -372,9 +374,9 @@ class BossComFases implements EstrategiaIa {
 
 É como em Dragon Ball: conforme Goku fica mais ferido, ele muda de abordagem. Cada fase tem uma mente própria.
 
-## Antes e Depois
+## Antes vs. Depois
 
-Antes, inimigos eram indistintos:
+### Antes: Indistinção
 
 ```text
 Zumbi: sempre anda aleatoriamente, sempre ataca se próximo
@@ -382,7 +384,7 @@ Lobo: sempre persegue, sempre ataca
 Dragão: sempre ataca com força bruta
 ```
 
-Depois, cada um é único:
+### Depois: Singularidade
 
 ```text
 Zumbi (IAPassiva): anda lentamente até ser provocado
@@ -393,10 +395,10 @@ Dragão (BossComFases): adapta tática a cada fase, inteligente
 
 ## Pergaminho do Capítulo
 
-Neste capítulo, você aprendeu dois padrões de design que transformam inimigos estáticos em adversários inteligentes e comportamentos previsíveis. O padrão Strategy permite que cada inimigo tenha sua própria "mente" — uma agressiva persegue você ferozmente, outra patrulha e dispara quando detectada, outra foge quando ferida — tudo sem modificar a classe Inimigo. Você implementou cinco estratégias diferentes (IAAgressiva, IACovardia, IAPatrulha, IAPassiva, e BossComFases), cada uma definindo como um inimigo decide agir em um turno. O padrão Command encapsula cada ação (ataque, movimento, espera) como um objeto reversível, permitindo que você construa um histórico completo, desfaça ações, e implemente replay de combates. Juntos, Strategy e Command eliminam if/else aninhados, criam inimigos que "pensam", e proveem a base para sistemas de IA sofisticados que respeitam a elegância do código.
+Neste capítulo, você aprendeu dois padrões de design que transformam inimigos estáticos em adversários inteligentes e comportamentos previsíveis. O padrão Strategy permite que cada inimigo tenha sua própria "mente" (uma agressiva persegue você ferozmente, outra patrulha e dispara quando detectada, outra foge quando ferida), tudo sem modificar a classe Inimigo. Você implementou cinco estratégias diferentes (IAAgressiva, IACovardia, IAPatrulha, IAPassiva e BossComFases), cada uma definindo como um inimigo decide agir em um turno. O padrão Command encapsula cada ação (ataque, movimento, espera) como um objeto reversível, permitindo que você construa um histórico completo, desfaça ações e implemente replay de combates. Juntos, Strategy e Command eliminam if/else aninhados, criam inimigos que "pensam" e proveem a base para sistemas de IA sofisticados que respeitam a elegância do código.
 
 ::: dica
-**Dica do Mestre:** Strategy e Command são padrões que vão muito além de jogos. Em aplicações reais, use Strategy sempre que tiver múltiplas formas de executar um algoritmo que pode mudar em runtime, e Command sempre que precisar de histórico, undo/redo, ou logging de operações. Um exemplo: um sistema de pagamentos que pode usar Visa, Mastercard, ou Pix — cada é uma Strategy. Um editor de documentos que permite desfazer múltiplas edições — cada edição é um Command. O investimento em aprender esses padrões numa masmorra digital te torna um desenvolvedor melhor em qualquer contexto.
+**Dica do Mestre:** Strategy e Command são padrões que vão muito além de jogos. Em aplicações reais, use Strategy sempre que tiver múltiplas formas de executar um algoritmo que pode mudar em runtime, e Command sempre que precisar de histórico, undo/redo, ou logging de operações. Um exemplo: um sistema de pagamentos que pode usar Visa, Mastercard, ou Pix; cada é uma Strategy. Um editor de documentos que permite desfazer múltiplas edições; cada edição é um Command. O investimento em aprender esses padrões numa masmorra digital te torna um desenvolvedor melhor em qualquer contexto.
 :::
 
 ***
@@ -419,4 +421,4 @@ O padrão Strategy transformou inimigos passivos em adversários inteligentes. C
 
 > *"A inteligência sem ação é mera reflexão. A ação sem inteligência é mera sorte. Um rei verdadeiro domina ambas."*
 
-No próximo capítulo você verá como usar Factory para criar centenas de inimigos variados de forma escalável, e Observer para fazer o mundo inteiro reagir aos eventos sem acoplamento.
+No próximo capítulo você verá como usar Factory para criar centenas de inimigos variados de forma escalável e Observer para fazer o mundo inteiro reagir aos eventos sem acoplamento.

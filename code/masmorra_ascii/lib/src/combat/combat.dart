@@ -15,7 +15,7 @@ bool executarCombate({
     if (inimigo.morto) {
       final ouro = 4 + inimigo.nome.length % 3;
       jogador.ouro += ouro;
-      log('Venceste! +$ouro ouro.');
+      log('Venceu! +$ouro ouro.');
       return true;
     }
     inimigo.executarTurno(jogador, log);

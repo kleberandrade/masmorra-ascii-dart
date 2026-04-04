@@ -42,7 +42,7 @@ class EventoLoot extends EventoJogo {
 
   @override
   String toString() =>
-      'Loot: Adquiriste $quantidade x $nomeItem (de $fonte)';
+      'Loot: Adquiriu $quantidade x $nomeItem (de $fonte)';
 }
 
 /// Evento de movimento: você moveu-se

@@ -14,7 +14,7 @@ class Item {
   });
 
   @override
-  String toString() => '$nome';
+  String toString() => nome;
 }
 
 class Arma extends Item {
@@ -22,20 +22,14 @@ class Arma extends Item {
   final String tipo;
 
   Arma({
-    required String id,
-    required String nome,
-    required String descricao,
-    required int preco,
-    required int peso,
+    required super.id,
+    required super.nome,
+    required super.descricao,
+    required super.preco,
+    required super.peso,
     required this.dano,
     required this.tipo,
-  }) : super(
-    id: id,
-    nome: nome,
-    descricao: descricao,
-    preco: preco,
-    peso: peso,
-  );
+  });
 
   @override
   String toString() => '$nome (+$dano dano)';
@@ -46,20 +40,14 @@ class Armadura extends Item {
   final String localizacao;
 
   Armadura({
-    required String id,
-    required String nome,
-    required String descricao,
-    required int preco,
-    required int peso,
+    required super.id,
+    required super.nome,
+    required super.descricao,
+    required super.preco,
+    required super.peso,
     required this.defesa,
     required this.localizacao,
-  }) : super(
-    id: id,
-    nome: nome,
-    descricao: descricao,
-    preco: preco,
-    peso: peso,
-  );
+  });
 
   @override
   String toString() => '$nome (+$defesa DEF)';

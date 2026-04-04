@@ -4,7 +4,7 @@
 
 ## Enums: tipos fechados e pequenos
 
-Um **enum** (enumeração) é um tipo que só pode ter um conjunto pré-definido de valores. É perfeito para coisas que não mudam: direções cardeais, dias da semana, fases da lua. Use `enum` para valores imutáveis:
+Um **enum** (enumeração) é um tipo que só pode ter um conjunto predefinido de valores. É perfeito para coisas que não mudam: direções cardeais, dias da semana, fases da lua. Use `enum` para valores imutáveis:
 
 ```dart
 // lib/direcao.dart
@@ -97,7 +97,7 @@ void main() {
 
 ## **Sealed classes**: comandos com tipagem estrita
 
-Agora vem o prato forte. `sealed class` são uma forma de Dart de dizer "esta hierarquia está fechada, apenas estas subclasses existem". É perfeito para **command** (padrão de design), porque cada comando é diferente e tem argumentos diferentes. Dart também oferece **extensions** para adicionar métodos a tipos existentes sem herança, e **typedefs** para nomear assinaturas de função complexas. Use `sealed class` para hierarquias fechadas:
+Agora vem o prato forte. `sealed class` são uma forma de Dart de dizer "esta hierarquia está fechada, apenas estas subclasses existem". É perfeito para command (padrão de design), porque cada comando é diferente e tem argumentos diferentes. Dart também oferece extensions para adicionar métodos a tipos existentes sem herança e typedefs para nomear assinaturas de função complexas. Use `sealed class` para hierarquias fechadas:
 
 ```dart
 // lib/comando_jogo.dart
@@ -151,12 +151,19 @@ class ComandoOlhar extends ComandoJogo {
   String executar() => 'Você observa ao seu redor...';
 }
 
+class ComandoStatus extends ComandoJogo {
+  const ComandoStatus();
+
+  @override
+  String executar() => 'Mostrando status...';
+}
+
 class ComandoAjuda extends ComandoJogo {
   const ComandoAjuda();
 
   @override
   String executar() =>
-      'Comandos: norte/sul/leste/oeste, atacar, pegar, inventário, olhar, ajuda, sair';
+      'Comandos: norte/sul/leste/oeste, atacar, pegar, inv, status, olhar, ajuda, sair';
 }
 
 class ComandoSair extends ComandoJogo {
@@ -190,7 +197,7 @@ ComandoJogo analisarLinha(String entrada) {
   final linha = entrada.trim().toLowerCase();
 
   if (linha.isEmpty) {
-    return ComandoDesconhecido('(vazio)');
+    return const ComandoDesconhecido('(vazio)');
   }
 
   final palavras = linha.split(RegExp(r'\s+'));
@@ -200,24 +207,24 @@ ComandoJogo analisarLinha(String entrada) {
   switch (verbo) {
     case 'n':
     case 'norte':
-      return ComandoMover(Direcao.norte);
+      return const ComandoMover(Direcao.norte);
 
     case 's':
     case 'sul':
-      return ComandoMover(Direcao.sul);
+      return const ComandoMover(Direcao.sul);
 
     case 'e':
     case 'leste':
-      return ComandoMover(Direcao.leste);
+      return const ComandoMover(Direcao.leste);
 
     case 'o':
     case 'oeste':
-      return ComandoMover(Direcao.oeste);
+      return const ComandoMover(Direcao.oeste);
 
     case 'atacar':
     case 'a':
       if (args.isEmpty) {
-        return ComandoDesconhecido('atacar o quê?');
+        return const ComandoDesconhecido('atacar o quê?');
       }
       final alvo = args.join(' ');
       return ComandoAtacar(alvo);
@@ -225,30 +232,33 @@ ComandoJogo analisarLinha(String entrada) {
     case 'inv':
     case 'inventario':
     case 'i':
-      return ComandoInventario();
+      return const ComandoInventario();
 
     case 'pegar':
     case 'p':
       if (args.isEmpty) {
-        return ComandoDesconhecido('pegar o quê?');
+        return const ComandoDesconhecido('pegar o quê?');
       }
       final item = args.join(' ');
       return ComandoPegar(item);
 
+    case 'status':
+      return const ComandoStatus();
+
     case 'olhar':
     case 'ver':
     case 'l':
-      return ComandoOlhar();
+      return const ComandoOlhar();
 
     case 'ajuda':
     case 'help':
     case '?':
-      return ComandoAjuda();
+      return const ComandoAjuda();
 
     case 'sair':
     case 'quit':
     case 'exit':
-      return ComandoSair();
+      return const ComandoSair();
 
     default:
       return ComandoDesconhecido(entrada);
@@ -284,6 +294,9 @@ class LoopJogo {
       case ComandoOlhar():
         print('Observando...');
 
+      case ComandoStatus():
+        print('Mostrando status...');
+
       case ComandoAjuda():
         print('Mostrando ajuda...');
 
@@ -309,7 +322,7 @@ class LoopJogo {
 
 ## Pattern matching com extração
 
-Nota a sintaxe especial: `case ComandoAtacar(:final alvo)`. Isso é pattern matching. Extrai o campo `alvo` diretamente no `case`, tornando o código mais conciso:
+Note a sintaxe especial: `case ComandoAtacar(:final alvo)`. Isso é pattern matching. Extrai o campo `alvo` diretamente no `case`, tornando o código mais conciso:
 
 ```dart
 // Sem pattern matching (mais verboso)
@@ -325,7 +338,7 @@ case ComandoAtacar(:final alvo):
 
 ## Integração completa: do input ao jogo
 
-Vê como tudo flui. Note o `import 'dart:io';` necessário para `stdin` e `stdout`:
+Veja como tudo flui. Note o `import 'dart:io';` necessário para `stdin` e `stdout`:
 
 ```dart
 // lib/main.dart
@@ -409,11 +422,11 @@ void main() {
 
 **Desafio 12.2. Novo comando ComandoEquipar.** Crie uma sealed subclass `ComandoEquipar` com um campo `arma: String`. Adicione-a ao parser quando o jogador escreve "equipar espada" ou "eq lança". Teste que o parser extrai o nome da arma corretamente.
 
-**Desafio 12.3. Sinonímia no parser (Abreviações).** Adicione abreviações para direções: `"u"` (up) para norte, `"d"` (down) para sul, `"l"` para leste, `"o"` para oeste. Teste que `analisarLinha("u")` retorna `ComandoMover(Direcao.norte)` e `analisarLinha("i")` retorna `ComandoInventario()`.
+**Desafio 12.3. Sinonímia no parser (Abreviações).** Adicione abreviações para direções: `"u"` (up) para norte, `"d"` (down) para sul, `"l"` para leste, `"o"` para oeste. Teste que `analisarLinha("u")` retorna `ComandoMover(Direcao.norte)` e `analisarLinha("inv")` retorna `ComandoInventario()`.
 
 **Desafio 12.4. Sugestão de comando semelhante.** Quando o jogador escreve um comando desconhecido, em vez de apenas retornar `ComandoDesconhecido(entrada)`, verifique se é similar a um comando válido (ex.: "atlcar" ≈ "atacar") e sugira: "Você quis dizer 'atacar'? Tente novamente."
 
-**Boss Final 12.5. Comando ComandoFala (Fala com argumento).** Crie `ComandoFala` que aceita uma frase inteira (ex.: `falar "Olá, mundo!"`). Modifique o parser para capturar tudo após "falar" como argumento único (pode incluir múltiplas palavras e pontuação). Demonstre com uma frase longa.
+**Boss Final 12.5. Comando ComandoFala (Fala com argumento).** Crie `ComandoFala` que aceita uma frase inteira (ex.: `falar "Olá, mundo!"`). Modifique o parser para capturar tudo após "falar" como argumento único (pode incluir múltiplas palavras e pontuação). Demonstre com uma frase completa.
 
 ## Pergaminho do Capítulo
 
@@ -429,5 +442,5 @@ Neste capítulo você aprendeu:
 `enum` e `sealed class` são ferramentas poderosas para tornar o código mais seguro. Quando combinadas, garantem que cada comando é um tipo diferente (nenhuma confusão), cada comando tem os campos corretos (não há erros de acesso), e o código que despacha comandos trata todos os casos (compilador força isso).
 
 ::: dica
-**Dica do Mestre:** `sealed class` + `switch` exaustivo = refatoração segura. Imagine que você adiciona um novo comando `ComandoMagia` num projeto grande. Com `sealed class`, o compilador anuncia cada lugar onde você faz `switch` sobre `ComandoJogo`, dizendo "ei, você esqueceu de tratar `ComandoMagia`!". Em linguagens sem `sealed class`, você recebe silenciosamente um `default` anônimo e a lógica fica incompleta. `sealed class` transformam erros em tempo de execução em avisos em tempo de compilação. É refatoração segura.
+**Dica do Mestre:** `sealed class` + `switch` exaustivo = refatoração segura. Imagine que você adiciona um novo comando `ComandoMagia` num projeto grande. Com `sealed class`, o compilador anuncia cada lugar onde você faz `switch` sobre `ComandoJogo`, dizendo "ei, você esqueceu de tratar `ComandoMagia`!". Em linguagens sem `sealed class`, você recebe silenciosamente um `default` anônimo e a lógica fica incompleta. `sealed class` transformam erros em tempo de execução em avisos em tempo de compilação. Isso é refatoração segura.
 :::

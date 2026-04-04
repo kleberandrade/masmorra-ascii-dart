@@ -24,11 +24,11 @@ Antes de codificar, vamos pensar como um designer. Um item numa masmorra tem car
 
 Mas nem todos os itens são iguais. Uma espada é um `Item`, mas precisa de `dano`. Uma armadura é `Item`, mas precisa de `defesa`. Uma poção é `Item`, mas precisa de `efeitoHps`.
 
-Essa é a oportunidade perfeita para herança de classes.
+Essa é a oportunidade perfeita para herança de classes: todos os itens compartilham estrutura comum, mas cada tipo especializa isso de forma diferente.
 
 ## Conceito: Herança com extends
 
-Em Dart, você pode criar uma `class` base (`Item`) e depois especializá-la com `extends`. Esta é uma oportunidade perfeita para herança: todos os itens têm propriedades comuns (nome, preço, peso), mas cada tipo especializa isso de forma diferente. Vamos começar com a classe `Item` genérica que serve como base para todos os itens da masmorra.
+Em Dart, você pode criar uma `class` base (`Item`) e depois especializá-la com `extends`. Todos os itens têm propriedades comuns (nome, preço, peso), mas cada tipo especializa isso de forma diferente. Vamos começar com a classe `Item` genérica que serve como base para todos os itens da masmorra.
 
 ```dart
 // lib/item.dart - A classe genérica
@@ -79,11 +79,11 @@ class Arma extends Item {
   );
 
   @override
-  String toString() => '$nome ($tipo, +$dano dano) . $descricao';
+  String toString() => '$nome ($tipo, +$dano dano)';
 }
 ```
 
-Nota importante: quando você faz `class Arma extends Item`, a `class` `Arma` herda todos os atributos de `Item`. Por isso você passa `id`, `nome`, etc. ao construtor `super()`, assim a classe-pai é inicializada corretamente.
+Nota importante: quando você faz `class Arma extends Item`, a `class` `Arma` herda todos os atributos de `Item`. Por isso você passa `id`, `nome` etc. ao construtor `super()`, assim a classe-pai é inicializada corretamente.
 
 ## Testando a Herança
 
@@ -117,8 +117,8 @@ void main() {
 ```
 
 Por que herança (`extends`) é boa aqui?
-- Reutilização: não repetimos `id`, `nome`, `descricao`, etc. em cada `class`.
-- Polimorfismo: numa `List<Item>` você pode misturar items genéricos, armas, armaduras.
+- Reutilização: não repetimos `id`, `nome`, `descrição`, etc. em cada `class`.
+- Polimorfismo: numa `List<Item>` você pode misturar itens genéricos, armas, armaduras.
 - Manutenibilidade: se mudar o que um `Item` é, automaticamente todas as subclasses mudam.
 
 ## Parte 2: Armadura
@@ -171,7 +171,7 @@ print(peitoral);
 
 ## Parte 3: O Inventário. Uma Lista com Propósito
 
-O jogador tem uma mochila: uma `List<Item>` onde qualquer `Item` cabe (herança permite **polimorfismo**). Esse é o poder da herança em ação: graças a `Arma extends Item` e `Armadura extends Item`, você pode guardar qualquer tipo de item numa única lista, sem necessidade de casts ou verificações de tipo. A mochila não precisa saber se contém uma arma ou uma poção, só sabe que são itens.
+O jogador tem uma mochila: uma `List<Item>` onde qualquer `Item` cabe (herança permite polimorfismo). Esse é o poder da herança em ação: graças a `Arma extends Item` e `Armadura extends Item`, você pode guardar qualquer tipo de item numa única lista, sem necessidade de casts ou verificações de tipo. A mochila não precisa saber se contém uma arma ou uma poção, só sabe que são itens.
 
 ```dart
 // lib/jogador.dart (trecho)
@@ -285,11 +285,11 @@ class Jogador {
 }
 ```
 
-O operador `is`: `item is Arma` pergunta "item é do tipo `Arma`?". Se não for, retorna `false` e você trata graciosamente. Também existe `is!` para "não é". Seguro e legível.
+O operador `is`: `item is Arma` pergunta "item é do tipo `Arma`?". Se não for, retorna `false` e você trata de forma apropriada. Também existe `is!` para "não é". Seguro e legível.
 
 ## Parte 5: Dano Total. Equação Simples
 
-Agora, o dano do jogador não é mais fixo. Depende do que ele está carregando. Uma das maravilhas de um sistema de equipamento real é que as estatísticas são dinâmicas: se você equipa uma espada melhor, o dano total sobe imediatamente. Isso usa o padrão `get` do Dart (uma propriedade calculada) para sempre retornar o dano atualizado.
+Agora, o dano do jogador não é mais fixo. Depende do que ele está carregando. Uma das maravilhas de um sistema de equipamento real é que as estatísticas são dinâmicas: se você equipa uma espada melhor, o dano total sobe imediatamente. Isto usa o padrão `get` do Dart (uma propriedade calculada) para sempre retornar o dano atualizado.
 
 ```dart
 // lib/jogador.dart
@@ -327,11 +327,11 @@ class Jogador {
 }
 ```
 
-Propriedade `get`: `int get danoTotal { ... }` é uma propriedade calculada. Você acessa com `jogador.danoTotal`, não `jogador.danoTotal()`. Dart calcula o valor à hora, sempre atualizado. É como um getter sem parênteses.
+Propriedade `get`: `int get danoTotal { ... }` é uma propriedade calculada. Você acessa com `jogador.danoTotal`, não `jogador.danoTotal()`. Dart calcula o valor no momento, sempre atualizado. É como um getter sem parênteses.
 
 ## Parte 6: Economia. Ouro, Compra e Venda
 
-O jogador tem `int ouro` que funciona como a moeda do jogo. Um sistema de economia é essencial em masmorra: faz o jogador escolher (comprar a espada cara agora ou economizar?), cria sacrifício (vender items para comprar melhores). Note que ao vender você recebe 50% do preço: isso é economia de jogo típica que desincentiva spam de compra/venda e mantém o ouro valioso.
+O jogador tem `int ouro` que funciona como a moeda do jogo. Um sistema de economia é essencial em masmorra: faz o jogador escolher (comprar a espada cara agora ou economizar?), cria sacrifício (vender itens para comprar melhores). Note que ao vender você recebe 50% do preço: isso é economia de jogo típica que desestimula spam de compra/venda e mantém o ouro valioso.
 
 ```dart
 // lib/jogador.dart
@@ -377,7 +377,7 @@ Nota: ao vender, você recebe 50% do valor (calculado com `(item.preco * 0.5).to
 
 ## Parte 7: Loot Tables. Drop de Items
 
-Quando um inimigo morre, às vezes deixa items. Vamos criar uma tabela simples usando um `Map<String, List<Item>>` que mapeia cada tipo de inimigo para os itens que pode droppar. Isso é comum em RPGs: um zumbi droppa moedas sujas e armas fracas, enquanto um esqueleto droppa tesouro mais valioso de guerreiro antigo. Usamos `Random` para escolher aleatoriamente qual item da lista ele deixa.
+Quando um inimigo morre, às vezes deixa itens. Vamos criar uma tabela simples usando um `Map<String, List<Item>>` que mapeia cada tipo de inimigo para os itens que pode droppar. Isso é comum em RPGs: um zumbi droppa moedas sujas e armas fracas, enquanto um esqueleto droppa tesouro mais valioso de guerreiro antigo. Usamos `Random` para escolher aleatoriamente qual item da lista ele deixa.
 
 ```dart
 // lib/loot_table.dart
@@ -443,7 +443,7 @@ import 'dart:math';
 
 ## Parte 8: Constantes. Items Predefinidos
 
-É conveniente ter items já prontos como constantes globais. Assim, toda vez que você quer dar uma espada ao jogador (no inicio, na loja, como loot), você reutiliza a mesma definição. Evita duplicação e torna fácil balancear (mudar o dano em um só lugar).
+É conveniente ter itens já prontos como constantes globais. Assim, toda vez que você quer dar uma espada ao jogador (no início, na loja, como loot), você reutiliza a mesma definição. Evita duplicação e torna fácil balancear (mudar o dano em um só lugar).
 
 ```dart
 // lib/items_base.dart
@@ -485,7 +485,7 @@ final lojaPrincipal = [
 
 ## Parte 9: Exemplo Completo. Uma Sessão de Jogo
 
-Vamos ver tudo funcionando junto: um jogador compra items, equipa armas, vê seu dano aumentar, vende items para financiar novas compras. Este exemplo mostra o sistema de economia e equipamento em ação, desde a criação do jogador até a manipulação do inventário.
+Vamos ver tudo funcionando junto: um jogador compra itens, equipa armas, vê seu dano aumentar, vende itens para financiar novas compras. Este exemplo mostra o sistema de economia e equipamento em ação, desde a criação do jogador até a manipulação do inventário.
 
 ```dart
 void main() {
@@ -563,5 +563,5 @@ Neste capítulo você aprendeu:
 No próximo capítulo, vamos usar todo esse sistema num combate real, onde o dano que você calcula aqui vai fazer diferença.
 
 ::: dica
-**Dica do Mestre:** `sealed class` (Dart 3+) são incríveis para limitar a hierarquia. Use `sealed class Item` e `final class Arma extends Item` para garantir que apenas `Arma`, `Armadura`, `Consumivel` podem estender `Item`. Com `sealed`, o compilador avisa se você esquecer um caso num `switch`. Isso previne bugs no futuro, quando adicionar novos tipos.
+**Dica do Mestre:** `sealed class` (Dart 3+) são incríveis para limitar a hierarquia. Use `sealed class Item` e `final class Arma extends Item` para garantir que apenas `Arma`, `Armadura` e `Consumivel` podem estender `Item`. Com `sealed`, o compilador avisa se você esquecer um caso num `switch`. Isso previne bugs no futuro, quando adicionar novos tipos.
 :::

@@ -1,6 +1,6 @@
 name: masmorra_ascii
-version: 0.36.0
-description: Masmorra ASCII - Step 36 - Roguelike Completo e Polido (MARCO VI)
+version: 0.37.0
+description: Masmorra ASCII - Step 37 - Encerramento (solução final em masmorra_ascii)
 publish_to: none
 
 environment:
@@ -10,4 +10,4 @@ dependencies:
 
 dev_dependencies:
   test: ^1.24.0
-  lints: ^4.0.0
+  lints: ^5.0.0

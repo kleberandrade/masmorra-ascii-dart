@@ -52,6 +52,13 @@ class Jogador with Combatente {
     }
   }
 
+  void removerItemEm(int indice) {
+    if (indice < 0 || indice >= _inventario.length) {
+      return;
+    }
+    _inventario.removeAt(indice);
+  }
+
   bool equiparArma(int indice) {
     if (indice < 0 || indice >= _inventario.length) {
       return false;

@@ -27,7 +27,7 @@ Nível 2:  50 XP (1 × 1 × 50)
 Nível 3:  200 XP (2 × 2 × 50), +150 XP necessário
 Nível 4:  450 XP (3 × 3 × 50), +250 XP necessário
 Nível 5:  800 XP (4 × 4 × 50), +350 XP necessário
-Nível 10: 4.950 XP (9 × 9 × 50) — a curva sobe rapidamente
+Nível 10: 4.950 XP (9 × 9 × 50). A curva sobe rapidamente
 ```
 
 Fórmula: `xpParaNivel(n) = n² × 50` (quadrática)
@@ -109,9 +109,9 @@ class Jogador extends Entidade {
 
   Jogador({
     required String nome,
-    int hpMax = 50,
+    int maxHp = 50,
     int ataque = 5,
-  }) : super(nome: nome, hpMax: hpMax, ataque: ataque) {
+  }) : super(nome: nome, hpMax: maxHp, ataque: ataque) {
     tabela = TabelaProgressao();
     eventos = BarramentoEventos<EventoJogo>();
   }
@@ -321,9 +321,9 @@ class Jogador extends Entidade {
 
 **Desafio 25.2. Três Caminhos do Guerreiro.** Você pode treinar para ser recruta (rápido), normal (balanceado), ou veterano (lento mas forte). Crie enum `Dificuldade { recruta, normal, veterano }` e campo em `Jogador`. Modifique `ganharXP()`: recruta ganha 1.5x (treina rápido), normal 1.0x, veterano 0.5x (mas deve ganhar mais estatísticas). Teste: que caminho progride mais rápido? Qual é mais difícil? Dica: multiplicadores revelam trade-offs.
 
-**Desafio 25.3. Barra de Progresso Épica.** Você quer saber exatamente onde está na progressão. Implemente `mostrarProgressoDetalhado()`: "Nível 4 ████████░░ 80% | 240/300 XP". Calcule quantos blocos cheios vs vazios. Mostre também: (1) XP atual no nível, (2) XP necessário total, (3) percentual. Teste ganhar XP e ver barra crescer. Satisfação visual. Dica: calcula percentual como `(xpAtual / xpProximo) * 100`.
+**Desafio 25.3. Barra de Progresso Épica.** Você quer saber exatamente onde está na progressão. Implemente `mostrarProgressoDetalhado()`: "Nível 4 ████████░░ 80% | 240/300 XP". Calcule quantos blocos cheios versus vazios. Mostre também: (1) XP atual no nível, (2) XP necessário total, (3) percentual. Teste ganhar XP e ver barra crescer. Satisfação visual. Dica: calcule percentual como `(xpAtual / xpProximo) * 100`.
 
-**Desafio 25.4. O Paladim Nível 10.** Ao atingir nível 10, você desbloqueia uma habilidade especial: "Cura em Grupo". Cria uma classe `CuraEmGrupo extends Habilidade` que cura 50% do HP máximo E reduz dano sofrido em 30% no próximo turno. Implemente: `bool podeExecutar()` (nível >= 10), `void executar()` (aplica cura, marca redutor). Teste: chegue a nível 10, use a habilidade, veja HP restaurado. Dica: sealed classes para habilidades.
+**Desafio 25.4. O Paladim Nível 10.** Ao atingir nível 10, você desbloqueia uma habilidade especial: "Cura em Grupo". Crie uma classe `CuraEmGrupo extends Habilidade` que cura 50% do HP máximo E reduz dano sofrido em 30% no próximo turno. Implemente: `bool podeExecutar()` (nível >= 10), `void executar()` (aplica cura, marca redutor). Teste: chegue a nível 10, use a habilidade, veja HP restaurado. Dica: sealed classes para habilidades.
 
 **Desafio 25.5. (Desafio): Distribuição de Pontos de Poder.** Cada level up dá 2 "Pontos de Habilidade". Você investe: (+1 HP por ponto), (+1 Ataque por ponto), (+1 Defesa por 3 pontos = reduz 5% dano). Crie um menu interativo: "Ganhou 2 pontos. Digite: 'hp', 'ataque' ou 'defesa'". Teste: suba 5 níveis, distribua 10 pontos total, veja suas stats aumentarem diferente baseado em sua escolha. Mestre estrategista. Dica: `pontosHabilidade` é persistente até usar.
 
@@ -345,7 +345,7 @@ Seu jogo agora tem verdadeira sensação de progresso. Você não é mais um gue
 ## Dica Profissional
 
 ::: dica
-Balanceamento é iterativo. A fórmula que escolhemos (`n² × 50`) é um ponto de partida. Quando começar a testar: meça tempo entre níveis, registre stats, ajuste constantemente. Mudar para `n² × 40` ou `n² × 60` é trivial. Teste várias versões. O número certo só aparece com testes reais.
+Balanceamento é iterativo. A fórmula que escolhemos (`n² × 50`) é um ponto de partida. Quando começar a testar: meça tempo entre níveis, registre stats, ajuste constantemente. Mudar para `n² × 40` ou `n² × 60` é trivial. Teste várias versões. O número certo só aparece com testes reais de jogadores. Dados sempre vencem intuição.
 :::
 
 ## Próximo Capítulo

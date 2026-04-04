@@ -1,3 +1,5 @@
+import 'jogador.dart';
+
 /// Classe base para inimigos
 abstract class Inimigo {
   final String nome;
@@ -19,8 +21,12 @@ abstract class Inimigo {
     hp = (hp - dano).clamp(0, hpMax);
   }
 
-  void executarTurno() {
+  void executarTurno(Jogador jogador) {
     print('$nome ataca!');
+  }
+
+  String descreverAcao() {
+    return '$nome ataca!';
   }
 
   @override

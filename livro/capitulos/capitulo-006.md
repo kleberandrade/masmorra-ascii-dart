@@ -2,19 +2,19 @@
 
 > *O artesão da masmorra não usa pincéis, usa caracteres. Um `╔` no canto, um `║` na lateral, um `═` no topo. Linha por linha, o texto bruto vira interface. Neste capítulo, você se torna o artesão.*
 
-O jogo já tem salas, inventário e navegação. Mas a apresentação visual ainda é primitiva, prints soltos, sem moldura consistente, sem alinhamento. Neste capítulo vamos aprender a construir telas ASCII de forma programática com **sprites ASCII**: molduras, barras de HP, caixas de texto e banners, tudo usando **StringBuffer** para montar o desenho eficientemente antes de exibi-lo.
+O jogo já tem salas, inventário e navegação. Mas a apresentação visual ainda é primitiva: prints soltos, sem moldura consistente, sem alinhamento. Neste capítulo vamos aprender a construir telas ASCII de forma programática com **sprites ASCII** (molduras, barras de HP, caixas de texto e banners), tudo usando **StringBuffer** para montar o desenho eficientemente antes de exibi-lo.
 
 ## Por que não usar print diretamente?
 
 Até agora usamos `print()` para cada linha de saída. Funciona, mas tem dois problemas conforme o jogo cresce.
 
-O primeiro é performance. Quando seu mapa tiver 20 linhas por 40 colunas e precisar ser redesenhado a cada turno, chamar `print()` 20 vezes causa cintilação visível. É mais eficiente montar toda a saída numa única string e imprimir de uma vez.
+O primeiro é performance. Quando seu mapa tiver 20 linhas por 40 colunas e precisar ser redesenhado a cada turno, chamar `print()` 20 vezes causa cintilação visível no terminal. É mais eficiente montar toda a saída numa única string e imprimir de uma vez.
 
-O segundo é organização. Quando você quer construir uma moldura cujo tamanho depende do texto dentro dela, precisa calcular larguras, preencher espaços e alinhar colunas. Fazer isso com `print()` separados é confuso. Com `StringBuffer`, você monta o desenho inteiro em uma única variável e só depois exibe.
+O segundo é organização. Quando você quer construir uma moldura cujo tamanho depende do texto dentro dela, precisa calcular larguras, preencher espaços e alinhar colunas. Fazer isso com múltiplos `print()` é confuso. Com `StringBuffer`, você monta o desenho inteiro em uma única variável e só depois exibe.
 
 ## StringBuffer, o bloco de construção
 
-A classe `StringBuffer` acumula texto de forma eficiente. Em vez de criar strings intermediárias com `+` (o que é lento porque cria novas strings o tempo todo), você vai escrevendo pedaços e no final extrai o resultado como uma única string. Para telas complexas, `StringBuffer` é essencial: você constrói tudo em memória e imprime de uma vez, evitando cintilação no terminal.
+A classe `StringBuffer` acumula texto de forma eficiente. Em vez de criar strings intermediárias com `+` (o que é lento porque cria novas strings a cada operação), você vai escrevendo pedaços e no final extrai o resultado como uma única string. Para telas complexas, `StringBuffer` é essencial: você constrói tudo em memória e imprime de uma vez, evitando cintilação no terminal.
 
 ```dart
 var buffer = StringBuffer();
@@ -54,9 +54,9 @@ print(texto.padLeft(20));
 print(texto.padRight(20, '.'));
 ```
 
-A função `padRight(20)` garante que a string tenha pelo menos 20 caracteres, preenchendo com espaços à direita. Isso é essencial para alinhar colunas em tabelas.
+A função `padRight(20)` garante que a string tenha exatamente 20 caracteres, preenchendo com espaços à direita se necessário. Isso é essencial para alinhar colunas em tabelas.
 
-**Centralizar texto** (Dart não tem método nativo, mas podemos criar):
+**Centralizar texto** (Dart não tem método nativo para isso, mas podemos criar):
 
 ```dart
 String centralizar(String texto, int largura) {
@@ -73,7 +73,7 @@ O operador `~/` é a divisão inteira, retorna um `int` em vez de `double`. Por 
 
 ## Construindo uma moldura dinâmica
 
-Agora que dominamos `StringBuffer`, vamos criar uma função mais sofisticada: uma moldura que se ajusta dinamicamente ao conteúdo. Esse é um excelente exercício de manipulação de strings. Calcular tamanhos programaticamente, preencher espaços e construir strings complexas são habilidades fundamentais.
+Agora que dominamos `StringBuffer`, vamos criar uma função mais sofisticada: uma moldura que se ajusta dinamicamente ao conteúdo. Esse é um excelente exercício de manipulação de strings. Calcular tamanhos programaticamente, preencher espaços e construir strings complexas são habilidades fundamentais para qualquer desenvolvedor de jogos de texto.
 
 ```dart
 String moldura(String titulo, List<String> linhas, {int minLargura = 30}) {
@@ -140,7 +140,7 @@ A função `moldura()` é um ótimo exercício de manipulação de strings. No n
 
 ## Barras de HP e XP
 
-Barras visuais são o tipo mais icônico de interface em jogos de texto. Uma barra bem desenhada comunica informações em millisegundos: um relance na proporção de blocos preenchidos e o jogador sabe exatamente em que estado seu personagem está. Vamos construir uma barra de HP reutilizável que usa caracteres Unicode para representar a vida de forma visual.
+Barras visuais são o tipo mais icônico de interface em jogos de texto. Uma barra bem desenhada comunica informações instantaneamente: num relance na proporção de blocos preenchidos, o jogador sabe exatamente em que estado seu personagem está. Vamos construir uma barra de HP reutilizável que usa caracteres Unicode para representar a vida de forma visual.
 
 ```dart
 String barraHP(int atual, int maximo, {int largura = 20}) {
@@ -175,7 +175,7 @@ String barraComStatus(String rotulo, int atual, int maximo) {
 
 ## Tabelas ASCII
 
-Para listas de itens, lojas ou comparar stats entre armas, tabelas ASCII estruturadas são essenciais. Uma tabela bem construída permite que o jogador absorva informações complexas num relance. Vamos montar uma função que cria uma tabela com bordas alinhadas automaticamente, sem que você tenha que calcular os espaços manualmente.
+Para listas de itens, lojas ou comparar estatísticas entre armas, tabelas ASCII estruturadas são essenciais. Uma tabela bem construída permite que o jogador absorva informações complexas num relance. Vamos montar uma função que cria uma tabela com bordas alinhadas automaticamente, sem que você precise calcular os espaços manualmente.
 
 ```dart
 String tabela(List<String> cabecalhos, List<List<String>> linhas) {
@@ -242,9 +242,9 @@ Resultado:
 +--------------+-------+------+
 ```
 
-## Aplicação no jogo, **HUD** composto
+## Aplicação no jogo: **HUD** composto
 
-Agora vamos integrar tudo: molduras, barras e alinhamento. Um bom **HUD** (Head-Up Display) comunica a saúde do jogador, recursos disponíveis e equipamento atual tudo num pequeno espaço. Vamos montar um HUD que combina as técnicas de moldura, preenchimento e barra para criar uma tela profissional.
+Agora vamos integrar tudo: molduras, barras e alinhamento. Um bom **HUD** (Head-Up Display) comunica a saúde do jogador, recursos disponíveis e equipamento atual, tudo num pequeno espaço. Vamos montar um HUD que combina as técnicas de moldura, preenchimento e barra para criar uma tela profissional.
 
 ```dart
 String montarHUD(String nome, int hp, int maxHp, int ouro, String? arma) {
@@ -301,7 +301,7 @@ Resultado:
 
 **Desafio 6.1. Moldura com título e rodapé.** Modifique a função `moldura()` para aceitar um parâmetro opcional `rodape`. Se fornecido, adicione uma linha separadora (com `─`) entre o conteúdo e o rodapé, depois exiba o rodapé com alinhamento. Por exemplo: uma caixa de inventário com "Mochila Vazia" como rodapé.
 
-**Desafio 6.2. Barra de XP customizada.** Crie uma função `barraXP(int xpAtual, int xpProximoNivel, int nivel)` que mostra uma barra diferente da de HP: use `▓` (preenchido) e `░` (vazio), similar à de HP mas com cores diferentes (conceitualmente). Ao lado, mostre "Nível X" e a percentagem de progresso.
+**Desafio 6.2. Barra de XP customizada.** Crie uma função `barraXP(int xpAtual, int xpProximoNivel, int nivel)` que mostra uma barra diferente da de HP: use `▓` (preenchido) e `░` (vazio), similar à de HP mas com caracteres diferentes. Ao lado, mostre "Nível X" e a percentagem de progresso.
 
 **Desafio 6.3. Caixa de diálogo de NPC (Com bordas especiais).** Crie uma função `dialogoNPC(String nomeNPC, String fala)` que exibe uma caixa estilizada: o nome do NPC em negrito (ou destacado com cores se em suporte a ANSI) no topo, a fala envolvida com uma borda especial diferente da HUD (use caracteres como `╭`, `╰`, `│`).
 
@@ -309,11 +309,13 @@ Resultado:
 
 **Boss Final 6.5. Tela de morte épica (Game Over).** Crie uma função `telaGameOver(String nome, int turnos, int ouro)` que monta uma tela de game over elaborada. Inclua: arte ASCII de um túmulo ou caveira, nome do herói caído, quantos turnos sobreviveu, ouro acumulado, e uma última mensagem do tipo "Descansa em paz, herói." Use box-drawing para tornar impressionante.
 
+*Dica do Mestre: Monte tudo com `StringBuffer`. Comece com uma moldura externa grande usando `╔═╗║╚═╝`. Dentro, desenhe um túmulo simples com `/\` e `|_|`. Centralize o nome e os números. Use `'═' * largura` para linhas separadoras.*
+
 ## O próximo passo: organizando o caos com classes
 
-Você agora domina `StringBuffer`, strings interpoladas, alinhamento e arte ASCII. São ferramentas sólidas para desenhar qualquer tela. Mas há um problema que vai aparecer conforme o jogo cresce: o código fica espalhado. Você tem funções `moldura()`, `barraHP()`, `tabela()`, `montarHUD()`. Depois vêm mais 20 funções para combate, inventário, equipamento, magia. Tudo solto, sem relação clara.
+Você agora domina `StringBuffer`, strings interpoladas, alinhamento e arte ASCII. São ferramentas sólidas para desenhar qualquer tela. Mas há um problema que vai aparecer conforme o jogo cresce: o código fica espalhado. Você tem funções `moldura()`, `barraHP()`, `tabela()` e `montarHUD()`. Depois virão mais 20 funções para combate, inventário, equipamento e magia. Tudo solto, sem relação clara.
 
-No Capítulo 5 aprendemos que coleções (List, Map, Set) agrupam _dados_. Mas dados sozinhos não bastam. Você precisa agrupar _dados e comportamento_. Seu jogador tem HP, nome, ouro, inventário. Seu inventário tem itens. Cada item tem dano, preço, descrição. Hoje isso é feito com Map e variáveis globais. Amanhã, com classes, você agrupa tudo: dados + métodos que operam naqueles dados.
+No Capítulo 5 aprendemos que coleções (List, Map, Set) agrupam _dados_. Mas dados sozinhos não bastam. Você precisa agrupar _dados e comportamento_. Seu jogador tem HP, nome, ouro e inventário. Seu inventário tem itens. Cada item tem dano, preço e descrição. Hoje isso é feito com Map e variáveis globais. Amanhã, com classes, você agrupa tudo: dados mais métodos que operam naqueles dados.
 
 Parte II começa a essa jornada. Suas salas soltas em `mundoSalas` viram objetos `Sala`. Seus itens em listas viram objetos `Item`. Seu personagem vira `Jogador`. E cada classe organiza seus dados e suas funções de forma clara e reutilizável.
 
@@ -326,5 +328,5 @@ Neste capítulo você aprendeu a usar `StringBuffer` para montar texto complexo 
 Essas são as ferramentas visuais que vamos usar pelo resto do livro. Toda interface do jogo será construída com essas mesmas técnicas. No Capítulo 7, vamos unificar tudo num game loop completo e bem organizado.
 
 ::: dica
-**Dica do Mestre:** Ao desenhar interfaces ASCII, escolha uma largura padrão (como 40 ou 50 caracteres) e mantenha-a consistente em todas as telas. Nada quebra mais a imersão do que molduras de tamanhos diferentes aparecendo em sequência. Defina uma constante `const larguraTela = 40;` e use-a em todas as funções de desenho.
+**Dica do Mestre:** Ao desenhar interfaces ASCII, escolha uma largura padrão (como 40 ou 50 caracteres) e mantenha-a consistente em todas as telas. Nada quebra mais a imersão do que molduras de tamanhos diferentes aparecendo em sequência. Defina uma constante global `const larguraTela = 40;` e use-a em todas as funções de desenho.
 :::

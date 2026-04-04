@@ -56,7 +56,7 @@ Você deve ver algo como:
 Dart SDK version: 3.11.3 (stable) on "linux_x64"
 ```
 
-Este livro assume Dart 3.11.3 ou superior. Se a sua versão for mais antiga, atualize antes de continuar. Vamos usar recursos como pattern matching e sealed classes que só existem a partir do Dart 3. Para experimentar sem instalar, use **DartPad** (dartpad.dev), um IDE online para Dart.
+Este livro assume Dart 3.11.3 ou superior. Se sua versão for mais antiga, atualize antes de continuar. Vamos usar recursos como *pattern matching* e *sealed classes* que só existem a partir do Dart 3. Para experimentar sem instalar, use **DartPad** (dartpad.dev), um IDE online para Dart.
 
 ## Criando o projeto
 
@@ -167,9 +167,9 @@ void main() {
 
 Aqui aparecem três conceitos novos.
 
-Variáveis com `var`. `var nomeJogo = 'Masmorra ASCII'` cria uma **variável** chamada `nomeJogo` e armazena o texto `'Masmorra ASCII'` nela. O Dart infere automaticamente que o **tipo** é **String**. Depois da atribuição, `nomeJogo` só pode guardar textos, a tipagem é estática, mesmo usando `var`. Da mesma forma, `versao` é inferido como **int** (número inteiro).
+Variáveis com `var`. `var nomeJogo = 'Masmorra ASCII'` cria uma **variável** chamada `nomeJogo` e armazena o texto `'Masmorra ASCII'` nela. O Dart infere automaticamente que o **tipo** é `String`. Depois da atribuição, `nomeJogo` só pode guardar textos; a tipagem é estática, mesmo usando `var`. Da mesma forma, `versao` é inferido como `int` (número inteiro).
 
-Interpolação de strings. O cifrão (`$`) dentro de uma string permite inserir o valor de uma variável diretamente no texto. ``'$nomeJogo, versão $versao'`` produz ``'Masmorra ASCII, versão 1'``. Para expressões mais complexas, usamos chaves: ``'${2 + 3}'`` produz ``'5'``.
+Interpolação de strings. O cifrão (`$`) dentro de uma string permite inserir o valor de uma variável diretamente no texto. `'$nomeJogo, versão $versao'` produz `'Masmorra ASCII, versão 1'`. Para expressões mais complexas, usamos chaves: `'${2 + 3}'` produz `'5'`.
 
 Caracteres especiais. Os caracteres `═` são caracteres Unicode que formam linhas. Dart suporta Unicode nativamente, o que é ótimo para arte ASCII.
 
@@ -328,7 +328,7 @@ Execute `dart lib/main.dart` e veja o banner:
 
 O jogo ainda não é um jogo, é uma placa na porta da masmorra. Mas a fundação está sólida: o projeto existe, compila sem erros, e você já sabe como analisar e formatar o código.
 
-Note que todo o nosso código vive em `lib/main.dart`. À medida que o jogo crescer, vamos criar mais arquivos em `lib/` para organizar classes e funções, mas o ponto de entrada será sempre `lib/main.dart`. O arquivo `lib/masmorra_ascii.dart` gerado pelo `dart create` serve como declaração da biblioteca:
+Observe que todo nosso código vive em `lib/main.dart`. À medida que o jogo crescer, vamos criar mais arquivos em `lib/` para organizar classes e funções, mas o ponto de entrada será sempre `lib/main.dart`. O arquivo `lib/masmorra_ascii.dart` gerado pelo `dart create` serve como declaração da biblioteca:
 
 ```dart
 /// Masmorra ASCII, um roguelike em Dart puro.
@@ -345,13 +345,15 @@ Ele ficará útil quando começarmos a importar módulos entre arquivos.
 
 **Desafio 1.1. Personalize o banner.** Modifique o banner para incluir o seu nome como autor. Use uma nova variável `autor` e interpolação de string para exibi-la. Dica: use múltiplas linhas de `print()` para deixar o banner legível.
 
-**Desafio 1.2. Explore o dart analyze.** Introduza três erros diferentes no código (tipo errado, variável não usada, ponto e vírgula faltando) e veja como o `dart analyze` reporta cada um. Depois corrija todos. Observe como o analisador ajuda você a encontrar problemas sem executar o programa.
+**Desafio 1.2. Explore o dart analyze.** Introduza três erros diferentes no código (tipo errado, variável não usada, ponto e vírgula faltando) e veja como o `dart analyze` os reporta. Depois corrija todos. Observe como o analisador ajuda você a encontrar problemas sem executar o programa.
 
 **Desafio 1.3. Moldura com caracteres box-drawing.** Reescreva o banner usando os caracteres `╔`, `╗`, `╚`, `╝`, `║` e `═` para criar uma moldura completa. A moldura deve ter largura fixa de 40 caracteres. Execute e veja o resultado alinhado.
 
 **Desafio 1.4. Múltiplas linhas com quebra de linha.** Em vez de usar vários `print()`, tente criar uma única string multilinha usando `\n` ou aspas triplas (`'''`). Execute e compare qual abordagem você acha mais legível no código.
 
 **Boss Final 1.5. **ASCII art** de portal mágico.** Crie uma arte ASCII de um portal mágico ou de uma inscrição antiga na parede da masmorra, usando apenas `print()`. Comece simples (5-10 linhas) e incremente. Teste caracteres especiais: `◆`, `◊`, `✦`, `✧` para efeitos visuais. O objetivo é dominar a saída no terminal e entender como texto visual funciona num roguelike.
+
+*Dica do Mestre: Comece com caracteres simples como `*`, `#` e `-` para desenhar a forma geral, depois refine com box-drawing como `╔`, `║`, `═`. Linhas de symmetry ajudam: desenha metade, depois copia e inverte.*
 
 ## Pergaminho do Capítulo
 

@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:step_16_tela_ascii/dungeon.dart';
+import 'package:step_16_tela_ascii/tela_ascii.dart';
 import 'package:step_16_tela_ascii/tile.dart';
 
 void main() {

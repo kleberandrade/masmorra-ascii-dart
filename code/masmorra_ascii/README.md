@@ -6,7 +6,7 @@ Este é o **projeto de referência completo e executável**: exploração MUD, m
 
 ## Requisitos
 
-- Dart SDK **3.5+**
+- Dart SDK **3.11+**
 
 ## Executar
 

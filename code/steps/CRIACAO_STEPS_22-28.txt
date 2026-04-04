@@ -262,7 +262,7 @@ Dependências:
 
 ═══════════════════════════════════════════════════════════════════════════════
 
-🎮 JORNADA COMPLETA (Capítulos 22-28)
+JORNADA COMPLETA (Capítulos 22-28)
 
 Capítulo 22: Economia → Base econômica do roguelike
 Capítulo 23: Loja → Economia ganha interface
@@ -330,4 +330,4 @@ Para dúvidas ou problemas:
 Desenvolvido com passion em Dart 3.11.0+
 Parte do livro "Masmorra ASCII: Uma Epopeia de Aprendizado"
 
-Que a programação seja com você! 🎮✨
+Que a programação seja com você! ✨

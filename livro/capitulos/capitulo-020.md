@@ -23,7 +23,7 @@ Ao final, você terá um mapa dinâmico com inimigos, itens e escadas.
 
 Uma masmorra viva tem muitas coisas: o jogador, inimigos que atacam, itens valiosos, escadas para descer. São entidades, e todas compartilham propriedades: posição (x, y), símbolo visual para renderizar, nome descritivo. Mas cada uma reage diferente quando tocada. Um inimigo ativa combate. Um item vai para seu inventário. Uma escada muda de andar.
 
-A classe abstrata `Entidade` é o contrato que diz: qualquer coisa no mapa precisa ter coordenadas, símbolo e nome. Subclasses (inimigo, item, escada) implementam o método `aoTocada()` diferente. Quando o jogador anda para cima de uma entidade, a entidade reage de forma apropriada.
+A classe abstrata `Entidade` é o contrato que diz: qualquer coisa no mapa precisa ter coordenadas, símbolo e nome. Subclasses (inimigo, item, escada) implementam o método `aoTocada()` de forma diferente. Quando o jogador anda para cima de uma entidade, a entidade reage de forma apropriada.
 
 ```dart
 // entidade.dart
@@ -124,14 +124,14 @@ class EntidadeEscada extends Entidade {
 }
 ```
 
-> **Importante:** A classe `Jogador` deve ter um campo `inventario` declarado como `List<Item> inventario = [];` para permitir que `EntidadeItem.aoTocada()` adicione itens coletados. Este campo é definido na classe Jogador conforme demonstrado neste capítulo.
+> **Importante:** A classe `Jogador` deve ter um campo `inventario` declarado como `List<Item> inventario = [];` para permitir que `EntidadeItem.aoTocada()` adicione itens coletados. Este campo deve ser adicionado à classe `Jogador` conforme demonstrado nos exemplos de integração neste capítulo.
 
 
 ## Parte 3: Spawning de Entidades
 
 "Spawn" significa "gerar" ou "aparecer". Depois que a masmorra é gerada, você precisa preenchê-la com inimigos, itens e escada. A classe `GeradorEntidades` faz exatamente isto: calcula quantos inimigos aparecem (escalado por andar), coloca itens em posições válidas (piso sólido, não parede), e garante sempre uma escada para descida.
 
-Note que cada entidade precisa de uma posição única (não sobrepostas). Usamos um set `posicoesPrecupadas` para rastrear onde já colocamos coisas. Se não encontrar espaço após 50 tentativas aleatórias, desistimos (é ok, às vezes um item não consegue aparecer em um andar apertado).
+Note que cada entidade precisa de uma posição única (não sobrepostas). Usamos um set `posicoesOcupadas` para rastrear onde já colocamos coisas. Se não encontrar espaço após 50 tentativas aleatórias, desistimos (está ok, às vezes um item não consegue aparecer em um andar apertado).
 
 ```dart
 // entity_spawner.dart
@@ -140,7 +140,7 @@ class GeradorEntidades {
   final MapaMasmorra mapa;
   final int andarAtual;
   final Random random;
-  final Set<Point<int>> posicoesPrecupadas = {};
+  final Set<Point<int>> posicoesOcupadas = {};
 
   GeradorEntidades({
     required this.mapa,
@@ -150,7 +150,7 @@ class GeradorEntidades {
 
   List<Entidade> spawn() {
     final entidades = <Entidade>[];
-    posicoesPrecupadas.clear();
+    posicoesOcupadas.clear();
 
     entidades.addAll(_spawnInimigos());
     entidades.addAll(_spawnItens());
@@ -172,7 +172,7 @@ class GeradorEntidades {
           y: pos.y,
           inimigo: _criarInimigo(tipo),
         ));
-        posicoesPrecupadas.add(pos);
+        posicoesOcupadas.add(pos);
       }
     }
 
@@ -193,7 +193,7 @@ class GeradorEntidades {
             nome: ['Ouro', 'Poção', 'Gema'][random.nextInt(3)],
           ),
         ));
-        posicoesPrecupadas.add(pos);
+        posicoesOcupadas.add(pos);
       }
     }
 
@@ -214,7 +214,7 @@ class GeradorEntidades {
       final y = random.nextInt(mapa.altura);
       final pos = Point(x, y);
 
-      if (mapa.ehPassavel(x, y) && !posicoesPrecupadas.contains(pos)) {
+      if (mapa.ehPassavel(x, y) && !posicoesOcupadas.contains(pos)) {
         return pos;
       }
     }
@@ -378,10 +378,8 @@ class GeradorEntidadesAvancado {
   }
 }
 ```
-```
 
-
-## Parte 4: Detecção de **Colisão** e Interação
+## Parte 4: Detecção de Colisão e Interação
 
 Quando o jogador tenta se mover para uma posição, você precisa checar se há uma entidade lá. Se houver, trata a **colisão**. A interface define o contrato; subclasses definem comportamentos específicos:
 
@@ -580,14 +578,13 @@ class AndarMasmorra {
   }
 }
 ```
-```
 
 ## Pergaminho do Capítulo
 
-Neste capítulo você trouxe a masmorra à vida através de entidades — objetos que ocupam espaço no mapa e reagem quando tocados. Criou uma classe abstrata `Entidade` como contrato que garante toda coisa tem posição (x, y), símbolo visual e nome, além de um método abstrato `aoTocada()` que define comportamento ao ser colidida. Implementou três subclasses concretas: `EntidadeInimigo` que envolve um combatente, `EntidadeItem` que pode ser coletada para inventário (e marcada para remoção), e `EntidadeEscada` que permite descida para o próximo andar. Criou o `GeradorEntidades`, um spawner básico que popula masmorras com inimigos escalados por dificuldade de andar, itens valiosos, e escada garantida, respeitando posições válidas (piso). Aprendeu a versão inteligente `GeradorEntidadesAvancado` que usa distância Manhattan para posicionar inimigos longe da entrada (realismo), itens espalhados por salas diferentes (exploração), e escada bem distante (progressão). Implementou `DetectorColisao` que checa movimentos do jogador contra paredes e entidades, retornando `ResultadoMovimento` com tipo específico de colisão. Criou `ProcessadorInteracao` para lidar com cada tipo de colisão diferentemente: paredes bloqueiam, itens são coletados, inimigos disparam combate, escadas permitem descida. Finalmente, agrupou tudo na classe `AndarMasmorra`, que encapsula mapa + entidades + número, oferecendo métodos para encontrar, remover e filtrar entidades — um exemplo puro do padrão composição. O resultado é um mundo vivo onde colisões significam algo, e o jogador verdadeiramente interage com coisas reais.
+Neste capítulo você trouxe a masmorra à vida através de entidades. Objetos que ocupam espaço no mapa e reagem quando tocados. Criou uma classe abstrata `Entidade` como contrato que garante toda coisa tem posição (x, y), símbolo visual e nome, além de um método abstrato `aoTocada()` que define comportamento ao ser colidida. Implementou três subclasses concretas: `EntidadeInimigo` que envolve um combatente, `EntidadeItem` que pode ser coletada para inventário (e marcada para remoção), e `EntidadeEscada` que permite descida para o próximo andar. Criou o `GeradorEntidades`, um spawner básico que popula masmorras com inimigos escalados por dificuldade de andar, itens valiosos, e escada garantida, respeitando posições válidas (piso). Aprendeu a versão inteligente `GeradorEntidadesAvancado` que usa distância Manhattan para posicionar inimigos longe da entrada (realismo), itens espalhados por salas diferentes (exploração), e escada bem distante (progressão). Implementou `DetectorColisao` que checa movimentos do jogador contra paredes e entidades, retornando `ResultadoMovimento` com tipo específico de colisão. Criou `ProcessadorInteracao` para lidar com cada tipo de colisão diferentemente: paredes bloqueiam, itens são coletados, inimigos disparam combate, escadas permitem descida. Finalmente, agrupou tudo na classe `AndarMasmorra`, que encapsula mapa + entidades + número, oferecendo métodos para encontrar, remover e filtrar entidades. Um exemplo puro do padrão composição. O resultado é um mundo vivo onde colisões significam algo, e o jogador verdadeiramente interage com coisas reais.
 
 ::: dica
-**Dica do Mestre:** Em engines profissionais como libGDX ou Godot, entidades são frequentemente atores/nós que herdam de uma classe mãe cena e possuem componentes (física, renderização, IA). O padrão entity-component-system (ECS) é ainda mais escalável — uma entidade é apenas um ID, dados são armazenados em tabelas. Para roguelikes, composição simples (como feito aqui) é suficiente até milhares de entidades. Sempre marque entidades como "persistentes" em andar anterior vs "geradas" em novo andar — alguns roguelikes mantêm andar anterior "vivo" para você voltar. Considere usar objeto Pool para reusar instâncias de entidades em vez de criar/destruir constantemente.
+**Dica do Mestre:** Em engines profissionais como libGDX ou Godot, entidades são frequentemente atores/nós que herdam de uma classe mãe cena e possuem componentes (física, renderização, IA). O padrão entity-component-system (ECS) é ainda mais escalável; uma entidade é apenas um ID, dados são armazenados em tabelas. Para roguelikes, composição simples (como feito aqui) é suficiente até milhares de entidades. Sempre marque entidades como "persistentes" em andar anterior vs "geradas" em novo andar. Alguns roguelikes mantêm andar anterior "vivo" para você voltar. Considere usar objeto Pool para reusar instâncias de entidades em vez de criar/destruir constantemente.
 :::
 
 ## Desafios da Masmorra
@@ -603,4 +600,3 @@ Neste capítulo você trouxe a masmorra à vida através de entidades — objeto
 **Desafio 20.5. Spawn inteligente (Distribuição).** Inimigos nunca aparecem a menos de 20 tiles da entrada (distância Manhattan). Itens são distribuídos em salas diferentes. Escadas ficam no fundo (distante). Passe as salas ao gerador, determine sala aleatória, spawn dentro dela.
 
 **Boss Final 20.6. IA de Inimigos (Movimentação).** Adicione método `moveIA(Pos jogadorPos)` em Inimigo que retorna nova posição. Se jogador está no FOV, persegue (distância < 10 tiles). Senão, anda aleatoriamente. Implemente no turno inimigo: primeiro inimigos se movem, depois jogador age. Crie um `InimigoPerseguidor` que tenta se aproximar do jogador.
-```

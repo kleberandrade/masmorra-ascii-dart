@@ -6,6 +6,7 @@ language: pt-BR
 rights: "© 2026 Kleber de Oliveira Andrade. Todos os direitos reservados."
 publisher: "Clube de Autores"
 description: "Dart na prática, do primeiro print a um roguelike em ASCII no terminal — com economia, loja, armas, vários tipos de inimigos, padrões de projeto e IA de jogo."
+isbn: "978-65-00-XXXXX-X"
 toc-title: "Sumário"
-# cover-image: "assets/epub-cover.png"  # descomente quando o arquivo existir
+cover-image: "assets/epub-cover.png"
 ...

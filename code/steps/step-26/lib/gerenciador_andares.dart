@@ -37,12 +37,12 @@ class GerenciadorAndares {
   }
 
   /// Itens disponíveis por andar
-  List<String> itemsPorAndar(int numero) {
+  List<String> itensPorAndar(int numero) {
     return switch (numero) {
-      0 => ['pocao-vida', 'pocao-vida'],
-      1 => ['pocao-vida', 'pocao-vida', 'espada-ferro'],
-      2 => ['pocao-vida', 'espada-aco', 'escudo-aco'],
-      3 => ['pocao-vida', 'espada-runada', 'armadura-pesada'],
+      0 => ['pocaoVida', 'pocaoVida'],
+      1 => ['pocaoVida', 'pocaoVida', 'espadaFerro'],
+      2 => ['pocaoVida', 'espadaAco', 'escudoAco'],
+      3 => ['pocaoVida', 'espadaRunada', 'armaduraPesada'],
       4 => [],
       _ => [],
     };

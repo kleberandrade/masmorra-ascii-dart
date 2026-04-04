@@ -205,21 +205,21 @@ void main() {
 }
 ```
 
-## Padrões de projeto usados no livro
+## Padrões de Projeto Usados no Livro
 
-Strategy: cada inimigo tem uma estratégia de IA que decide seu comportamento. Permite trocar o comportamento em tempo de execução.
+**Strategy:** cada inimigo tem uma estratégia de IA que decide seu comportamento. Permite trocar o comportamento em tempo de execução.
 
-Command: ações do jogo (mover, atacar, usar item) são objetos com `executar()` e `desfazer()`. Permite histórico e undo.
+**Command:** ações do jogo (mover, atacar, usar item) são objetos com `executar()` e `desfazer()`. Permite histórico e desfazer.
 
-Factory: criação centralizada de inimigos e itens por tipo e andar. Facilita balanceamento e extensão.
+**Factory:** criação centralizada de inimigos e itens por tipo e andar. Facilita balanceamento e extensão.
 
-Observer: sistema de eventos com `Stream`. Quando algo acontece no jogo, vários sistemas são notificados (log, UI, estatísticas).
+**Observer:** sistema de eventos com `Stream`. Quando algo acontece no jogo, vários sistemas são notificados (log, UI, estatísticas).
 
-State: máquinas de estado para comportamento de inimigos (patrulha, alerta, perseguição, ataque, fuga) e fases de boss.
+**State:** máquinas de estado para comportamento de inimigos (patrulha, alerta, perseguição, ataque, fuga) e fases de boss.
 
 ## Para Explorar Depois
 
-O calabouço vai mais fundo. Aqui estão os skills para a próxima aventura—recursos avançados que transformam seus programas Dart de "funcional" para "obra-prima".
+O calabouço vai mais fundo. Aqui estão os skills para a próxima aventura: recursos avançados que transformam seus programas Dart de "funcional" para "obra-prima".
 
 ### Streams: Fluxos de Dados Assíncronos
 
@@ -236,7 +236,7 @@ Stream<int> contadorStream() async* {
 
 ### Isolates: Concorrência de Verdade
 
-Isolates são "threads" do Dart—mundos paralelos que executam código pesado sem travar a UI. Diferente de threads convencionais, eles não compartilham memória, o que evita deadlocks e race conditions. Use para cálculos pesados ou processamento de dados.
+Isolates são "threads" do Dart: mundos paralelos que executam código pesado sem travar a UI. Diferente de threads convencionais, eles não compartilham memória, o que evita deadlocks e race conditions. Use para cálculos pesados ou processamento de dados.
 
 ```dart
 void computarFatorialPesado() async {
@@ -283,7 +283,7 @@ class Paladino extends Jogador with Curioso {
 }
 ```
 
-## Recursos úteis
+## Recursos Úteis
 
 - Documentação oficial: `dart.dev`
 - Pacotes: `pub.dev`

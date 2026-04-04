@@ -4,7 +4,6 @@ import 'package:masmorra_ascii/sala.dart';
 import 'package:masmorra_ascii/mundo_texto.dart';
 import 'package:masmorra_ascii/comando_jogo.dart';
 import 'package:masmorra_ascii/parser.dart';
-import 'package:masmorra_ascii/direcao.dart';
 
 void exibirBanner() {
   // ignore: avoid_print

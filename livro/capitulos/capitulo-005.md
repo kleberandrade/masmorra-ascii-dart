@@ -6,7 +6,7 @@ Até agora, cada dado do jogo vivia numa variável separada: `nome`, `hp`, `opca
 
 ## **List**, quando a ordem importa
 
-Uma **lista** é uma sequência ordenada de valores. Pense numa fila: o primeiro elemento tem índice 0, o segundo tem índice 1, e assim por diante. No nosso jogo, a lista será essencial para guardar o inventário do jogador, os itens numa sala, e a sequência de ações registradas. Quando a ordem importa ou você precisa acessar elementos por posição, use `List`.
+Uma **lista** é uma sequência ordenada de valores. Pense numa fila: o primeiro elemento tem índice 0, o segundo tem índice 1, e assim sucessivamente. No nosso jogo, a lista será essencial para guardar o inventário do jogador, os itens numa sala e a sequência de ações registradas. Quando a ordem importa ou você precisa acessar elementos por posição, use `List`.
 
 ```dart
 var inventario = ['Tocha', 'Chave Enferrujada', 'Poção de Vida'];
@@ -22,7 +22,7 @@ print(inventario[2]);
 print(inventario.length);
 ```
 
-Cuidado: acessar um índice que não existe causa erro em runtime. Por exemplo, `inventario[5]` crasha se a lista só tem 3 elementos.
+Cuidado: acessar um índice que não existe causa erro em runtime. Por exemplo, `inventario[5]` crasha se a lista possui apenas 3 elementos.
 
 **Adicionar e remover:**
 
@@ -72,7 +72,7 @@ A sintaxe `(n) => n > 3` é uma arrow function, uma função anônima compacta. 
 
 ## **Map**, quando cada valor tem um nome
 
-Um **mapa** associa chaves a valores, como um dicionário: você procura por uma chave e recebe o valor correspondente. Mapas serão fundamentais no nosso jogo para associar IDs de sala a descrições, nomes de itens a seus preços em ouro, ou abreviações a comandos completos. Se você precisa procurar algo por nome e depois recuperar um dado associado, use `Map`.
+Um **mapa** associa chaves a valores, como um dicionário: você procura por uma chave e recebe o valor correspondente. Mapas serão fundamentais no nosso jogo para associar IDs de sala a descrições, nomes de itens a seus preços em ouro ou abreviações a comandos completos. Se você precisa procurar algo por nome e depois recuperar um dado associado, use `Map`.
 
 ```dart
 var salas = <String, String>{
@@ -133,7 +133,7 @@ var comando = sinonimos[input] ?? input;
 
 ## **Set**, quando só importa se existe
 
-Um **conjunto** é como uma lista que não permite duplicatas e não garante ordem. Sua vantagem principal é a velocidade: verificar se um elemento existe num `Set` é muito mais rápido que em uma `List`, porque usa uma tabela de hash internamente. No jogo, usaremos `Set` para rastrear salas visitadas, inimigos derrotados, ou conquistas desbloqueadas, quando só importa se algo foi feito ou não, não quantas vezes ou em que ordem.
+Um **conjunto** é como uma lista que não permite duplicatas e não garante ordem. Sua vantagem principal é a velocidade: verificar se um elemento existe num `Set` é muito mais rápido que em uma `List`, pois usa uma tabela de hash internamente. No jogo, usaremos `Set` para rastrear salas visitadas, inimigos derrotados ou conquistas desbloqueadas, quando só importa se algo foi feito ou não, não quantas vezes ou em que ordem.
 
 ```dart
 var chavesPossuidas = <String>{'chave_prata', 'chave_ouro'};
@@ -172,11 +172,11 @@ Map<String, int> precos = {'Espada': 100, 'Poção': 30};
 Set<String> visitadas = {'praca', 'taverna'};
 ```
 
-Isso evita misturar tipos por acidente. `itens.add(42)` causa erro de compilação, a lista é de `String`, não `int`. Essa segurança de tipos é especialmente valiosa num jogo com centenas de itens. Estruturas de dados são frequentemente visualizadas como **árvores** (hierarquias) ou **grafos** (redes): o mapa da masmorra é tecnicamente um grafo, com salas como nós e corredores como arestas.
+Isso evita misturar tipos por acidente. `itens.add(42)` causa erro de compilação, pois a lista é de `String`, não `int`. Essa segurança de tipos é especialmente valiosa num jogo com centenas de itens. Estruturas de dados são frequentemente visualizadas como **árvores** (hierarquias) ou **grafos** (redes): o mapa da masmorra é, tecnicamente, um grafo, com salas como nós e corredores como arestas.
 
 ## O **operador spread** (...)
 
-O **operador spread** (`...`) é uma forma compacta e legível de desempacotar uma coleção dentro de outra. Em vez de manualmente copiar cada elemento de uma lista, você coloca três pontos e deixa o Dart fazer o trabalho. Vamos usar spread o tempo todo para combinar inventários, juntar listas de saídas possíveis ou montar arrays de resultado.
+O **operador spread** (`...`) é uma forma compacta e legível de desempacotar uma coleção dentro de outra. Em vez de manualmente copiar cada elemento de uma lista, você coloca três pontos e deixa o Dart fazer o trabalho. Vamos usar spread o tempo todo para combinar inventários, juntar listas de saídas possíveis ou montar listas de resultado.
 
 ```dart
 var basicos = ['Tocha', 'Corda'];
@@ -227,7 +227,6 @@ final sinonimos = <String, String>{
   'n': 'norte', 's': 'sul', 'l': 'leste', 'o': 'oeste',
   'e': 'leste', 'w': 'oeste',
   'i': 'inventario', 'inv': 'inventario',
-  'pegar': 'pegar', 'p': 'pegar',
 };
 
 var salaAtual = 'praca';
@@ -395,7 +394,7 @@ Saídas: [sul]
 
 ```
 
-Repare como os mapas e listas tornam o código flexível: adicionar uma nova sala é acrescentar uma entrada em `salas`, não reescrever lógica. Adicionar um sinônimo é uma linha em `sinonimos`. O mapa de saídas define automaticamente a navegação, sem `if`/`else` para cada direção.
+Repare como os mapas e listas tornam o código flexível: adicionar uma nova sala é acrescentar uma entrada em `salas`, não reescrever a lógica. Adicionar um sinônimo é uma linha em `sinonimos`. O mapa de saídas define automaticamente a navegação, sem `if`/`else` para cada direção.
 
 O uso de `dynamic` no mapa de salas não é ideal. No Capítulo 8, classes resolvem isso de forma tipada. Mas por enquanto, funciona e mostra o poder das coleções.
 
@@ -405,13 +404,15 @@ O uso de `dynamic` no mapa de salas não é ideal. No Capítulo 8, classes resol
 
 **Desafio 5.1. Expandir o mundo (Mais salas).** Adicione pelo menos duas salas novas ao mapa: por exemplo, "Câmara do Tesouro" e "Biblioteca Antiga". Conecte-as ao mundo existente com saídas apropriadas e descrições atmosféricas. Teste navegando até elas e verificando se as saídas funcionam nos dois sentidos.
 
-**Desafio 5.2. Largar itens.** Implemente o comando `"largar <item>"` que remove um item do inventário e o coloca na sala atual (adicionando ao `itens` da sala). Valide que o jogador realmente possui o item antes de largar. Dica: é exatamente o inverso de `pegarItem`.
+**Desafio 5.2. Largar itens.** Implemente o comando `"largar <item>"` que remove um item do inventário e o coloca na sala atual (adicionando à lista de `itens` da sala). Valide que o jogador realmente possui o item antes de largá-lo. Dica: é exatamente o inverso de `pegarItem`.
 
 **Desafio 5.3. Limite de inventário com feedback.** Adicione um limite de 5 itens máximo no inventário. Se estiver cheio, mostre uma mensagem clara: "Sua mochila está cheia! Você tem 5/5 itens. Largue algo antes de pegar novo item." Use `.length` para verificar.
 
 **Desafio 5.4. Sala de tesouro (Múltiplos itens).** Adicione uma sala especial "Câmara do Tesouro" com 5 itens valiosos (Moeda de Ouro, Anel de Prata, Diamante, Corrente, Gema). Implemente o comando `"pegar tudo"` que pega todos os itens da sala de uma vez, respeitando o limite do inventário. Se a mochila ficar cheia no meio, mostre quantos pôde pegar.
 
 **Boss Final 5.5. Visualizar o mundo (Mapa de adjacência).** Crie uma função `exibirMapaMundi()` que imprime um diagrama ASCII mostrando todas as salas conectadas. Por exemplo, usando um formato de árvore ou de grafo simples. Use nomes de salas e setas para mostrar as conexões (Praça →[norte] Corredor, etc). Isso ajuda o jogador a visualizar a topologia do mundo.
+
+*Dica do Mestre: Comece simples: imprima cada sala e suas saídas diretas. Próxima evolução: use indentação ou ASCII arrows para mostrar hierarquia. Use `.keys` para iterar sobre as salas e `.entries` para pegar chaves e valores (conexões).*
 
 ## Pergaminho do Capítulo
 

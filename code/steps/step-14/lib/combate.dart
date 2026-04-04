@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'jogador.dart';
 import 'inimigo.dart';
@@ -33,13 +34,15 @@ class Combate {
     // ignore: avoid_print
     print('║ $barraJogador $barraInimigo ║');
     // ignore: avoid_print
-    print('║ HP: ${jogador.hp}/${jogador.maxHp}'.padRight(19) +
-        ' HP: ${inimigo.hp}/${inimigo.maxHp}'.padRight(18) +
-        '║');
+    print(
+      '${'║ HP: ${jogador.hp}/${jogador.maxHp}'.padRight(19)}'
+      '${' HP: ${inimigo.hp}/${inimigo.maxHp}'.padRight(18)}║',
+    );
     // ignore: avoid_print
-    print('║ Ataque: ${jogador.danoTotal}'.padRight(15) +
-        ' Ataque: ${inimigo.danoBase}'.padRight(18) +
-        '║');
+    print(
+      '${'║ Ataque: ${jogador.danoTotal}'.padRight(15)}'
+      '${' Ataque: ${inimigo.danoBase}'.padRight(18)}║',
+    );
     // ignore: avoid_print
     print('╚════════════════════════════════════╝\n');
   }
@@ -101,7 +104,7 @@ class Combate {
       final curaReal = jogador.hp - hpAnterior;
 
       _registrar('> ${jogador.nome} usa poção e recupera $curaReal HP!');
-      jogador._inventario.removeAt(indice);
+      jogador.removerItemEm(indice);
       return false;
     }
 
@@ -219,9 +222,9 @@ class Combate {
     // ignore: avoid_print
     print('╠════════════════════════════════════╣');
     // ignore: avoid_print
-    print('║ Ouro: +$ouroGanho'.padRight(38) + '║');
+    print('${'║ Ouro: +$ouroGanho'.padRight(38)}║');
     // ignore: avoid_print
-    print('║ XP: +$xpGanho'.padRight(38) + '║');
+    print('${'║ XP: +$xpGanho'.padRight(38)}║');
     // ignore: avoid_print
     print('╚════════════════════════════════════╝\n');
   }
@@ -236,7 +239,7 @@ class Combate {
     // ignore: avoid_print
     print('║ Você caiu em combate.              ║');
     // ignore: avoid_print
-    print('║ Durou $turno turnos de glória.'.padRight(36) + '║');
+    print('${'║ Durou $turno turnos de glória.'.padRight(36)}║');
     // ignore: avoid_print
     print('╚════════════════════════════════════╝\n');
   }
@@ -250,5 +253,3 @@ class Combate {
     }
   }
 }
-
-import 'dart:io';

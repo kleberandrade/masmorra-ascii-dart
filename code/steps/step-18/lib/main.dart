@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:step_18_geracao_procedural/dungeon.dart';
-import 'package:step_18_geracao_procedural/tile.dart';
+import 'package:step_18_geracao_procedural/tela_ascii.dart';
 
 void main() {
   print('=== MASMORRA ASCII: Geração Procedural ===\n');

@@ -12,7 +12,7 @@ String lerComando() {
   return entrada.trim().toLowerCase();
 }
 
-/// Tenta interpretar o input como número do menu.
+/// Tenta interpretar o input como número de menu.
 int? interpretarComoNumero(String input) {
   if (input.isEmpty) return null;
   return int.tryParse(input);

@@ -7,7 +7,7 @@
 
 Neste capítulo você vai:
 
-- Criar a classe ExploradorMasmorra — o orquestrador supremo
+- Criar a classe `ExploradorMasmorra` - o orquestrador supremo
 - Implementar um loop de jogo completo: input → update → render
 - Gerenciar múltiplos andares com progressão dinâmica
 - Integrar combate, colisão, FOV e renderização num fluxo coeso
@@ -49,9 +49,9 @@ CONDIÇÕES DE SAÍDA
 ```
 
 
-## Parte 2: Classe ExploradorMasmorra . Orquestrador
+## Parte 2: Classe ExploradorMasmorra - Orquestrador
 
-A classe `ExploradorMasmorra` é o maestro que coordena tudo. Ela mantém o estado do jogo: quem é o jogador, qual é o andar atual, quantos turnos passaram, se o jogo acabou. Oferece métodos principais: `gerarAndar()` cria um mapa novo, `renderizarFrame()` desenha na tela, `processarComando()` lê input do jogador e reage, e `executar()` é o loop infinito que mantém o jogo vivo.
+A classe `ExploradorMasmorra` é o maestro que coordena tudo. Ela mantém o estado do jogo: quem é o jogador, qual é o andar atual, quantos turnos passaram, se o jogo acabou. Oferece métodos principais. `gerarAndar()` cria um mapa novo, `renderizarFrame()` desenha na tela, `processarComando()` lê input do jogador e reage, e `executar()` é o loop infinito que mantém o jogo vivo.
 
 Esta é a orquestração completa: tudo passa por aqui, desde a inicialização até a vitória ou derrota.
 
@@ -62,7 +62,6 @@ class ExploradorMasmorra {
   final Jogador jogador;
   late AndarMasmorra andarAtual;
   late TelaAscii tela;
-  late CampoVisao fov;
 
   final int larguraMapa;
   final int alturaMapa;
@@ -74,46 +73,50 @@ class ExploradorMasmorra {
   bool vitoria = false;
 
   int totalInimigosDefeitos = 0;
-  int totalOuroColetado = 0;
   int maiorAndarAlcancado = 0;
 
   ExploradorMasmorra({
     required this.jogador,
-    this.larguraMapa = 80,
-    this.alturaMapa = 24,
-    this.andarFinal = 5,
+    this.larguraMapa = 60,
+    this.alturaMapa = 20,
+    this.andarFinal = 3,
   }) {
-    tela = TelaAscii(largura: larguraMapa, altura: alturaMapa);
-    fov = CampoVisao();
+    tela = TelaAscii(largura: larguraMapa, altura: alturaMapa + 5);
   }
 
   void gerarAndar() {
-    final gerador = MapaMasmorra.comSalasECorredores(
+    final mapa = MapaMasmorra.gerar(
       largura: larguraMapa,
       altura: alturaMapa,
-      random: Random(),
-      numSalas: 6 + andarNumero,
     );
 
     final spawner = GeradorEntidades(
-      mapa: gerador,
+      mapa: mapa,
       andarAtual: andarNumero,
-      random: Random(),
     );
 
     andarAtual = AndarMasmorra(
       numero: andarNumero,
-      mapa: gerador,
+      mapa: mapa,
       entidades: spawner.spawn(),
     );
 
-    jogador.x = larguraMapa ~/ 2;
-    jogador.y = alturaMapa ~/ 2;
+    // Encontrar posição inicial passável
+    bool encontrou = false;
+    for (int y = 1; y < alturaMapa - 1 && !encontrou; y++) {
+      for (int x = 1; x < larguraMapa - 1 && !encontrou; x++) {
+        if (mapa.ehPassavel(x, y)) {
+          jogador.x = x;
+          jogador.y = y;
+          encontrou = true;
+        }
+      }
+    }
 
-    fov.calcularShadowcast(
+    mapa.fov.calcularShadowcast(
       Point(jogador.x, jogador.y),
       8,
-      andarAtual.mapa,
+      mapa,
     );
 
     maiorAndarAlcancado = andarNumero;
@@ -137,11 +140,28 @@ class ExploradorMasmorra {
   }
 
   void _renderizarHUD() {
-    final hudY = alturaMapa - 3;
+    final hudY = alturaMapa + 1;
+    final hpBar = _construirBarraHP();
+
     tela.desenharString(0, hudY, '═' * larguraMapa);
-    tela.desenharString(0, hudY + 1,
-        'Andar: $andarNumero | Turno: $turno | HP: ${jogador.hpAtual}/${jogador.hpMax} | Ouro: ${jogador.ouro}');
-    tela.desenharString(0, hudY + 2, '[W]cima [A]esq [S]baixo [D]dir [Q]uit [I]nventário');
+    tela.desenharString(
+      0,
+      hudY + 1,
+      'Andar: $andarNumero | Turno: $turno | $hpBar ${jogador.hpAtual}/${jogador.hpMax}',
+    );
+    tela.desenharString(
+      0,
+      hudY + 2,
+      'Ouro: ${jogador.ouro} | Inimigos: ${totalInimigosDefeitos}',
+    );
+    tela.desenharString(0, hudY + 3, '[W]cima [A]esq [S]baixo [D]dir [I]nventário [Q]uit');
+  }
+
+  String _construirBarraHP() {
+    const blocos = 5;
+    final cheios = (jogador.hpAtual / jogador.hpMax * blocos).toInt();
+    final vazios = blocos - cheios;
+    return '█' * cheios + '░' * vazios;
   }
 
   void processarComando(String comando) {
@@ -203,7 +223,7 @@ class ExploradorMasmorra {
     jogador.y = novoY;
     turno++;
 
-    fov.calcularShadowcast(
+    andarAtual.mapa.fov.calcularShadowcast(
       Point(jogador.x, jogador.y),
       8,
       andarAtual.mapa,
@@ -235,21 +255,31 @@ class ExploradorMasmorra {
   }
 
   void _mostrarGameOver() {
-    print('\n╔════════════════════════════════════════╗');
-    if (vitoria) {
-      print('║          ESCAPASTE DA MASMORRA!        ║');
-      print('║              PARABÉNS!                 ║');
-    } else {
-      print('║              GAME OVER                 ║');
-      print('║          Caíste na masmorra...         ║');
+    final largura = 40;
+    String centralizar(String texto) {
+      final espacos = (largura - texto.length) ~/ 2;
+      return ' ' * espacos + texto;
     }
-    print('╠════════════════════════════════════════╣');
-    print('║ Estatísticas:                          ║');
-    print('║ Turnos: $turno                        ║');
-    print('║ Maior Andar: $maiorAndarAlcancado                           ║');
-    print('║ Inimigos Derrotados: $totalInimigosDefeitos                ║');
-    print('║ Ouro Total: $totalOuroColetado                      ║');
-    print('╚════════════════════════════════════════╝\n');
+    String alinhar(String rotulo, dynamic valor) {
+      final conteudo = '$rotulo $valor';
+      return conteudo.padRight(largura);
+    }
+
+    print('\n╔${'═' * largura}╗');
+    if (vitoria) {
+      print('║${centralizar('ESCAPOU DA MASMORRA!')}║');
+      print('║${centralizar('PARABÉNS!')}║');
+    } else {
+      print('║${centralizar('GAME OVER')}║');
+      print('║${centralizar('Caiu na masmorra...')}║');
+    }
+    print('╠${'═' * largura}╣');
+    print('║${alinhar(' Estatísticas:', '')}║');
+    print('║${alinhar(' Turnos:', turno)}║');
+    print('║${alinhar(' Maior Andar:', maiorAndarAlcancado)}║');
+    print('║${alinhar(' Inimigos Derrotados:', totalInimigosDefeitos)}║');
+    print('║${alinhar(' Ouro Total:', jogador.ouro)}║');
+    print('╚${'═' * largura}╝\n');
   }
 }
 ```
@@ -468,10 +498,10 @@ Cada parte adiciona novas camadas ao jogo. Compare com o início e veja o quanto
 
 **Desafio 21.4. Log de Eventos.** Adicione um `List<String> logEventos` que registra o que aconteceu: "Você matou Zumbi", "Pegou ouro", "Subiu de nível". Mostre os últimos 3-5 eventos na HUD.
 
-**Boss Final 21.5. Volte à classe `TelaAscii` do Capítulo 16.** Adicione cores ANSI para cada tipo de tile: verde para chão (`.`), cinza para paredes (`#`), vermelho para inimigos (`E`), amarelo para ouro (`$`), azul para escada (`>`). Rode o dungeon crawl inteiro e veja como cores melhoram a clareza visual do mapa. Dica: use escape codes como `'\u001B[32m'` para verde, `'\u001B[0m'` para resetar.
+**Boss Final 21.5. Volte à classe `TelaAscii` do Capítulo 16.** Adicione cores ANSI para cada tipo de tile: verde para chão (`.`), cinza para paredes (`#`), vermelho para inimigos, amarelo para ouro, azul para escada (`>`). Execute o dungeon crawl inteiro e veja como cores melhoram a clareza visual do mapa. Dica: use códigos de escape como `'\x1B[32m'` para verde, `'\x1B[0m'` para resetar.
 
 ::: dica
-**Dica do Mestre:** Escalabilidade do loop de jogo em produção: o loop apresentado aqui é funcional, mas em um jogo real você pode encontrar gargalos. Considere separar completamente entrada (I/O bloqueante) do lógica de jogo. Use filas de comando ou channels para desacoplar a leitura do stdin do update lógico. Para jogos mais complexos, implemente um deltaTime (time stepping) ao invés de turnos síncronos:
+**Dica do Mestre:** Escalabilidade do loop de jogo em produção: o loop apresentado aqui é funcional, mas em um jogo real você pode encontrar gargalos. Considere separar completamente entrada (I/O bloqueante) da lógica de jogo. Use filas de comando ou channels para desacoplar a leitura do stdin do update lógico. Para jogos mais complexos, implemente um deltaTime (time stepping) em vez de turnos síncronos:
 
 ```dart
 void executarComDeltaTime() {
@@ -491,12 +521,12 @@ void executarComDeltaTime() {
 }
 ```
 
-Além disso, salvar o estado completo (seed do mapa, posição jogador, turnos) permite implementar rewind ou replay de sessões, uma feature muito valorizada em comunidades speedrunning e streaming de roguelikes.
+Além disso, salvar o estado completo (seed do mapa, posição jogador, turnos) permite implementar rewind ou replay de sessões, uma funcionalidade muito valorizada em comunidades speedrunning e streaming de roguelikes.
 :::
 
 ## Pergaminho do Capítulo
 
-Neste capítulo final da Parte III, você juntou tudo — geração, entidades, visão, colisão, renderização — num jogo roguelike completo e jogável. Começou visualizando o fluxo completo: inicialização, loop principal (renderizar → input → update), e verificação de vitória/derrota. Implementou `ExploradorMasmorra`, a orquestração central que coordena tudo: geração de andares, renderização com FOV, processamento de comandos, detecção de colisão com entidades, e transição entre andares. Criou `GerenciadorEstado` usando enum para organizar estados distintos (exploração, combate, inventário, transição, game over), permitindo lógica limpa e previsível. Implementou `GerenciadorTransicao` que cuida da descida entre andares: efeitos visuais, geração de novo andar com dificuldade crescente, recuperação de HP. Criou `VerificadorCondicoes` que centraliza toda lógica de vitória/derrota e geração de estatísticas finais. O resultado: um jogo onde o jogador entra em um andar procedural gerado, explora com névoa de guerra real, encontra inimigos que pode combater, coleta itens, desce andares cada vez mais perigosos, e eventualmente escapa ou morre — tudo com feedback claro e estatísticas ao fim.
+Neste capítulo final da Parte III, você juntou tudo: geração, entidades, visão, colisão, renderização. Num jogo roguelike completo e jogável. Começou visualizando o fluxo completo: inicialização, loop principal (renderizar → input → update), e verificação de vitória/derrota. Implementou `ExploradorMasmorra`, a orquestração central que coordena tudo: geração de andares, renderização com FOV, processamento de comandos, detecção de colisão com entidades, e transição entre andares. Criou `GerenciadorEstado` usando enum para organizar estados distintos (exploração, combate, inventário, transição, game over), permitindo lógica limpa e previsível. Implementou `GerenciadorTransicao` que cuida da descida entre andares: efeitos visuais, geração de novo andar com dificuldade crescente, recuperação de HP. Criou `VerificadorCondicoes` que centraliza toda lógica de vitória/derrota e geração de estatísticas finais. O resultado: um jogo onde o jogador entra em um andar procedural gerado, explora com névoa de guerra real, encontra inimigos que pode combater, coleta itens, desce andares cada vez mais perigosos, e eventualmente escapa ou morre. Tudo com feedback claro e estatísticas ao fim.
 
 Você aprendeu a construir um roguelike completo:
 

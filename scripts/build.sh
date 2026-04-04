@@ -30,9 +30,11 @@ OUTPUT_DIR="output"
 METADATA="$CONFIG_DIR/metadata.yaml"
 PREAMBLE="$CONFIG_DIR/preamble.tex"
 STYLESHEET="$CONFIG_DIR/style.css"
-BOOK_NAME="masmorra-ascii"
+# Nome dos artefactos em output/ (PDF/EPUB versionados no Git; ver .gitignore)
+BOOK_NAME="masmorra-ascii-dart"
 CHAPTERS_FILE="$CONFIG_DIR/chapters.txt"
 # Tema de syntax highlight — zenburn (escuro) para PDF, tango (claro) para EPUB/DOCX
+# Pandoc 3.x: --syntax-highlighting substitui --highlight-style (deprecado).
 SYNTAX_PDF="zenburn"
 SYNTAX_EPUB="tango"
 
@@ -60,7 +62,7 @@ echo "Generating PDF..."
 pandoc "${INPUT_ARGS[@]}" \
     --metadata-file="$METADATA" \
     --include-in-header="$PREAMBLE" \
-    --highlight-style="$SYNTAX_PDF" \
+    --syntax-highlighting="$SYNTAX_PDF" \
     --pdf-engine=xelatex \
     --top-level-division=chapter \
     --toc-depth=1 \
@@ -85,7 +87,7 @@ done
 pandoc "${EPUB_INPUT_ARGS[@]}" \
     --metadata-file="$METADATA" \
     --template="$CONFIG_DIR/default.epub3" \
-    --highlight-style="$SYNTAX_EPUB" \
+    --syntax-highlighting="$SYNTAX_EPUB" \
     --metadata toc-title="Sumário" \
     --css="$STYLESHEET" \
     --epub-title-page=false \
@@ -120,7 +122,7 @@ done
 
 pandoc "${DOCX_INPUT_ARGS[@]}" \
     --metadata-file="$METADATA" \
-    --highlight-style="$SYNTAX_EPUB" \
+    --syntax-highlighting="$SYNTAX_EPUB" \
     --metadata toc-title="Sumário" \
     --toc \
     --toc-depth=3 \

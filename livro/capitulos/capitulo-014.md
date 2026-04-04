@@ -1,11 +1,11 @@
 # Capítulo 14 - Combate por turnos
 
-> *Você enfrenta o inimigo. Não foge, não negocia. Apenas luta. Seu turno: ataca. Seu turno: defende. Seu turno: falha. A morte espreita cada decisão. Este é o coração que faz um roguelike pulsar.*
+> *Você enfrenta o inimigo. Não foge, não negocia. Apenas luta. Seu turno: ataca. Seu turno: defende. Seu turno: falha. A morte espreita cada decisão. Este é o coração que faz um roguelike bater.*
 
 ## O que vamos aprender
 
 Neste capítulo você vai:
-- Criar uma `class` `Combate` que orquestra lutas entre `Jogador` e `Inimigo`
+- Criar uma `class Combate` que orquestra lutas entre `Jogador` e `Inimigo`
 - Implementar um `loop` de turnos com escolhas do jogador
 - Usar `Random` de `dart:math` para dano variável (realismo)
 - Registrar tudo numa `List<String> log` (história da luta)
@@ -31,15 +31,15 @@ Vamos modelar isso em código.
 
 ## Aleatoriedade e RPGs: por que os dados nunca mentem
 
-Você já notou que em um RPG real (D&D, Pathfinder, qualquer jogo de mesa), cada ação é incerta? Você rola um dado de 20 lados para saber se acerta um golpe. Rola novamente para determinar dano. Essa incerteza é _essencial_: sem ela, combate é determinístico, previsível, chato. Se você sempre ataca com 8 de dano, o inimigo sempre ataca com 6, o resultado final é óbvio desde o início. Ninguém quer jogar um RPG onde sabe exatamente quem vai ganhar antes do combate começar.
+Você já notou que em um RPG real (D&D, Pathfinder, qualquer jogo de mesa), cada ação é incerta? Você rola um dado de 20 lados para saber se acerta um golpe. Rola novamente para determinar dano. Essa incerteza é essencial: sem ela, combate é determinístico, previsível, entediante. Se você sempre ataca com 8 de dano, o inimigo sempre ataca com 6, o resultado final é óbvio desde o início. Ninguém quer jogar um RPG onde sabe exatamente quem vai ganhar antes do combate começar.
 
-Daí entra `Random` do Dart. Em vez de dano fixo, você rola dados: `jogador.dano - 20% + aleatório(40%)`. Isso gera um intervalo realista. Um ataque pode fazer 6 a 10 de dano em vez de sempre 8. Combates viram emocionantes. Uma derrota inesperada é possível. Uma vitória incrível contra um inimigo mais forte vira história.
+Daí entra `Random` do Dart. Em vez de dano fixo, você rola dados: `jogador.dano - 20% + aleatório(40%)`. Isso gera um intervalo realista. Um ataque pode fazer 6 a 10 de dano em vez de sempre 8. Combates viram emocionantes. Uma derrota inesperada é possível. Uma vitória incrível contra um inimigo mais forte se torna história.
 
 Neste capítulo, `Random` é seu aliado para criar combate que respira, que surpreende, que faz a adrenalina bombar.
 
 ## Parte 2: Classe Combate. Orchestrador
 
-A classe `Combate` é o coração do sistema. Ela recebe um `Jogador` e um `Inimigo` e orquestra todo o loop de turnos. Mantém um `log` de mensagens (crucial para entender o que aconteceu), calcula dano com variação aleatória (para não ser previsível), e gerencia defesa, item, e fuga. Note o método `_registrar()` que tanto escreve na tela quanto armazena no log para replay.
+A classe `Combate` é o coração do sistema. Ela recebe um `Jogador` e um `Inimigo` e orquestra todo o loop de turnos. Mantém um `log` de mensagens (crucial para entender o que aconteceu), calcula dano com variação aleatória (para não ser previsível) e gerencia defesa, item e fuga. Note o método `_registrar()` que tanto escreve na tela quanto armazena no log para replay.
 
 ```dart
 // lib/combate.dart
@@ -278,7 +278,7 @@ class Combate {
 
 Notas importantes:
 
-- `stdin.readLineSync()` lê entrada do teclado. Você precisará de `import 'dart:io';`
+- `stdin.readLineSync()` lê entrada do teclado. Você vai precisar de `import 'dart:io';`
 - `_registrar()` escreve e armazena no `log`
 - `defesaAtiva` é um flag booleano que dura um turno
 - Dano tem variação (usando `random.nextInt()`) para não ser previsível
@@ -286,9 +286,9 @@ Notas importantes:
 
 ## Parte 3: Classe Inimigo e Subtipos
 
-Agora você precisa de inimigos que funcionem com combate. Mas aqui surge um problema clássico: seu roguelike tem Zumbi, Lobo e Orc. Cada um é diferente em nome, HP, dano e habilidades. Se você criasse cada um do zero como uma classe separada, teria muita duplicação: `class Zumbi { int hpMax; int hpAtual; int dano; ... sofrerDano() { ... } }` e `class Lobo { int hpMax; int hpAtual; int dano; ... sofrerDano() { ... } }`. O código `sofrerDano()` é idêntico em ambos. Você estaria escrevendo a mesma coisa três vezes.
+Agora você precisa de inimigos que funcionem com combate. Mas aqui surge um problema clássico: seu roguelike tem Zumbi, Lobo e Orc. Cada um é diferente em nome, HP, dano e habilidades. Se você criasse cada um do zero como uma classe separada, teria muita duplicação: `class Zumbi { int hpMax; int hpAtual; int dano; ... sofrerDano() { ... } }` e `class Lobo { int hpMax; int hpAtual; int dano; ... sofrerDano() { ... } }`. O código `sofrerDano()` é idêntico em ambos. Você estaria escrevendo a mesma coisa várias vezes.
 
-Aí entra a classe **abstrata**. Você cria uma `abstract class Inimigo` que define a estrutura e o comportamento _comum_ a todos os inimigos: HP, dano, método `sofrerDano()`, método para calcular dano aleatório. Depois, cada inimigo (Zumbi, Lobo, Orc) herda desse template e personaliza apenas o que é único: seu loot, suas habilidades especiais, seus valores base. Zero duplicação.
+Aí entra a classe abstrata. Você cria uma `abstract class Inimigo` que define a estrutura e o comportamento comum a todos os inimigos: HP, dano, método `sofrerDano()`, método para calcular dano aleatório. Depois, cada inimigo (Zumbi, Lobo, Orc) herda desse template e personaliza apenas o que é único: seu loot, suas habilidades especiais, seus valores base. Zero duplicação.
 
 A `abstract class Inimigo` define o contrato: todo inimigo tem HP, dano, e pode sofrer dano. Mas cada subtipo (Zumbi, Lobo, Orc) personaliza seu loot e habilidades especiais. Observe `sofrerDano()` que retorna `bool`: true se o inimigo morreu, false se ainda está vivo. Isso simplifica o loop de combate.
 
@@ -444,11 +444,11 @@ class Jogador {
 
 ## Parte 5: Factory de Inimigos
 
-Você agora tem `Zumbi()`, `Lobo()`, `Orc()` prontos para criar instâncias. Mas imagina uma masmorra grande com 20 tipos de inimigos diferentes. Ao gerar uma sala, você faria `if (ambiente == 'floresta') { inimigo = Lobo(); } else if (ambiente == 'catacumba') { inimigo = Zumbi(); } ...`. Espalhado pelo código. Se precisar adicionar um novo inimigo, tem que caçar todos os lugares onde inimigos são criados e adicionar novo `if`.
+Você agora tem `Zumbi()`, `Lobo()`, `Orc()` prontos para criar instâncias. Mas imagine uma masmorra grande com 20 tipos de inimigos diferentes. Ao gerar uma sala, você faria `if (ambiente == 'floresta') { inimigo = Lobo(); } else if (ambiente == 'catacumba') { inimigo = Zumbi(); } ...`. Espalhado pelo código. Se precisar adicionar um novo inimigo, tem que caçar todos os lugares onde inimigos são criados e adicionar novo `if`.
 
-Aí entra o padrão **Factory**. Você centraliza _toda_ a lógica de criação de inimigos num único lugar. Ao invés de escrever `Zumbi()` espalhado pelo código, você chama `FabricaInimigo.criarPorId('zumbi')`. Se precisar trocar a lógica de criação, muda num só lugar. Se vai adicionar um novo inimigo, registra na Factory e pronto. Toda o resto do código continua funcionando sem saber quantos tipos existem.
+Aí entra o padrão Factory. Você centraliza toda a lógica de criação de inimigos num único lugar. Em vez de escrever `Zumbi()` espalhado pelo código, você chama `FabricaInimigo.criarPorId('zumbi')`. Se precisar trocar a lógica de criação, muda num só lugar. Se vai adicionar um novo inimigo, registra na Factory e pronto. O resto do código continua funcionando sem saber quantos tipos existem.
 
-Para gerar inimigos pelo ID, use o padrão Factory (uma `class` com métodos estáticos). Você não cria `Zumbi()` diretamente, mas chama `FabricaInimigo.criarPorId('zumbi')`. Nota a função `gerarInimigo()` que escolhe aleatoriamente qual tipo de inimigo aparece num certo ambiente (floresta vs catacumba).
+Para gerar inimigos pelo ID, use o padrão Factory (uma `class` com métodos estáticos). Você não cria `Zumbi()` diretamente, mas chama `FabricaInimigo.criarPorId('zumbi')`. Note a função `gerarInimigo()` que escolhe aleatoriamente qual tipo de inimigo aparece num certo ambiente (floresta vs catacumba).
 
 ```dart
 // lib/enemy_factory.dart
@@ -488,7 +488,7 @@ class FabricaInimigo {
 
 ## Parte 6: Exemplo Completo. Uma Luta Real
 
-Aqui está um exemplo de fim-a-fim: criamos um jogador com uma espada e poção, depois ele enfrenta um lobo. O combate roda com input do usuário até que o jogador vença, fuja ou morra. Este é o momento em que todo o sistema de combate (turnos, dano, itens, recompensas) se une numa experiência coerente.
+Aqui está um exemplo de fim a fim: criamos um jogador com uma espada e poção, depois ele enfrenta um lobo. O combate roda com input do usuário até que o jogador vença, fuja ou morra. Este é o momento em que todo o sistema de combate (turnos, dano, itens, recompensas) se une numa experiência coerente.
 
 ```dart
 // lib/main.dart
@@ -570,7 +570,7 @@ XP: +50
 
 ```
 
-Cada parte adiciona novas camadas ao jogo. Compare com o início e veja o quanto você evoluiu!
+Cada parte adiciona novas camadas ao jogo. Compare com o início e veja o quanto você evoluiu nesta jornada!
 
 ***
 
@@ -580,7 +580,7 @@ Cada parte adiciona novas camadas ao jogo. Compare com o início e veja o quanto
 
 **Desafio 14.2. Ataque Crítico.** Implemente crítico: 15% de chance de dano dobrado (x2). Use `Random().nextDouble() < 0.15`. Quando crítico ocorrer, registre no log: "GOLPE CRÍTICO! Dano dobrado!" e mostre o dano com destaque.
 
-**Desafio 14.3. Limite de turno (Fuga automática).** Adicione um limite: combate não pode durar mais de 10 turnos. Se chegar ao limite e ainda houver combate, o jogador é forçado a fugir automaticamente com mensagem: "A luta foi demasiada longa, você foge pela sua vida!"
+**Desafio 14.3. Limite de turno (Fuga automática).** Adicione um limite: combate não pode durar mais de 10 turnos. Se chegar ao limite e ainda houver combate, o jogador é forçado a fugir automaticamente com mensagem: "A luta durou demais, você foge pela sua vida!"
 
 **Desafio 14.4. Ação Defensa com Riposte.** Implemente uma ação `defender()`: reduz dano sofrido em 50% neste turno. Além disso, ao sofrer ataque enquanto defendendo, há 30% de chance de ripostear (contra-ataque) com 30% do seu dano normal.
 
@@ -605,5 +605,5 @@ Seu jogo agora é um verdadeiro roguelike com combate completo. Isso é o pico e
 No próximo capítulo começaremos a expandir a exploração da masmorra, com salas, movimento 2D e encontros dinâmicos.
 
 ::: dica
-**Dica do Mestre:** Sempre registre ações em combate (no `log`). Ajuda a entender o que aconteceu e é essencial para balanceamento. Além disso, considere criar diferentes níveis de dificuldade criando variantes dos inimigos. Por exemplo, `class GoblinForte extends Zumbi { ... }`. Teste bastante! Combate é onde balanceamento importa.
+**Dica do Mestre:** Sempre registre ações em combate (no `log`). Ajuda a entender o que aconteceu e é essencial para balanceamento. Além disso, considere criar diferentes níveis de dificuldade criando variantes dos inimigos. Por exemplo, `class GoblinForte extends Zumbi { ... }`. Teste bastante! Combate é onde o balanceamento importa.
 :::

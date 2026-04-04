@@ -1,7 +1,9 @@
 /// Biblioteca do livro *Masmorra ASCII* — modelo, UI textual e sessão de jogo.
 library;
 
-export 'ascii_screen.dart';
+export 'src/ai/acao_combate.dart';
+export 'src/ai/estado_ia.dart';
+export 'src/ascii_screen.dart';
 export 'src/game/game_session.dart';
 export 'src/model/enemy.dart';
 export 'src/model/item.dart';

@@ -1,136 +1,136 @@
 # Apêndice D: Glossário {.unnumbered}
 
-Este glossário reúne os termos técnicos mais importantes usados ao longo do livro. Consulte-o sempre que encontrar uma palavra desconhecida.
+Este glossário reúne os termos técnicos mais importantes usados ao longo do livro e na jornada roguelike. Consulte-o sempre que encontrar uma palavra desconhecida: aqui você encontrará tanto a explicação técnica quanto o contexto do jogo.
 
-**Abstract Class:** Classe que não pode ser instanciada diretamente e serve como base para outras classes. Define uma interface que subclasses devem implementar, força um contrato de comportamento.
+**Abstract Class:** classe que não pode ser instanciada diretamente e serve como base para outras classes. Define uma interface que subclasses devem implementar, força um contrato de comportamento.
 
-**Ahead-of-Time (AOT):** Compilação que converte código Dart em código de máquina nativo antes da execução. Resulta em inicialização rápida e performance previsível, ideal para aplicações que precisam iniciar rapidamente.
+**Ahead-of-Time (AOT):** compilação que converte código Dart em código de máquina nativo antes da execução. Resulta em inicialização rápida e performance previsível, ideal para aplicações que precisam iniciar rapidamente.
 
-**ANSI Escape Codes:** Sequências de caracteres que controlam formatação, cor e posição do cursor no terminal. O jogo usa códigos como `\x1B[2J` para limpar a tela e `\x1B[31m` para texto vermelho.
+**ANSI Escape Codes:** sequências de caracteres que controlam formatação, cor e posição do cursor no terminal. O jogo usa códigos como `\x1B[2J` para limpar a tela e `\x1B[31m` para texto vermelho.
 
 **ASCII:** American Standard Code for Information Interchange. Padrão de codificação que representa caracteres usando números de 0 a 127. Essencial para jogos baseados em texto que utilizam caracteres para desenhar o mundo.
 
-**Async/Await:** Padrão em Dart para operações assíncronas não-bloqueantes. `async` marca uma função como assíncrona, `await` pausa a execução até o Future resolver. Essencial para I/O (save/load) sem congelar o game loop.
+**Async/Await:** padrão em Dart para operações assíncronas não-bloqueantes. `async` marca uma função como assíncrona, `await` pausa a execução até o `Future` resolver. Essencial para I/O (save/load) sem congelar o game loop.
 
-**BFS (Breadth-First Search):** Algoritmo de busca em largura que explora todos os nós de uma distância antes de explorar nós mais afastados. Usado em pathfinding para encontrar o caminho mais curto entre dois pontos.
+**BFS (Breadth-First Search):** algoritmo de busca em largura que explora todos os nós de uma distância antes de explorar nós mais afastados. Usado em pathfinding para encontrar o caminho mais curto entre dois pontos.
 
-**Boss:** Inimigo poderoso, geralmente único ou raro, que representa um desafio significativo. Frequentemente marca o final de uma seção ou dungeon e oferece recompensas maiores ao ser derrotado.
+**Boss:** inimigo poderoso, geralmente único ou raro, que representa um desafio significativo. Frequentemente marca o final de uma seção ou dungeon e oferece recompensas maiores ao ser derrotado.
 
-**Buffer:** Área de memória que armazena dados temporariamente. Em renderização, o buffer guarda o estado de cada tile antes de exibir na tela.
+**Buffer:** área de memória que armazena dados temporariamente. Em renderização, o buffer guarda o estado de cada tile antes de exibir na tela.
 
-**Command Pattern:** Padrão de design que encapsula uma solicitação como um objeto, permitindo parametrizar clientes com diferentes requisições e implementar filas, undo e logging.
+**Command Pattern:** padrão de design que encapsula uma solicitação como um objeto, permitindo parametrizar clientes com diferentes requisições e implementar filas, desfazer e logging.
 
-**Distância de Manhattan:** Método de calcular distância entre dois pontos em grid contando passos horizontais e verticais: `|x1 - x2| + |y1 - y2|`. Mais rápido que distância euclidiana em jogos baseados em grid. Usada em cálculos de FOV, spawn seguro e IA.
+**Distância de Manhattan:** método de calcular distância entre dois pontos em grid contando passos horizontais e verticais: `|x1 - x2| + |y1 - y2|`. Mais rápido que distância euclidiana em jogos baseados em grid. Usada em cálculos de FOV, spawn seguro e IA.
 
-**Dungeon Crawler:** Tipo de jogo onde o jogador explora um calabouço ou série de andares subterrâneos, enfrentando monstros e coletando tesouro. Exemplos clássicos incluem Rogue e NetHack.
+**Dungeon Crawler:** tipo de jogo onde o jogador explora um calabouço ou série de andares subterrâneos, enfrentando monstros e coletando tesouro. Exemplos clássicos incluem Rogue e NetHack.
 
-**DRY (Don't Repeat Yourself):** Princípio que evita duplicação de código. Código duplicado é mais difícil de manter e mais propenso a bugs.
+**DRY (Don't Repeat Yourself):** princípio que evita duplicação de código. Código duplicado é mais difícil de manter e mais propenso a bugs.
 
-**Effective Dart:** Conjunto de diretrizes e melhores práticas para escrever código Dart de alta qualidade, mantido pela equipe oficial do Dart.
+**Effective Dart:** conjunto de diretrizes e melhores práticas para escrever código Dart de alta qualidade, mantido pela equipe oficial do Dart.
 
-**Enum:** Tipo que define um conjunto fixo de constantes nomeadas. Útil para representar estados, direções ou tipos de entidades no jogo.
+**Enum:** tipo que define um conjunto fixo de constantes nomeadas. Útil para representar estados, direções ou tipos de entidades no jogo.
 
-**Factory Constructor:** Construtor especial em Dart que não necessariamente cria uma nova instância da classe, podendo retornar uma instância existente ou de uma subclasse.
+**Factory Constructor:** construtor especial em Dart que não necessariamente cria uma nova instância da classe, podendo retornar uma instância existente ou de uma subclasse.
 
-**Field of View (FOV):** Área que o jogador pode enxergar do seu ponto de vista atual. Implementada com algoritmos como shadowcasting para criar exploração realista. Diferente de Line of Sight (LOS), que verifica visibilidade entre dois pontos específicos.
+**Field of View (FOV):** área que o jogador pode enxergar do seu ponto de vista atual. Implementada com algoritmos como shadowcasting para criar exploração realista. Diferente de Line of Sight (LOS), que verifica visibilidade entre dois pontos específicos.
 
-**Future:** Tipo Dart que representa um valor que será disponível no futuro. Retornado por operações assíncronas como leitura de arquivos. Aguardado com `await` ou gerenciado com `.then()`.
+**Future:** tipo Dart que representa um valor que será disponível no futuro. Retornado por operações assíncronas como leitura de arquivos. Aguardado com `await` ou gerenciado com `.then()`.
 
-**Game Loop:** Estrutura fundamental de um jogo que continuamente executa: processamento de entrada, atualização de estado e renderização. Garante comportamento consistente e responsivo.
+**Game Loop:** estrutura fundamental de um jogo que continuamente executa: processamento de entrada, atualização de estado e renderização. Garante comportamento consistente e responsivo.
 
-**Golden Test:** Teste que compara a saída de uma função com um resultado pré-gravado. Útil para testes de renderização ou geração procedural onde a saída é complexa.
+**Golden Test:** teste que compara a saída de uma função com um resultado pré-gravado. Útil para testes de renderização ou geração procedural onde a saída é complexa.
 
-**HUD (Heads-Up Display):** Interface visual que exibe informações do jogo como vida, mana, inventário e mapa sem interromper o gameplay. Geralmente posicionado nas bordas da tela.
+**HUD (Heads-Up Display):** interface visual que exibe informações do jogo como vida, mana, inventário e mapa sem interromper o gameplay. Geralmente posicionado nas bordas da tela.
 
-**JIT (Just-In-Time):** Compilação que converte código durante a execução. Mais lento na inicialização mas pode otimizar código que está sendo executado frequentemente.
+**JIT (Just-In-Time):** compilação que converte código durante a execução. Mais lento na inicialização mas pode otimizar código que está sendo executado frequentemente.
 
 **JSON:** JavaScript Object Notation. Formato padrão para representar dados estruturados em texto. Usado para serializar estado do jogo em arquivos de save.
 
-**Late:** Palavra-chave Dart que permite declarar uma variável que será inicializada após a construção do objeto. Útil para valores que dependem de outros parâmetros mas são garantidos antes do primeiro uso.
+**Late:** palavra-chave Dart que permite declarar uma variável que será inicializada após a construção do objeto. Útil para valores que dependem de outros parâmetros mas são garantidos antes do primeiro uso.
 
-**Linha de Visão (Line of Sight / LOS):** Algoritmo que determina se um ponto é visível a partir de outro sem obstáculos bloqueando. Diferente de FOV, que calcula múltiplos pontos, LOS verifica uma linha reta entre dois objetos.
+**Linha de Visão (Line of Sight / LOS):** algoritmo que determina se um ponto é visível a partir de outro sem obstáculos bloqueando. Diferente de FOV, que calcula múltiplos pontos, LOS verifica uma linha reta entre dois objetos.
 
-**Loot:** Itens valiosos encontrados após derrotar inimigos ou explorar áreas. Inclui equipamentos, poções, ouro e outros objetos que melhoram o personagem.
+**Loot:** itens valiosos encontrados após derrotar inimigos ou explorar áreas. Inclui equipamentos, poções, ouro e outros objetos que melhoram o personagem.
 
-**Level Up:** Processo pelo qual o personagem do jogador ganha experiência e aumenta de nível, geralmente resultado em aumento de atributos e novas habilidades.
+**Level Up:** processo pelo qual o personagem do jogador ganha experiência e aumenta de nível, geralmente resultando em aumento de atributos e novas habilidades.
 
-**Mixin:** Mecanismo em Dart que permite reutilizar código de uma classe em múltiplas classes sem usar herança. Implementado com a palavra-chave `with`.
+**Mixin:** mecanismo em Dart que permite reutilizar código de uma classe em múltiplas classes sem usar herança. Implementado com a palavra-chave `with`.
 
-**Mob:** Abreviação de mobile, refere-se a inimigos comuns e repetidos. Diferente de boss, que são únicos ou raros.
+**Mob:** abreviação de mobile, refere-se a inimigos comuns e repetidos. Diferente de boss, que são únicos ou raros.
 
-**MUD (Multi-User Dungeon):** Jogo de texto multiplayer baseado em exploração de calabouço. Precursor dos roguelikes modernos, ainda popular na comunidade de jogadores.
+**MUD (Multi-User Dungeon):** jogo de texto multiplayer baseado em exploração de calabouço. Precursor dos roguelikes modernos, ainda popular na comunidade de jogadores.
 
-**MST (Minimum Spanning Tree / Árvore Geradora Mínima):** Estrutura de grafo que conecta todos os nós com peso total mínimo, sem ciclos. Usada em geração procedural para conectar salas ou áreas sem sobreposição desnecessária.
+**MST (Minimum Spanning Tree / Árvore Geradora Mínima):** estrutura de grafo que conecta todos os nós com peso total mínimo, sem ciclos. Usada em geração procedural para conectar salas ou áreas sem sobreposição desnecessária.
 
-**Null Safety:** Recurso do Dart que torna seguro trabalhar com valores nulos. O compilador garante que variáveis não nulas nunca recebam null, prevenindo uma classe inteira de bugs.
+**Null Safety:** recurso do Dart que torna seguro trabalhar com valores nulos. O compilador garante que variáveis não nulas nunca recebam `null`, prevenindo uma classe inteira de bugs.
 
-**NPC (Non-Player Character):** Personagem controlado pelo jogo, não pelo jogador. Pode ser comerciante, quest-giver, aliado ou simples decoração.
+**NPC (Non-Player Character):** personagem controlado pelo jogo, não pelo jogador. Pode ser comerciante, quest-giver, aliado ou simples decoração.
 
-**Observer Pattern:** Padrão de design que estabelece uma relação um-para-muitos entre objetos, onde mudanças em um objeto notificam automaticamente seus observadores.
+**Observer Pattern:** padrão de design que estabelece uma relação um-para-muitos entre objetos, onde mudanças em um objeto notificam automaticamente seus observadores.
 
-**Package:** Unidade de código reutilizável em Dart. Publicado no pub.dev e pode ser incluído em outros projetos via arquivo pubspec.yaml.
+**Package:** unidade de código reutilizável em Dart. Publicado no `pub.dev` e pode ser incluído em outros projetos via arquivo `pubspec.yaml`.
 
-**Pathfinding:** Algoritmo que encontra o caminho mais curto ou viável entre dois pontos. Exemplos incluem BFS, A* e Dijkstra.
+**Pathfinding:** algoritmo que encontra o caminho mais curto ou viável entre dois pontos. Exemplos incluem BFS, A* e Dijkstra.
 
-**Permadeath (Morte Permanente):** Característica central de roguelikes onde a morte do personagem é irreversível. Não há salvação automática, continuar ou undo — o personagem morre e a partida acaba, criando tensão e significado em cada decisão.
+**Permadeath (Morte Permanente):** característica central de roguelikes onde a morte do personagem é irreversível. Não há salvação automática, continuar ou desfazer. O personagem morre e a partida acaba, criando tensão e significado em cada decisão.
 
-**Pattern Matching:** Recurso de linguagem que permite comparar valores contra padrões complexos. Em Dart, usado em switch expressions e destructuring.
+**Pattern Matching:** recurso de linguagem que permite comparar valores contra padrões complexos. Em Dart, usado em switch expressions e destructuring.
 
-**Procedural Generation:** Técnica que cria conteúdo do jogo algoritmicamente ao invés de manualmente. Gera dungeons, itens e obstáculos de forma aleatória mas controlada.
+**Procedural Generation:** técnica que cria conteúdo do jogo algoritmicamente ao invés de manualmente. Gera dungeons, itens e obstáculos de forma aleatória mas controlada.
 
-**Pub:** Gerenciador de pacotes oficial do Dart. Permite publicar e consumir bibliotecas da comunidade.
+**Pub:** gerenciador de pacotes oficial do Dart. Permite publicar e consumir bibliotecas da comunidade.
 
-**Ray Casting:** Técnica que lança raios para determinar visibilidade. Mais simples que shadowcasting mas menos preciso em FOV.
+**Ray Casting:** técnica que lança raios para determinar visibilidade. Mais simples que shadowcasting mas menos preciso em FOV.
 
-**Refatoração:** Processo de reestruturar código sem alterar seu comportamento externo. Melhora qualidade, legibilidade e mantenibilidade.
+**Refatoração:** processo de reestruturar código sem alterar seu comportamento externo. Melhora qualidade, legibilidade e mantenibilidade.
 
-**Render:** Processo de converter estado do jogo em saída visual que o jogador pode ver. No jogo ASCII, significa colocar caracteres corretos nas posições corretas.
+**Render:** processo de converter estado do jogo em saída visual que o jogador pode ver. No jogo ASCII, significa colocar caracteres corretos nas posições corretas.
 
-**Roguelike:** Gênero de jogo caracterizado por exploração de dungeon, combate por turnos, morte permanente (permadeath) e progressão de personagem. Inspirado no clássico Rogue de 1980.
+**Roguelike:** gênero de jogo caracterizado por exploração de dungeon, combate por turnos, morte permanente (permadeath) e progressão de personagem. Inspirado no clássico Rogue de 1980.
 
-**Rooms and Corridors:** Algoritmo de geração procedural que cria dungeons colocando salas retangulares e conectando-as com corredores. Simples e eficiente.
+**Rooms and Corridors:** algoritmo de geração procedural que cria dungeons colocando salas retangulares e conectando-as com corredores. Simples e eficiente.
 
-**Random Walk:** Técnica de geração onde um ponto se move aleatoriamente, deixando um rastro. Cria paisagens naturais e cavernas.
+**Random Walk:** técnica de geração onde um ponto se move aleatoriamente, deixando um rastro. Cria paisagens naturais e cavernas.
 
-**Sealed Class:** Classe cuja herança é restrita a classes específicas definidas no mesmo arquivo. Garante que todos os subtipos são conhecidos e gerenciáveis.
+**Sealed Class:** classe cuja herança é restrita a classes específicas definidas no mesmo arquivo. Garante que todos os subtipos são conhecidos e gerenciáveis.
 
-**Seed (Semente):** Valor inicial que alimenta um gerador de números aleatórios. Mesma seed produz mesma sequência de números, permitindo reproduzir mapas e combates idênticos para debug e testes.
+**Seed (Semente):** valor inicial que alimenta um gerador de números aleatórios. Mesma seed produz mesma sequência de números, permitindo reproduzir mapas e combates idênticos para debug e testes.
 
-**Serialização:** Processo de converter objetos em um formato que pode ser armazenado ou transmitido, como JSON. Essencial para sistema de save/load.
+**Serialização:** processo de converter objetos em um formato que pode ser armazenado ou transmitido, como JSON. Essencial para sistema de save/load.
 
-**Shadowcasting:** Algoritmo avançado que calcula campo de visão de forma rápida e realista, tratando linha de visão e obstáculos corretamente.
+**Shadowcasting:** algoritmo avançado que calcula campo de visão de forma rápida e realista, tratando linha de visão e obstáculos corretamente.
 
-**Sprite:** Imagem 2D que representa um objeto no jogo. Em jogos ASCII, um sprite é um ou alguns caracteres que representam uma entidade.
+**Sprite:** imagem 2D que representa um objeto no jogo. Em jogos ASCII, um sprite é um ou alguns caracteres que representam uma entidade.
 
-**SDK (Software Development Kit):** Conjunto de ferramentas para desenvolver aplicações. O Dart SDK inclui compilador, runtime e bibliotecas padrão.
+**SDK (Software Development Kit):** conjunto de ferramentas para desenvolver aplicações. O Dart SDK inclui compilador, runtime e bibliotecas padrão.
 
-**SOLID:** Acrônimo para cinco princípios de design: Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion. Promove código flexível e sustentável.
+**SOLID:** acrônimo para cinco princípios de design: Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion. Promove código flexível e sustentável.
 
-**Spawn:** Ato de criar uma nova entidade no jogo, como inimigo aparecendo em uma localização específica.
+**Spawn:** ato de criar uma nova entidade no jogo, como inimigo aparecendo em uma localização específica.
 
-**State Pattern:** Padrão de design que permite um objeto alterar seu comportamento quando seu estado interno muda. Implementado naturalmente com sealed classes em Dart.
+**State Pattern:** padrão de design que permite um objeto alterar seu comportamento quando seu estado interno muda. Implementado naturalmente com sealed classes em Dart.
 
-**Strategy Pattern:** Padrão de design que define uma família de algoritmos, encapsula cada um e os torna intercambiáveis. Permite selecionar algoritmo em tempo de execução.
+**Strategy Pattern:** padrão de design que define uma família de algoritmos, encapsula cada um e os torna intercambiáveis. Permite selecionar algoritmo em tempo de execução.
 
-**Stream:** Sequência de eventos assíncronos em Dart. `StreamController` emite eventos, `listen()` os observa. Usado com Observer Pattern para reação a eventos sem acoplamento direto.
+**Stream:** sequência de eventos assíncronos em Dart. `StreamController` emite eventos, `listen()` os observa. Usado com Observer Pattern para reação a eventos sem acoplamento direto.
 
-**StringBuffer:** Estrutura em Dart para construir strings eficientemente, acumulando caracteres sem recriação de objetos. Essencial em renderização ASCII para montar cada frame completo antes de exibir.
+**StringBuffer:** estrutura em Dart para construir strings eficientemente, acumulando caracteres sem recriação de objetos. Essencial em renderização ASCII para montar cada frame completo antes de exibir.
 
-**Teste Unitário:** Teste automatizado que verifica comportamento de uma unidade de código isoladamente. Fundamental para garantir qualidade e evitar regressões.
+**Teste Unitário:** teste automatizado que verifica comportamento de uma unidade de código isoladamente. Fundamental para garantir qualidade e evitar regressões.
 
-**Test-Driven Development (TDD):** Metodologia que escreve testes antes do código. Garante cobertura de teste e design orientado a testes.
+**Test-Driven Development (TDD):** metodologia que escreve testes antes do código. Garante cobertura de teste e design orientado a testes.
 
-**Tile:** Unidade de grid no mapa, geralmente representado por um character ASCII. Cada tile ocupa uma posição [x, y] no dungeon.
+**Tile:** unidade de grid no mapa, geralmente representado por um caractere ASCII. Cada tile ocupa uma posição [x, y] no dungeon.
 
-**Turn-Based:** Sistema de jogo onde ações ocorrem em turnos sequenciais. O jogador faz uma ação, inimigos respondem, e o ciclo continua. Comum em roguelikes.
+**Turn-Based:** sistema de jogo onde ações ocorrem em turnos sequenciais. O jogador faz uma ação, inimigos respondem, e o ciclo continua. Comum em roguelikes.
 
-**UI (User Interface):** Interface visual através da qual o jogador interage com o jogo. Inclui menus, HUD, diálogos e controles.
+**UI (User Interface):** interface visual através da qual o jogador interage com o jogo. Inclui menus, HUD, diálogos e controles.
 
-**XP (Experience Points):** Pontos ganhos ao derrotar inimigos ou completar objetivos. Acumulam para permitir level up do personagem.
+**XP (Experience Points):** pontos ganhos ao derrotar inimigos ou completar objetivos. Acumulam para permitir level up do personagem.
 
-## Do mundo real à masmorra
+## Do Mundo Real à Masmorra
 
-Além das entradas alfabéticas acima, este quadro traduz o vocabulário da masmorra para conceitos de programação — e vice-versa. Use-o para ver como mecânicas de roguelike se expressam em Dart e na arquitetura do jogo.
+Além das entradas alfabéticas acima, este quadro traduz o vocabulário da masmorra para conceitos de programação (e vice-versa). Use-o para ver como mecânicas de roguelike se expressam em Dart e na arquitetura do jogo. É um mapa bidirecional: comece no RPG e encontre o código, ou comece no código e encontre a mecânica do jogo.
 
 | Termo RPG | Termo de Programação | Descrição |
 |-----------|---------------------|-----------|
@@ -190,8 +190,9 @@ Além das entradas alfabéticas acima, este quadro traduz o vocabulário da masm
 | Sobrecarga de operadores | operator overload | `class Ponto { Ponto operator+(Ponto other) { ... } }`. Usar `+`, `-`, `==` em tipos custom. |
 | Tipo abstrato / contrato | Sealed class | `sealed class Entidade { }` garante que só subclasses conhecidas existem. Exaustividade em switch. |
 
-## Como usar este mapa conceitual
+## Como Usar Este Mapa Conceitual
 
 - **Conceitos de programação:** comece na coluna "Termo de Programação". Se não souber o que é um `Stream`, procure na tabela e encontre a linha correspondente ao jogo.
 - **Mecânicas da masmorra:** comece na coluna "Termo RPG". Para saber como "morte permanente" se relaciona com código, veja a coluna do meio e a descrição.
 - **Padrões de design:** use as linhas de Strategy, Command, State e Observer para ligar teoria ao que o livro implementa no combate e na IA.
+- **Dúvidas durante o desenvolvimento:** se você está implementando um feature e não sabe qual padrão usar, procure na coluna "Termo RPG" para encontrar sugestões de código.

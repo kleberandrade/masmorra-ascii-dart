@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'tile.dart';
 import 'tela_ascii.dart';
 import 'campo_visao.dart';
@@ -29,13 +28,13 @@ class Jogador extends Entidade {
   int ouro;
 
   Jogador({
-    required String nome,
-    required int x,
-    required int y,
+    required super.nome,
+    required super.x,
+    required super.y,
     required this.hpMax,
     required this.ouro,
   })  : hpAtual = hpMax,
-        super(x: x, y: y, simbolo: '@', nome: nome);
+        super(simbolo: '@');
 
   bool mover(int novoX, int novoY, MapaMasmorra mapa) {
     if (!mapa.ehPassavel(novoX, novoY)) return false;
@@ -72,21 +71,20 @@ class Inimigo extends Entidade {
   int hpAtual;
 
   Inimigo({
-    required String nome,
-    required int x,
-    required int y,
+    required super.nome,
+    required super.x,
+    required super.y,
     required this.hpMax,
-    required String simbolo,
-  })  : hpAtual = hpMax,
-        super(x: x, y: y, simbolo: simbolo, nome: nome);
+    required super.simbolo,
+  })  : hpAtual = hpMax;
 }
 
 class Item extends Entidade {
   Item({
-    required String nome,
-    required int x,
-    required int y,
-  }) : super(x: x, y: y, simbolo: '!', nome: nome);
+    required super.nome,
+    required super.x,
+    required super.y,
+  }) : super(simbolo: '!');
 }
 
 class SessaoJogo {

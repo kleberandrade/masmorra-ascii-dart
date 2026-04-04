@@ -39,7 +39,6 @@ final sinonimos = <String, String>{
   'w': 'oeste',
   'i': 'inventario',
   'inv': 'inventario',
-  'p': 'pegar',
 };
 
 var salaAtual = 'praca';
@@ -47,10 +46,10 @@ var inventario = <String>[];
 var salasVisitadas = <String>{};
 
 void exibirSala() {
-  var sala = salas[salaAtual]!;
-  var descricao = sala['descricao'] as String;
-  var saidasMap = sala['saidas'] as Map<String, String>;
-  var itensNaSala = sala['itens'] as List<String>;
+  var sala = salas[salaAtual] ?? {};
+  var descricao = sala['descricao'] as String?;
+  var saidasMap = sala['saidas'] as Map<String, String>?;
+  var itensNaSala = sala['itens'] as List<String>?;
 
   var primeira = !salasVisitadas.contains(salaAtual);
   if (primeira) salasVisitadas.add(salaAtual);
@@ -60,17 +59,17 @@ void exibirSala() {
   if (primeira) {
     print('║  ** Lugar novo! **                   ║');
   }
-  for (var linha in descricao.split('\n')) {
+  for (var linha in (descricao ?? '').split('\n')) {
     print('║  $linha');
     print('║');
   }
   print('╠══════════════════════════════════════╣');
 
-  var saidasTexto = saidasMap.keys.map((d) => '[$d]').join(' ');
+  var saidasTexto = saidasMap?.keys.map((d) => '[$d]').join(' ') ?? 'Sem saídas';
   print('║  Saídas: $saidasTexto');
   print('║');
 
-  if (itensNaSala.isNotEmpty) {
+  if (itensNaSala != null && itensNaSala.isNotEmpty) {
     var itensTexto = itensNaSala.join(', ');
     print('║  No chão: $itensTexto');
     print('║');
@@ -93,11 +92,11 @@ void exibirInventario() {
 }
 
 void mover(String direcao) {
-  var sala = salas[salaAtual]!;
-  var saidasMap = sala['saidas'] as Map<String, String>;
+  var sala = salas[salaAtual] ?? {};
+  var saidasMap = sala['saidas'] as Map<String, String>?;
 
-  if (saidasMap.containsKey(direcao)) {
-    salaAtual = saidasMap[direcao]!;
+  if (saidasMap != null && saidasMap.containsKey(direcao)) {
+    salaAtual = saidasMap[direcao] ?? salaAtual;
     print('Você vai para $direcao...');
     exibirSala();
   } else {
@@ -106,8 +105,13 @@ void mover(String direcao) {
 }
 
 void pegarItem(String nomeItem) {
-  var sala = salas[salaAtual]!;
-  var itens = sala['itens'] as List<String>;
+  var sala = salas[salaAtual] ?? {};
+  var itens = sala['itens'] as List<String>?;
+
+  if (itens == null || itens.isEmpty) {
+    print('Não há "$nomeItem" aqui.');
+    return;
+  }
 
   var encontrado = itens
       .where((item) => item.toLowerCase() == nomeItem.toLowerCase())

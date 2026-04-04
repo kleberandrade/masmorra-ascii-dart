@@ -1,12 +1,10 @@
 # Capítulo 28 - Refatoração Guiada: Code Smells e Limpeza Estrutural
 
-*Você para e olha para trás. O jogo funciona, mas o código que o sustenta acumulou cicatrizes de batalha: funções longas demais, nomes confusos, lógica duplicada. Todo projeto real passa por isso, e a diferença entre código amador e profissional é o que você faz depois. Nesta parte, você volta pelos andares que conquistou e refatora. Extrai métodos, renomeia variáveis, organiza arquivos em pastas que fazem sentido.*
+*Você para e olha para trás. O jogo funciona, mas o código que o sustenta acumulou cicatrizes de batalha: funções longas demais, nomes confusos, lógica duplicada. Todo projeto real passa por isso e a diferença entre código amador e profissional é o que você faz depois. Nesta parte, você volta pelos andares que conquistou e refatora. Extrai métodos, renomeia variáveis, organiza arquivos em pastas que fazem sentido. Mais que limpar, você vai aprender a proteger seu trabalho. Testes unitários garantem que nada quebre enquanto você melhora. Save e load com JSON preservam o progresso do jogador entre sessões. E no final, o projeto terá a estrutura de um pacote Dart profissional: documentado, testado e organizado. O mesmo jogo, mas agora escrito como alguém que sabe o que está fazendo.*
 
-*Mais que limpar, você vai aprender a proteger seu trabalho. Testes unitários garantem que nada quebre enquanto você melhora. Save e load com JSON preservam o progresso do jogador entre sessões. E no final, o projeto terá a estrutura de um pacote Dart profissional: documentado, testado, organizado. O mesmo jogo, mas agora escrito como alguém que sabe o que está fazendo.*
+> *Você empurra a porta de uma câmara antiga. O piso está cheio de escombros: pedaços de código que já não fazem sentido, funções gigantescas que ninguém compreende, números mágicos espalhados como moedas podres. Antes de vencer este calabouço, é hora de limpar a casa. Refatorar não é reescrever; melhora a estrutura sem mudar o comportamento.*
 
-> *Você empurra a porta de uma câmara antiga. O piso está cheio de escombros: pedaços de código que já não fazem sentido, funções gigantescas que ninguém compreende, números mágicos espalhados como moedas podres. Antes de vencer este calabouço, é hora de limpar a casa. Refatorar não é reescrever; é melhorar a estrutura sem mudar o comportamento.*
-
-Você desceu vários andares. Derrotou zumbis, lobos, orcs. Acumulou ouro e experiência. Mas olhe para trás agora. O código que trouxe você até aqui está cicatrizado. Funções gigantescas como dragões antigos, nomes confusos como runes esquecidas, duplicação espalhada como moedas podres pelo chão da masmorra. Isto é code smell: sinais de que algo está apodrecendo.
+Você desceu vários andares. Derrotou zumbis, lobos, orcs. Acumulou ouro e experiência. Mas olhe para trás agora. O código que trouxe você até aqui está cicatrizado; funções gigantescas como dragões antigos, nomes confusos como runas esquecidas, duplicação espalhada como moedas podres pelo chão da masmorra. Isto é *code smell*: sinais de que algo está apodrecendo.
 
 Em qualquer RPG clássico, há um momento em que o herói para na vila antes de descer para o próximo calabouço. Descansa, organiza seu inventário, conserta suas armas, descarta o que não precisa mais. Este capítulo é esse momento para o seu código. Você não vai adicionar novas funcionalidades. Você vai limpar a casa.
 
@@ -14,13 +12,13 @@ Refatoração é um investimento no futuro. Código limpo é código que você (
 
 ## Reconhecer Code Smells
 
-Code smells não são bugs. São avisos de alerta amarelo. Se você já jogou Dark Souls, sabe aquele cheiro quando entra num local novo? Algo está errado e você não sabe o quê. Code smells são assim.
+*Code smells* não são bugs. São avisos de alerta amarelo. Se você já jogou Dark Souls, sabe aquele cheiro quando entra num local novo? Algo está errado e você não sabe o quê. *Code smells* são assim.
 
 ### Smell #1: Métodos Gigantescos
 
-Um método com 150 linhas. Imagine refatorar um Pokémon: o poder muda, mas a essência continua. Este método gigante é um Pokémon carregando cinco tipos de ataques diferentes ao mesmo tempo, incapaz de focar.
+Um método com 150 linhas. Imagine refatorar um Pokémon: o poder muda, mas a essência continua. Este método gigante é um Pokémon carregando cinco tipos de ataques diferentes ao mesmo tempo, incapaz de se focar.
 
-Observe como um método que deveria orquestrar o jogo termina fazendo renderização, processamento de entrada, cálculo de movimento e combate tudo junto. Cada uma dessas responsabilidades deveria ser um método separado. Quando você precisa testar "o inimigo se move corretamente", você não consegue testar isoladamente porque o método está acoplado ao resto do código.
+Observe como um método que deveria orquestrar o jogo termina fazendo renderização, processamento de entrada, cálculo de movimento e combate tudo junto. Cada uma dessas responsabilidades deveria ser um método separado. Quando você precisa testar "o inimigo se move corretamente", não consegue testar isoladamente pois o método está acoplado ao resto do código.
 
 ```dart
 // Ruim: executar() faz tudo simultaneamente
@@ -52,7 +50,7 @@ Problema: você não consegue testar `_moverJogador()` isoladamente. Você não 
 
 Uma classe que faz tudo. Renderiza, processa entrada, executa combate, gera mundos, gerencia economia, salva dados. É como um personagem de RPG que é mago, guerreiro, ladrão e clérigo simultaneamente.
 
-O código abaixo é aquilo que você quer evitar no seu projeto. Veja como `DungeonCrawl` acumula responsabilidades: uma mudança na renderização quebra a lógica de combate, e vice-versa. Você não consegue reutilizar a renderização em outro lugar, ou a lógica de combate em um editor de mapa. Cada responsabilidade "compete" com as outras pelo espaço e atenção.
+O código abaixo é aquilo que você quer evitar no seu projeto. Veja como `DungeonCrawl` acumula responsabilidades: uma mudança na renderização quebra a lógica de combate e vice-versa. Não consegue reutilizar a renderização em outro lugar, ou a lógica de combate em um editor de mapa. Cada responsabilidade "compete" com as outras pelo espaço e atenção.
 
 ```dart
 // Ruim: uma classe com 50 métodos desconexos
@@ -83,7 +81,7 @@ Você tira um método para refatorar, e três outros quebram. Você muda o rende
 
 ### Smell #3: Números Mágicos
 
-Números espalhados pelo código são armadilhas clássicas. Você vê um `17` aqui, um `80` ali, um `5` em outro lugar. Ninguém consegue entender por quê. Foi sorte? Fórmula? Um erro antigo que ninguém tocou? O pior é quando o contexto muda (você aumenta o HP máximo do jogador para 100) e você esquece de atualizar um desses números mágicos em algum lugar — o jogo fica quebrado de forma sutil.
+Números espalhados pelo código são armadilhas clássicas. Você vê um `17` aqui, um `80` ali, um `5` em outro lugar. Ninguém consegue entender por quê. Foi sorte? Fórmula? Um erro antigo que ninguém tocou? O pior é quando o contexto muda (você aumenta o HP máximo do jogador para 100) e você esquece de atualizar um desses números mágicos em algum lugar; o jogo fica quebrado de forma sutil.
 
 ```dart
 // Ruim: o que significam estes números?
@@ -96,9 +94,7 @@ Seis meses depois você olha e pensa: "por quê 17? Por quê 80? Por quê 5?" De
 
 ### Smell #4: Código Duplicado
 
-Você desenha uma caixa ASCII:
-
-O código abaixo é a armadilha clássica: você precisa desenhar a mesma linha separadora em três lugares diferentes. Status, inventário, loja. Parece simples copiar e colar, e é — a primeira vez. Mas quando você quer mudar o visual (use caracteres diferentes, ou ajuste a largura), você precisa lembrar de todos os três (cinco, dez) lugares. É garantido que você esquecerá um, deixando o jogo visualmente inconsistente.
+O código abaixo é a armadilha clássica: você precisa desenhar a mesma linha separadora em três lugares diferentes. Status, inventário, loja. Parece simples copiar e colar, é verdade. Mas quando você quer mudar o visual (use caracteres diferentes, ou ajuste a largura), você precisa lembrar de todos os três (cinco, dez) lugares. É garantido que você esquecerá um, deixando o jogo visualmente inconsistente.
 
 ```dart
 print('─' * 20);
@@ -120,7 +116,7 @@ Aí você quer mudar a estética. Precisa encontrar todos os três lugares (ou c
 
 ### Smell #5: Nomes Ruins
 
-Nomes vagos ou genéricos tornam o código incompreensível. O "x" pode ser coordenada, dano, quantidade de ouro — você não sabe. O "a" pode ser uma lista de itens, inimigos ou qualquer coisa. Seis meses depois, você olha e pensa "o que era isso?" Pior ainda é quando tira esse código para testá-lo isoladamente ou reutilizá-lo em outro lugar: sem contexto, é impossível entender o que cada variável significa.
+Nomes vagos ou genéricos tornam o código incompreensível. O "x" pode ser coordenada, dano, quantidade de ouro; você não sabe. O "a" pode ser uma lista de itens, inimigos ou qualquer coisa. Seis meses depois, você olha e pensa "o que era isso?" Pior ainda é quando tira esse código para testá-lo isoladamente ou reutilizá-lo em outro lugar: sem contexto, é impossível entender o que cada variável significa.
 
 ```dart
 // Ruim: o que é x? o que é a?
@@ -134,7 +130,7 @@ List<String> inimigosNaDungeon = [];
 var tilePrincipal = mapa[0][0];
 ```
 
-Nomes ruins são como uma masmorra sem sinalização: você se perde. Nomes bom são torches iluminando o caminho.
+Nomes ruins são como uma masmorra sem sinalização; você se perde. Nomes bons são tochas iluminando o caminho.
 
 ## Extract Method: Quebrando Funções Longas
 
@@ -167,7 +163,7 @@ class DungeonCrawl {
 }
 ```
 
-Você não consegue testar `_moverJogador()` separadamente. A lógica está espalhada. Impossível ler.
+Não consegue testar `_moverJogador()` separadamente. A lógica está espalhada. Impossível ler.
 
 ### Depois (Bom)
 
@@ -207,7 +203,7 @@ class DungeonCrawl {
 }
 ```
 
-Agora `executar()` é legível em um segundo. Cada método faz UMA coisa. Você consegue testar `_moverJogador()` isoladamente.
+Agora `executar()` é legível em um segundo. Cada método faz UMA coisa. Consegue testar `_moverJogador()` isoladamente.
 
 ## Extract Class: Separando Deus Classes
 
@@ -387,7 +383,7 @@ Agora cada classe tem UMA razão para mudar:
 
 ## Reorganizar Pastas por Responsabilidade
 
-### Antes (Caos)
+### Antes: Caos
 
 ```text
 lib/
@@ -401,7 +397,7 @@ lib/
   (25 arquivos misturados)
 ```
 
-### Depois (Organizado)
+### Depois: Organizado
 
 ```text
 lib/
@@ -441,11 +437,11 @@ import 'modelos/inimigo.dart';
 import 'combate/combate.dart';
 ```
 
-Dentro de `lib/`, use imports relativos. Em `test/`, use `package:` imports (convenção Dart).
+Dentro de `lib/` use imports relativos. Em `test/` use `package:` imports (convenção Dart).
 
 ## Exemplo Completo: Antes e Depois
 
-### Antes (Monolítico)
+### Antes: Monolítico
 
 ```dart
 // lib/dungeonCrawl.dart — 200 linhas, faz tudo
@@ -495,7 +491,7 @@ class DungeonCrawl {
 }
 ```
 
-### Depois (Refatorado)
+### Depois: Refatorado
 
 ```dart
 // lib/jogo/dungeonCrawl.dart — 40 linhas, orquestra
@@ -592,13 +588,13 @@ to parameter type 'Offset' at ...
 
 **Desafio 28.1. Audit de Saúde.** Seu código cresceu. Tempo de diagnóstico. Abra o arquivo principal e identifique problemas: (1) Qual método tem mais linhas? (2) A classe principal faz quantas coisas? (3) Existem números mágicos soltos (17, 100, 0.5)? (4) Vê código duplicado? Liste 5 problemas. Execute `dart analyze` para autochecar. Dica: transparência é primeiro passo para melhoria.
 
-**Desafio 28.2. Cirurgião de Código.** Encontre um método com 40+ linhas (ex: `executarTurno()`). Está fazendo demais: renderizar, ler input, combate. Extraia em 3 submétodos: `_renderizarTela()`, `_lerAcaoJogador()`, `_processarAcao()`. Cada responsável por uma coisa. Refatore e teste: jogo deve funcionar igual, mas código fica legível. Dica: retire uma responsabilidade por vez, teste, depois próxima.
+**Desafio 28.2. Cirurgião de Código.** Encontre um método com 40+ linhas (ex: `executarTurno()`). Está fazendo demais: renderizar, ler input, combate. Extraia em 3 submétodos: `_renderizarTela()`, `_lerAcaoJogador()`, `_processarAcao()`. Cada responsável por uma coisa. Refatore e teste: jogo deve funcionar igual, mas código fica legível. Dica: retire uma responsabilidade por vez, teste, depois a próxima.
 
 **Desafio 28.3. Constantes Nomeadas.** Espalhados pelo código estão valores como 20 (HP crítico), 80 (largura tela), 5 (raio visão). Crie `lib/config/constantes.dart`: `const hpMinimoDePerigo = 20`, `const larguraTelaMax = 80`, `const raioVisaoJogador = 5`. Substitua todos. Execute `dart analyze` (sem warnings). Execute jogo (sem mudanças). Agora alterar valores é fácil e centralizado. Dica: constantes documentam intenção.
 
 **Desafio 28.4. Organização Profissional.** Seu `lib/` é caos—tudo junto. Crie estrutura: `lib/modelos/` (dados), `lib/ui/` (renderização), `lib/jogo/` (loop), `lib/combate/` (batalha), `lib/mundo/` (geração), `lib/config/` (configuração). Mova `Jogador` → modelos, `TelaAscii` → ui, `MapaMasmorra` → mundo, etc. Atualize imports de `'jogador.dart'` para `'package:masmorra/modelos/jogador.dart'`. Execute `dart analyze` (zero erros). Dica: qualidade de vida enormemente melhor.
 
-**Boss Final 28.5. Quebra da Deus Classe.** Sua classe `Jogador` provavelmente faz 5 coisas: gerencia stats, renderiza, faz combate, salva, carrega. Viola SRP. Quebre em: (1) `JogadorModel` (HP, ataque, nível), (2) `RenderizadorJogador` (desenha barra HP), (3) `LogicaCombateJogador` (calcula dano). Mova métodos apropriados. Atualize `main` para usar 3 classes em lugar de uma. Teste tudo. Código mais limpo = bugs mais fáceis de caçar. Dica: faça um refactor por dia para não enlouquecer.
+**Boss Final 28.5. Quebra da Deus Classe.** Sua classe `Jogador` provavelmente faz 5 coisas: gerencia stats, renderiza, faz combate, salva, carrega. Viola SRP. Quebre em: (1) `JogadorModel` (HP, ataque, nível), (2) `RenderizadorJogador` (desenha barra HP), (3) `LogicaCombateJogador` (calcula dano). Mova métodos apropriados. Atualize `main` para usar 3 classes em lugar de uma. Teste tudo. Código mais limpo = bugs mais fáceis de caçar. Dica: faça um refactor por vez para não enlouquecer.
 
 ***
 
@@ -633,7 +629,7 @@ Em vez disso:
 3. Teste que o jogo funciona
 4. Faça commit com git: `git commit -m "refactor: extract Renderizador de DungeonCrawl"`
 
-Cada passo é reversível. Um refactor grande demora 2-3 semanas de commits pequenos, mas fica perfeito. Exemplo de sequence:
+Cada passo é reversível. Um refactor grande demora 2—3 semanas de commits pequenos, mas fica perfeito. Exemplo de sequência:
 
 ```text
 refactor: extract Renderizador
@@ -647,4 +643,4 @@ refactor: atualizar imports para package:
 Cada commit é pequeno, testável, reversível.
 :::
 
-No próximo capítulo você vai escrever testes unitários com `package:test`. Testes garantem que refatorações não quebraram nada e que comportamentos complexos funcionam como esperado. É a segurança de rede enquanto você dança na corda bamba.
+No próximo capítulo você vai escrever testes unitários com `package:test`. Testes garantem que refatorações não quebraram nada e que comportamentos complexos funcionam como esperado. É a segurança de rede enquanto você dança na corda bamba. Seu código merece proteção.

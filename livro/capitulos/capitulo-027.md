@@ -6,7 +6,7 @@
 
 Neste capítulo (o pico da Parte IV) você vai:
 
-- Criar a classe `MasmorraAscii`, o orquestrador máster de todo o jogo
+- Criar a classe `MasmorraAscii`, o orquestrador mestre de todo o jogo
 - Implementar o menu principal com ASCII art épico
 - Criar seleção de dificuldade (Recruta / Normal / Veterano)
 - Integrar criação de personagem (nome + atributos)
@@ -19,40 +19,43 @@ Ao final, você terá um jogo roguelike completo e jogável. Pronto para distrib
 
 ## Menu Principal
 
-Todo jogo profissional começa com um menu. A classe `MenuPrincipal` desenha ASCII art bonito que diz bem-vindo, oferece opções: novo jogo, instruções, créditos, sair. Isto é o rosto do seu jogo. Deixa claro o que é, cria atmosfera.
+Todo jogo profissional começa com um menu. A classe `MenuPrincipal` desenha ASCII art bonita que diz bem-vindo, oferece opções: novo jogo, instruções, créditos, sair. Isto é o rosto do seu jogo. Deixa claro o que é, cria atmosfera.
 
 ```dart
-// lib/menuPrincipal.dart
+// lib/menu_principal.dart
 
 import 'dart:io';
-import 'telaAscii.dart';
 
+/// Menu principal do jogo
 class MenuPrincipal {
-  final TelaAscii tela;
-
-  MenuPrincipal({TelaAscii? screen})
-      : tela = screen ?? TelaAscii(largura: 80, altura: 24);
-
   String exibir() {
     _limpar();
 
-    print('');
-    print('MASMORRA ASCII');
-    print('─' * 35);
-    print('Uma Epopeia Roguelike em Dart');
-    print('');
-    print('Bem-vindo, aventureiro! Você está prestes a descer numa masmorra');
-    print('antiga repleta de perigos, tesouros e poderes esquecidos.');
-    print('');
-    print('Preparado para a jornada?');
-    print('');
-    print('MENU PRINCIPAL');
-    print('─' * 35);
-    print('  [1]  Novo Jogo');
-    print('  [2]  Como Jogar');
-    print('  [3]  Créditos');
-    print('  [0]  Sair');
-    print('');
+    print('''
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║                         MASMORRA ASCII                                    ║
+║                                                                            ║
+║                      Uma Epopeia Roguelike em Dart                         ║
+║                                                                            ║
+╠════════════════════════════════════════════════════════════════════════════╣
+║                                                                            ║
+║   Bem-vindo, aventureiro! Você está prestes a descer numa masmorra        ║
+║   antiga repleta de perigos, tesouros e poderes esquecidos.              ║
+║                                                                            ║
+║   Preparado para a jornada?                                               ║
+║                                                                            ║
+╠════════════════════════════════════════════════════════════════════════════╣
+║                            MENU PRINCIPAL                                  ║
+║                                                                            ║
+║   [1]  Novo Jogo                                                          ║
+║   [2]  Como Jogar                                                         ║
+║   [3]  Créditos                                                           ║
+║   [0]  Sair                                                               ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+    ''');
 
     stdout.write('Escolha: ');
     return stdin.readLineSync() ?? '0';
@@ -65,72 +68,74 @@ class MenuPrincipal {
   }
 
   static void mostrarComoJogar() {
-    print('');
-    print('COMO JOGAR');
-    print('─' * 50);
-    print('');
-    print('MOVIMENTO:');
-    print('  W  - Norte     S  - Sul     A  - Oeste    D  - Leste');
-    print('');
-    print('AÇÕES:');
-    print('  >      - Descer escada');
-    print('  i      - Inventário');
-    print('  status - Ver status');
-    print('  quit   - Abandonar jogo');
-    print('');
-    print('COMBATE (ao encontrar inimigo):');
-    print('  [1] Atacar        [2] Defender');
-    print('  [3] Habilidade    [4] Usar Item');
-    print('  [5] Fugir');
-    print('');
-    print('PROGRESSÃO:');
-    print('  • Derrota inimigos para ganhar XP');
-    print('  • Colete itens e ouro');
-    print('  • Suba de nível para desbloquear habilidades');
-    print('  • Chegue ao andar 5 e derrote o Rei da Masmorra!');
-    print('');
-    print('DIFICULDADES:');
-    print('  Recruta:   +50% XP, inimigos mais fracos (treino)');
-    print('  Normal:    Balanço perfeito (recomendado)');
-    print('  Veterano:  -50% XP, inimigos mais fortes (desafio!)');
-    print('');
+    print('''
+╔════════════════════════════════════════════════════════════════════════════╗
+║                          COMO JOGAR                                        ║
+╠════════════════════════════════════════════════════════════════════════════╣
+║                                                                            ║
+║  MOVIMENTO:                                                                ║
+║    W  - Norte     S  - Sul     A  - Oeste    D  - Leste                   ║
+║                                                                            ║
+║  AÇÕES:                                                                    ║
+║    >      - Descer escada                                                 ║
+║    i      - Inventário                                                    ║
+║    status - Ver status                                                    ║
+║    quit   - Abandonar jogo                                                ║
+║                                                                            ║
+║  PROGRESSÃO:                                                               ║
+║    • Derrota inimigos para ganhar XP                                       ║
+║    • Colete itens e ouro                                                  ║
+║    • Suba de nível para desbloquear habilidades                           ║
+║    • Chegue ao andar 5 e derrote o Rei da Masmorra!                       ║
+║                                                                            ║
+║  DIFICULDADES:                                                             ║
+║    Recruta:   +50% XP, inimigos mais fracos (treino)                      ║
+║    Normal:    Balanço perfeito (recomendado)                              ║
+║    Veterano:  -50% XP, inimigos mais fortes (desafio!)                    ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+    ''');
 
     stdout.write('Pressione ENTER para voltar ao menu...');
     stdin.readLineSync();
   }
 
   static void mostrarCreditos() {
-    print('');
-    print('CRÉDITOS');
-    print('─' * 50);
-    print('');
-    print('MASMORRA ASCII, Uma Epopeia de Aprendizado');
-    print('');
-    print('Desenvolvido com Dart e ensino de programação como foco central');
-    print('');
-    print('SISTEMAS IMPLEMENTADOS:');
-    print('  • Geração procedural de dungeon (algoritmo BSP)');
-    print('  • Sistema completo de combate por turnos');
-    print('  • Progressão com XP e habilidades desbloqueáveis');
-    print('  • 5 andares com dificuldade crescente');
-    print('  • Chefão final com sistema de fases');
-    print('  • Interface ASCII com barras de saúde');
-    print('  • Sistema de economia (ouro, loja, itens)');
-    print('');
-    print('CONCEITOS DART ENSINADOS:');
-    print('  • Programação orientada a objetos (classes, herança)');
-    print('  • Polimorfismo e métodos abstratos');
-    print('  • Sealed classes e enums');
-    print('  • Generics e type parameters');
-    print('  • Pattern matching em Dart 3');
-    print('  • Event systems e padrões de design');
-    print('');
-    print('FERRAMENTA:');
-    print('  Desenvolvido em Dart 3.0+');
-    print('');
-    print('AGRADECIMENTOS:');
-    print('  A todos os aventureiros que jogam, aprendem e criam!');
-    print('');
+    print('''
+╔════════════════════════════════════════════════════════════════════════════╗
+║                          CRÉDITOS                                          ║
+╠════════════════════════════════════════════════════════════════════════════╣
+║                                                                            ║
+║  MASMORRA ASCII, Uma Epopeia de Aprendizado                              ║
+║                                                                            ║
+║  Desenvolvido com Dart e ensino de programação como foco central          ║
+║                                                                            ║
+║  SISTEMAS IMPLEMENTADOS:                                                   ║
+║    • Geração procedural de dungeon (algoritmo BSP)                         ║
+║    • Sistema completo de combate por turnos                               ║
+║    • Progressão com XP e habilidades desbloqueáveis                        ║
+║    • 5 andares com dificuldade crescente                                  ║
+║    • Chefão final com sistema de fases                                     ║
+║    • Interface ASCII com barras de saúde                                  ║
+║    • Sistema de economia (ouro, loja, itens)                              ║
+║                                                                            ║
+║  CONCEITOS DART ENSINADOS:                                                 ║
+║    • Programação orientada a objetos (classes, herança)                    ║
+║    • Polimorfismo e métodos abstratos                                     ║
+║    • Sealed classes e enums                                               ║
+║    • Generics e type parameters                                           ║
+║    • Pattern matching em Dart 3                                           ║
+║    • Event systems e padrões de design                                    ║
+║                                                                            ║
+║  DESENVOLVIDO EM: Dart 3.0+                                               ║
+║                                                                            ║
+║  AGRADECIMENTOS:                                                           ║
+║    A todos os aventureiros que jogam, aprendem e criam!                   ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+    ''');
 
     stdout.write('Pressione ENTER para voltar ao menu...');
     stdin.readLineSync();
@@ -143,12 +148,14 @@ class MenuPrincipal {
 Antes de começar, você escolhe: quer treino (recruta, +50% XP, inimigos mais fracos), balanço perfeito (normal), ou desafio extremo (veterano, -50% XP, inimigos mais fortes)? Depois, digita o nome do seu herói. Isto personaliza a jornada: é SEU herói, não um genérico.
 
 ```dart
-// lib/criacaoPersonagem.dart
+// lib/criacao_personagem.dart
 
 import 'dart:io';
 
+/// Dificuldade do jogo
 enum Dificuldade { recruta, normal, veterano }
 
+/// Gerencia criação de personagem e seleção de dificuldade
 class CriacaoPersonagem {
   String? nomePersonagem;
   Dificuldade dificuldade = Dificuldade.normal;
@@ -159,16 +166,18 @@ class CriacaoPersonagem {
   }
 
   void _selecionarDificuldade() {
-    print('\nESCOLHA SEU NÍVEL DE DIFICULDADE');
-    print('─' * 40);
-    print('[1]  RECRUTA (recomendado iniciante)');
-    print('     +50% XP, inimigos -20% saúde');
-    print('');
-    print('[2]   NORMAL (balanço perfeito)');
-    print('     1x XP, dificuldade média');
-    print('');
-    print('[3]  VETERANO (para desafiadores)');
-    print('     -50% XP, inimigos +30% saúde\n');
+    print('\n╔════════════════════════════════════════╗');
+    print('║    ESCOLHA SEU NÍVEL DE DIFICULDADE    ║');
+    print('╠════════════════════════════════════════╣');
+    print('║ [1]  RECRUTA (recomendado iniciante) ║');
+    print('║     +50% XP, inimigos -20% saúde      ║');
+    print('║                                        ║');
+    print('║ [2]   NORMAL (balanço perfeito)      ║');
+    print('║     1x XP, dificuldade média           ║');
+    print('║                                        ║');
+    print('║ [3]  VETERANO (para desafiadores)    ║');
+    print('║     -50% XP, inimigos +30% saúde      ║');
+    print('╚════════════════════════════════════════╝\n');
 
     stdout.write('Escolha (1-3): ');
     final escolha = stdin.readLineSync() ?? '2';
@@ -183,8 +192,9 @@ class CriacaoPersonagem {
   }
 
   void _criarPersonagem() {
-    print('\nCRIE SEU PERSONAGEM');
-    print('─' * 40 + '\n');
+    print('\n╔════════════════════════════════════════╗');
+    print('║        CRIE SEU PERSONAGEM             ║');
+    print('╚════════════════════════════════════════╝\n');
 
     stdout.write('Qual é o nome do seu herói? ');
     nomePersonagem = stdin.readLineSync() ?? 'Aventureiro Sem Nome';
@@ -195,9 +205,9 @@ class CriacaoPersonagem {
 }
 ```
 
-## Classe MasmorraAscii: Orquestrador Máster
+## Classe MasmorraAscii: Orquestrador Mestre
 
-A classe `MasmorraAscii` é o pico da pirâmide. Ela orquestra TUDO: menu, criação de personagem, loop de exploração, transições de andar, combate, vitória/derrota. É o maestro que coordena 27 capítulos de aprendizado em uma experiência coesa.
+A classe `MasmorraAscii` é o pico da pirâmide. Ela orquestra TUDO: menu, criação de personagem, loop de exploração, transições de andar, combate, vitória/derrota. É o mestre que coordena 27 capítulos de aprendizado em uma experiência coesa.
 
 ```dart
 // lib/masmorraAscii.dart
@@ -256,10 +266,8 @@ class MasmorraAscii {
       hpMax: 50,
       ataque: 5,
     );
-    // Nota: Certifique-se de que Jogador possui o campo 'dificuldade'
-    // ou altere esta linha para armazenar a dificuldade em uma variável separada.
-    // jogador.dificuldade = criacaoPersonagem.dificuldade;
-    // Alternativa: final dificuldade = criacaoPersonagem.dificuldade;
+
+    final dificuldade = criacaoPersonagem.dificuldade;
 
     dungeon = DungeonMultiAndar(jogador: jogador);
 
@@ -356,7 +364,7 @@ Você não apenas aprendeu Dart; você criou um produto real.
 ## Dica Profissional
 
 ::: dica
-De agora em diante, a manutenção é contínua. Reúna feedback de jogadores reais (amigos, comunidades online). O que é muito difícil? Muito fácil? Chato? Cada feedback é uma oportunidade para melhorar. Iteração é como você vai de "produto acadêmico" para "jogo verdadeiramente bom".
+De agora em diante, a manutenção é contínua. Reúna feedback de jogadores reais (amigos, comunidades online). O que é muito difícil? Muito fácil? Chato? Cada feedback é uma oportunidade para melhorar. Iteração é como você vai de "produto acadêmico" para "jogo verdadeiramente bom". Ouça seus jogadores.
 :::
 
 ## Próximas Etapas
@@ -371,7 +379,7 @@ Este é o fim da Parte IV, o fim da jornada do código para o produto. Na Parte 
 - Refatoração e testes completos
 - Distribuição como executável
 
-Mas por agora, você tem um jogo completo. Jogue-o. Mostre aos seus amigos. Aperfeiçoe-o. E acima de tudo, celebre o caminho que você trilhou: do "Hello, World" até um roguelike funcional.
+Mas por agora, você tem um jogo completo. Jogue-o. Mostre aos seus amigos. Aperfeiçoe-o. E acima de tudo, celebre o caminho que você trilhou: do "Hello, World" até um roguelike funcional com economia, progressão e chefe épico.
 
 ***
 
@@ -443,12 +451,12 @@ Cada parte adiciona novas camadas ao jogo. Compare com o início e veja o quanto
 
 **Desafio 27.2. A Descida Sem Fim.** Após derrotar o boss no andar 5, você pode escolher: sair com vitória ou continuar descendo. Implemente modo "Endless": andares 6, 7, 8... aparecem com escalação infinita. Boss fica 5% mais forte a cada andar adicional. Opção no menu: "Campanha Clássica (5 andares)" vs "Modo Endless (sem limite)". Teste: vencedor pode ficar até andar 20? Quanto consegue?. Dica: `if (andar > 5) permitirContinuarOuSair()`.
 
-**Desafio 27.3. Seus Recordes.** O jogo memora seus feitos. Implemente um arquivo `stats.txt` que salva **records** globais: maior nível atingido, ouro máximo coletado em uma partida, mais inimigos derrotados, andar mais profundo. Ao iniciar, carregue e mostre no menu: "Seu Recorde: Nível 8, 15000 ouro". Teste: vença 3 partidas diferentes, veja os recordes atualizarem. Dica: serialize `Record` para JSON, salve e carregue com `File`.
+**Desafio 27.3. Seus Recordes.** O jogo memoriza seus feitos. Implemente um arquivo `stats.txt` que salva **records** globais: maior nível atingido, ouro máximo coletado em uma partida, mais inimigos derrotados, andar mais profundo. Ao iniciar, carregue e mostre no menu: "Seu Recorde: Nível 8, 15000 ouro". Teste: vença 3 partidas diferentes, veja os recordes atualizarem. Dica: serialize `Record` para JSON, salve e carregue com `File`.
 
 **Desafio 27.4. Seu Jogo, Suas Regras.** Iniciantes podem querer jogo mais fácil. Implemente submenu "Customização": ajuste multiplicadores de HP de inimigos (0.5x até 2.0x), XP ganho (0.5x até 2.0x), preços na loja (0.5x até 2.0x). Mostre preview: "Com essas mudanças, inimigos terão 50% HP". Teste: crie dois savefiles, um fácil (0.5x tudo), um insano (2.0x tudo). Compare dificuldade. Dica: armazene multiplicadores em um objeto `ConfigJogo`.
 
 **Desafio 27.5. (Desafio): Corrida Contra o Tempo.** Speedrunners amam desafios timeboxed. Implemente "Speedrun Mode": você tem 10 minutos reais para derrotar o boss. Após o limite, o boss fica 10% mais forte a cada minuto. Timer na HUD conta de trás para frente. Teste: consegue vencer em 8 minutos? O que acontece após 10? Dica: use `Stopwatch` para rastrear tempo, atualize força do boss por `1.0 + ((tempoPassado - 600) / 60) * 0.10`.
 
-**Boss Final 27.6. Economia Equilibrada.** Conforme desce, itens na loja ficam mais caros (fornecedor remoto cobra mais para trazer itens pro fundo). Implemente: preços aumentam 5% por andar (andar 0 = base, andar 5 = +25%). MAS aumentar drops também (+5% ouro por andar, ou itens raros aparecem mais). Teste: descida ao andar 5 deve se sentir viável economicamente, não trapaceado. Dica: cálculo final = `precoBase * (1.0 + andar * 0.05)`, depois balance drops.
+**Boss Final 27.6. Economia Equilibrada.** Conforme desce, itens na loja ficam mais caros (fornecedor remoto cobra mais para trazer itens ao fundo). Implemente: preços aumentam 5% por andar (andar 0 = base, andar 5 = +25%). MAS aumente drops também (+5% ouro por andar, ou itens raros aparecem mais). Teste: descida ao andar 5 deve se sentir viável economicamente, não trapaceado. Dica: cálculo final = `precoBase * (1.0 + andar * 0.05)`, depois balance drops.
 
 ***

@@ -36,19 +36,22 @@ class AcaoAtacar implements Acao {
 /// Ação de movimento
 class AcaoMover implements Acao {
   final Inimigo self;
-  final int destinoX;
-  final int destinoY;
+  final dynamic destino;
+  final dynamic mapa;
   late int origemX;
   late int origemY;
 
-  AcaoMover(this.self, this.destinoX, this.destinoY);
+  AcaoMover(this.self, this.destino, this.mapa);
 
   @override
   void executar() {
     origemX = self.x;
     origemY = self.y;
-    self.x = destinoX;
-    self.y = destinoY;
+    final d = destino;
+    if (d is Map && d.containsKey('x') && d.containsKey('y')) {
+      self.x = d['x'] as int;
+      self.y = d['y'] as int;
+    }
   }
 
   @override
@@ -58,7 +61,7 @@ class AcaoMover implements Acao {
   }
 
   @override
-  String get descricao => "${self.nome} se move para ($destinoX, $destinoY)";
+  String get descricao => "${self.nome} se move";
 }
 
 /// Ação de fuga

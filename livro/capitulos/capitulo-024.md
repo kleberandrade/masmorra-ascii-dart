@@ -1,6 +1,6 @@
 # Capítulo 24 - Generics e Pattern Matching: Sistema de Eventos
 
-> *A economia gera ouro. A loja oferece itens. Você compra uma espada e... sente nada, sem feedback. Mas quando equipa essa espada, o seu ataque sobe. Quando bebe uma poção, o seu HP sobe. Quando level-up, ganha habilidades. Cada uma destas ações é um evento, um fato histórico que o jogo deveria registar. Este capítulo transforma o silêncio em narrativa: um sistema de eventos tipado que registra, filtra e notifica em tempo real. Aqui aprenderá o poder dos generics e do pattern matching em Dart 3 para criar código limpo e expressivo.*
+> *A economia gera ouro. A loja oferece itens. Você compra uma espada e... sente nada, sem feedback. Mas quando equipa essa espada, o seu ataque sobe. Quando bebe uma poção, o seu HP sobe. Quando level-up, ganha habilidades. Cada uma destas ações é um evento, um fato histórico que o jogo deveria registrar. Este capítulo transforma o silêncio em narrativa: um sistema de eventos tipado que registra, filtra e notifica em tempo real. Aqui aprenderá o poder dos generics e do pattern matching em Dart 3 para criar código limpo e expressivo.*
 
 ## O Que Vamos Aprender
 
@@ -20,8 +20,6 @@ Ao final, você terá um sistema de eventos tipado que torna o jogo mais narrati
 ## Generics: Uma Rápida Recordação
 
 Você já conhece `List<T>`. Generics são a forma de Dart dizer: "esta estrutura pode guardar qualquer tipo, mas vou ser estrito sobre qual tipo é". É segurança de tipos em tempo de compilação.
-
-Você já conhece `List<T>`:
 
 ```dart
 List<int> numeros = [1, 2, 3];
@@ -102,10 +100,11 @@ class EventoLoot extends EventoJogo {
 
   @override
   String toString() =>
-      'Loot: Adquiriste $quantidade x $nomeItem (de $fonte)';
+      'Loot: Adquiriu $quantidade × $nomeItem (de $fonte)';
 }
 
 /// Evento de movimento: você moveu-se
+/// Nota: usa registros (records) de Dart 3 para pares de coordenadas
 class EventoMovimento extends EventoJogo {
   final (int x, int y) de;
   final (int x, int y) para;
@@ -142,7 +141,7 @@ class EventoNivel extends EventoJogo {
 
 ## BarramentoEventos Genérico
 
-Um BarramentoEventos é um registador (log) de eventos tipado. Permite subscrições filtradas e callbacks. Pense como um serviço de notificações: alguém dispara um evento (ex: item coletado), e todas as subscrições recebem a notificação automaticamente. Isto desacopla completamente: o gerenciador de combate não precisa saber que a UI existe; combate dispara evento, UI sente e reage de forma independente.
+Um `BarramentoEventos` é um registador (log) de eventos tipado. Permite subscrições filtradas e callbacks. Pense como um serviço de notificações: alguém dispara um evento (ex: item coletado), e todas as subscrições recebem a notificação automaticamente. Isto desacopla completamente: o gerenciador de combate não precisa saber que a UI existe; combate dispara evento, UI sente e reage de forma independente.
 
 ```dart
 // lib/barramento_eventos.dart
@@ -179,6 +178,8 @@ class BarramentoEventos<T extends EventoJogo> {
   void limpar() {
     eventos.clear();
   }
+
+  int get contador => eventos.length;
 }
 ```
 
@@ -220,13 +221,13 @@ class ProcessadorEventos {
         print('> $atacante causou $dano dano!');
 
       case EventoCombate(:final dano) when dano < 0:
-        print('! Recebeste ${dano.abs()} dano!');
+        print('! Recebeu ${dano.abs()} de dano!');
 
       case EventoLoot(:final itemId, :final quantidade):
-        print('+ Adquiriste: $itemId x$quantidade');
+        print('+ Adquiriu: $itemId x$quantidade');
 
       case EventoNivel(:final nivelAnterior, :final nivelNovo):
-        print('* Sobiste de nível $nivelAnterior → $nivelNovo!');
+        print('* Subiu de nível $nivelAnterior → $nivelNovo!');
 
       case EventoMovimento():
         break;
@@ -317,7 +318,7 @@ class DungeonComEventos {
 
 **Desafio 24.3. Combate Violento.** Nem todo dano é importante. Filtre eventos de combate: retorne só `EventoCombate` com `dano > 20` (golpes críticos e devastadores). Itere e exiba: "Crítico! Dano: 35". Teste: em 100 turnos de combate, quantos golpes foram >= 20 dano? Você vai notar que a maioria é fraca e apenas alguns são épicos. Dica: combine `whereType<EventoCombate>()` com `.where()`.
 
-**Desafio 24.4. Resumo da Partida.** Ao fim do jogo, você quer saber: Quantas vezes equipou itens? Quantas vezes sofreu dano? Quantas compras na loja? Implemente `contagemPorTipo()` que retorna um mapa: `{'EventoCombate': 145, 'EventoEquipamento': 8, 'EventoCompra': 3}`. Use pattern matching no switch para cada tipo. Execute uma partida e veja o resumo final. Dica: isso é análise agregada.
+**Desafio 24.4. Resumo da Partida.** Ao fim do jogo, você quer saber: Quantas vezes equipou itens? Quantas vezes sofreu dano? Quantas compras na loja? Implemente `contagemPorTipo()` que retorna um mapa: `{'EventoCombate': 145, 'EventoEquipamento': 8, 'EventoCompra': 3}`. Use pattern matching no switch para cada tipo. Execute uma partida e veja o resumo final. Dica: isto é análise agregada.
 
 **Desafio 24.5. (Desafio): Assista a Sua Epopeia.** Você quer mostrar a um amigo o que aconteceu na masmorra. Implemente `EventReplay` que armazena eventos e tem método `async tocar()`: exibe cada evento com 500ms entre eles. Use `Future.delayed(Duration(milliseconds: 500))`. Assim, narrativa toda se desenrola visualmente. Teste: grave 50 eventos, toque e veja cada um aparecer sequencialmente. Você consegue acompanhar a história? Dica: `await` faz o programa esperar sem travar.
 
@@ -339,7 +340,7 @@ O sistema de eventos transforma um jogo silencioso em um que fala. Cada ação �
 ## Dica Profissional
 
 ::: dica
-Eventos são a coluna vertebral de sistemas reativos. Quando adicionar uma nova feature (spell, item especial, achievement), não alteres 50 funções; dispara um evento novo. Qualquer listener que se importe com esse evento vai reagir. Isto é desacoplamento: combate não sabe de UI, UI sente eventos. Mantém o código limpo e modular.
+Eventos são a coluna vertebral de sistemas reativos. Quando adicionar uma nova feature (feitiço, item especial, achievement), não altere 50 funções; dispare um evento novo. Qualquer listener que se importe com esse evento vai reagir. Isto é desacoplamento: combate não sabe de UI, UI sente eventos. Mantém o código limpo e modular.
 :::
 
 ## Próximo Capítulo

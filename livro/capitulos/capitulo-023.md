@@ -1,6 +1,6 @@
 # Capítulo 23 - A Loja do Mercador: UI e Fluxo
 
-> *Entrou numa loja. O ar cheira a madeira antiga e moedas de ouro. Atrás do balcão, um homem de barba cinzenta sorri. "O que quer comprar?" As armas brilham na parede. As poções estão arrumadas em prateleiras. Este é o espaço de respiração do roguelike, onde você estratégia: que armadura devo carregar? Quanto ouro devo guardar? Vale a pena vender isto agora? Aqui, a economia ganha presença física e interface clara.*
+> *Entrou numa loja. O ar cheira a madeira antiga e moedas de ouro. Atrás do balcão, um homem de barba cinzenta sorri. "O que quer comprar?" As armas brilham na parede. As poções estão arrumadas em prateleiras. Este é o espaço de respiração do roguelike onde você estratégia: que armadura devo carregar? Quanto ouro devo guardar? Vale a pena vender isto agora? Aqui a economia ganha presença física e interface clara.*
 
 ## O Que Vamos Aprender
 
@@ -21,15 +21,15 @@ Ao final, você terá uma loja completa e jogável que funciona como uma entidad
 
 A loja é mais que um menu. É uma experiência completa:
 
-1. Uma sala física: você entra por ação específica (digita `shop` ou pisa numa sala especial marcada)
-2. Um estado de jogo distinto: não há movimento ou combate, apenas compra/venda
-3. Inventário dinâmico: muda a cada andar ou a cada visita, oferecendo itens progressivamente melhores
-4. Interface clara e contextual: lista de items à venda, lista de seus items, preços visíveis
-5. Transações validadas: compra com verificação de ouro, venda com verificação de inventário
+1. Uma sala física; você entra por ação específica (digita `shop` ou pisa numa sala especial marcada)
+2. Um estado de jogo distinto; não há movimento ou combate, apenas compra/venda
+3. Inventário dinâmico; muda a cada andar ou a cada visita, oferecendo itens progressivamente melhores
+4. Interface clara e contextual; lista de items à venda, lista de seus items, preços visíveis
+5. Transações validadas; compra com verificação de ouro, venda com verificação de inventário
 
 ## Classe ItemVenda e Inventário do Mercador
 
-Um item à venda não é só um Item. Tem um preço e uma quantidade em estoque. A classe `ItemVenda` encapsula isto: o item, quanto custa, quantos estão disponíveis. Oferece métodos para remover do estoque (quando você compra) e verificar se ainda tem estoque disponível.
+Um item à venda não é só um `Item`. Tem um preço e uma quantidade em estoque. A classe `ItemVenda` encapsula isto: o item, quanto custa, quantos estão disponíveis. Oferece métodos para remover do estoque (quando você compra) e verificar se ainda tem estoque disponível.
 
 ```dart
 // lib/item_venda.dart
@@ -137,15 +137,6 @@ class Mercador {
   }
 
   void _adicionarAoEstoqueDaLoja(Item item, int preco) {
-    // Nota: firstWhereOrNull requer `package:collection`
-    // Adicione ao pubspec.yaml:
-    //   dependencies:
-    //     collection: ^1.18.0
-    // Se não tiver a dependência, use a alternativa abaixo:
-    // final existe = inventario.cast<ItemVenda?>().firstWhere(
-    //   (iv) => iv?.item.id == item.id,
-    //   orElse: () => null,
-    // );
     final existe = inventario.firstWhereOrNull(
       (iv) => iv.item.id == item.id,
     );
@@ -234,52 +225,52 @@ class Mercador {
     ];
   }
 }
+
+extension _FirstWhereOrNull<T> on List<T> {
+  T? firstWhereOrNull(bool Function(T) test) {
+    for (final element in this) {
+      if (test(element)) return element;
+    }
+    return null;
+  }
+}
 ```
 
 ## UI ASCII da Loja
 
-A loja precisa de uma interface clara que mostre: que items você pode comprar, seus preços, seu inventário, seu ouro atual. A classe `LojaRenderer` desenha tudo em ASCII: duas colunas (esquerda = loja, direita = seu inventário), cabeçalho com nome do comerciante, HUD com status.
+A loja precisa de uma interface clara que mostre: que items você pode comprar, seus preços, seu inventário, seu ouro atual. A classe `LojaRenderer` desenha tudo em ASCII: cabeçalho com nome do comerciante, lista de items à venda, seu inventário, e HUD com status.
 
 ```dart
 // lib/loja_renderer.dart
 
-import 'tela_ascii.dart';
 import 'jogador.dart';
 import 'mercador.dart';
 
 /// Renderiza a interface da loja
 class LojaRenderer {
-  final TelaAscii tela;
   final int largura;
   final int altura;
 
   LojaRenderer({
-    required this.tela,
     this.largura = 80,
     this.altura = 24,
   });
 
   void renderizar(Jogador jogador, Mercador mercador) {
-    tela.limpar();
     _desenharCabecalho(mercador);
     _desenharColunasCompraVenda(jogador, mercador);
     _desenharHud(jogador);
-    tela.exibir();
   }
 
   void _desenharCabecalho(Mercador mercador) {
-    tela.escrever(0, 0, '─' * largura);
-    tela.escrever(1, 0, '  LOJA DO ${mercador.nome.toUpperCase()}');
-    tela.escrever(2, 0, '─' * largura);
+    print('═' * largura);
+    print('║ LOJA DO ${mercador.nome.toUpperCase()} ║');
+    print('═' * largura);
   }
 
   void _desenharColunasCompraVenda(Jogador jogador, Mercador mercador) {
-    final colEsquerda = 2;
-    final colDireita = largura ~/ 2 + 2;
-    int linhaAtual = 4;
-
-    tela.escrever(colEsquerda, linhaAtual, ' COMPRAR NA LOJA');
-    linhaAtual += 2;
+    print('\n COMPRAR NA LOJA');
+    print('─' * 40);
 
     for (int i = 0; i < mercador.inventario.length; i++) {
       final item = mercador.inventario[i];
@@ -287,44 +278,36 @@ class LojaRenderer {
           '[$i] ${item.item.nome} --- ${item.precoCompra} ouro (${item.quantidade})';
 
       if (!item.temEstoque) {
-        // Nota: Se TelaAscii não suporte cor, apenas renderize sem parâmetro `cor`
-        tela.escrever(colEsquerda, linhaAtual, linha);
+        print('(fora de estoque) $linha');
       } else {
-        tela.escrever(colEsquerda, linhaAtual, linha);
+        print(linha);
       }
-
-      linhaAtual++;
     }
 
-    linhaAtual = 4;
-    tela.escrever(colDireita, linhaAtual, ' TEU INVENTÁRIO');
-    linhaAtual += 2;
+    print('\n TEU INVENTÁRIO');
+    print('─' * 40);
 
     for (int i = 0; i < jogador.inventario.length; i++) {
       final item = jogador.inventario[i];
       final precoVenda = (item.preco ?? 0) ~/ 2;
       final linha = '[$i] ${item.nome} (⌬$precoVenda ouro)';
-      tela.escrever(colDireita, linhaAtual, linha);
-      linhaAtual++;
+      print(linha);
     }
 
     if (jogador.inventario.isEmpty) {
-      tela.escrever(colDireita, linhaAtual, '(vazio)');
+      print('(vazio)');
     }
   }
 
   void _desenharHud(Jogador jogador) {
-    final linhaHud = altura - 4;
-    tela.escrever(2, linhaHud, '─ STATUS ' + '─' * 32);
-    tela.escrever(2, linhaHud + 1, '  Ouro: ${jogador.ouro.toString().padLeft(6)}  '
+    print('\n┌─ STATUS ─────────────────────────┐');
+    print('│ Ouro: ${jogador.ouro.toString().padLeft(6)}  '
         'HP: ${jogador.hp}/${jogador.maxHp}');
-    tela.escrever(2, linhaHud + 2, '  Inventário: ${jogador.inventario.length}/'
+    print('│ Inventário: ${jogador.inventario.length}/'
         '${jogador.tamanhoInventario}');
-    tela.escrever(2, linhaHud + 3, '─' * 40);
+    print('└────────────────────────────────────┘');
 
-    final linhaInstrucoes = altura - 1;
-    tela.escrever(2, linhaInstrucoes,
-        'Digita: [C]omprar [nº] | [V]ender [nº] | [S]air | [A]juda');
+    print('Digita: [C]omprar [nº] | [V]ender [nº] | [S]air | [A]juda');
   }
 }
 ```
@@ -416,17 +399,19 @@ class ModoLoja {
 
 ## Desafios da Masmorra
 
-**Desafio 23.1. A Chave do Final.** No coração da loja aparece um item lendário: a Chave Dourada que abre a porta do boss final. Crie um `ItemVenda` com nome "Chave Dourada Rara", id `'chave_dourada'`, preço 500 ouro, estoque 1. Adicione à loja (método `_inventarioBase()` ou crie um método novo). Teste: navegue a loja, veja a chave, pergunte: tenho ouro suficiente para comprar? Dica: use a classe `ItemVenda` com seu construtor para não repetir dados.
+**Desafio 23.1. Estoque Rotativo: Itens Novos a Cada Andar.** Implemente um método `regenerarEstoque()` na loja que troca parte dos itens a cada andar. Use `import 'dart:math'` e `Random().nextInt()` para selecionar 2-3 itens novos de uma lista maior de possibilidades. Cada vez que o jogador retorna à loja (novo andar), alguns itens antigos saem do catálogo e aparecem novos. O mercador comenta: "Chegou mercadoria nova!" quando o estoque muda. Dica: guarde uma lista de `_itemsCatalogo` (todos os itens possíveis) e `_itensAtuais` (o que está na loja agora). Cada chamada a `regenerarEstoque()` remove itens aleatórios e adiciona novos do catálogo.
 
-**Desafio 23.2. O Roubo do Comerciante.** Você negocia com o comerciante: uma Espada de Aço de 75 ouro em compra. Quanto ele oferece quando você quer vender de volta? Calcule manualmente (resposta: 37.5 ouro com margem 50%, ou 22.5 com margem 30%). Depois implemente no código e valide. O comerciante te prejudica na venda? Quanto você perde em uma transação completa (compra e venda)? Dica: sinta a economia em ação.
+**Desafio 23.2. A Chave do Final.** No coração da loja aparece um item lendário: a Chave Dourada que abre a porta do boss final. Crie um `ItemVenda` com nome "Chave Dourada Rara", id `'chave_dourada'`, preço 500 ouro, estoque 1. Adicione à loja (método `_inventarioBase()` ou crie um método novo). Teste: navegue a loja, veja a chave, pergunte: tenho ouro suficiente para comprar? Dica: use a classe `ItemVenda` com seu construtor para não repetir dados.
 
-**Desafio 23.3. O Tesouro da Profundeza.** Conforme você desce muito fundo (andar 10 e além), a loja recebe artefatos lendários. Crie um método `_inventarioAndarProfundo()` que retorna itens épicos: "Espada Ancestral" (+10 ataque, 5000 ouro), "Anel de Imortalidade" (impede morte uma vez, 8000 ouro), "Tomo de Poder" (+5 ao nível, 6000 ouro). Integre em `restoquear()` com uma condição: `if (andar >= 10)`. Teste descendo até o andar 10, entre na loja, veja os itens novos aparecerem. Dica: siga o padrão de `_inventarioAndarInicial()`.
+**Desafio 23.3. O Roubo do Comerciante.** Você negocia com o comerciante: uma Espada de Aço de 75 ouro em compra. Quanto ele oferece quando você quer vender de volta? Calcule manualmente (resposta: 37.5 ouro com margem 50%, ou 22.5 com margem 30%). Depois implemente no código e valide. O comerciante te prejudica na venda? Quanto você perde em uma transação completa (compra e venda)? Dica: sinta a economia em ação.
 
-**Desafio 23.4. Loja Segura com Exceções.** A loja não pode quebrar. Se você não tem ouro, lança exceção, não trava. Crie `LojaExcecao`, `OuroInsuficienteExcecao`, `MochilaCheia Excecao`. Refatore `Mercador.comprar()` para verificar e lançar exceções ao invés de retornar strings de erro. Na UI, capture exceções e exiba mensagens amigáveis. Teste tentando comprar sem ouro, com mochila cheia, etc. Código mais robusto = jogo mais confiável. Dica: use try/catch na loja.
+**Desafio 23.4. O Tesouro da Profundeza.** Conforme você desce muito fundo (andar 10 e além), a loja recebe artefatos lendários. Crie um método `_inventarioAndarProfundo()` que retorna itens épicos: "Espada Ancestral" (+10 ataque, 5000 ouro), "Anel de Imortalidade" (impede morte uma vez, 8000 ouro), "Tomo de Poder" (+5 ao nível, 6000 ouro). Integre em `restoquear()` com uma condição: `if (andar >= 10)`. Teste descendo até o andar 10, entre na loja, veja os itens novos aparecerem. Dica: siga o padrão de `_inventarioAndarInicial()`.
 
-**Desafio 23.5. (Desafio): Ofertas do Dia.** Todo dia, a loja tem 3 itens especiais em destaque com 50% de desconto. Use `DateTime.now()` para pegar a data e criar seed determinística (ex: `seed = DateTime.now().year * 10000 + DateTime.now().month * 100 + DateTime.now().day`). Assim, o mesmo dia sempre tem os mesmos deals. Teste: reinicie o jogo 2x no mesmo dia, verá os mesmos deals? Reinicie no dia seguinte, verá offers diferentes? Dica: isso recompensa jogadores diários.
+**Desafio 23.5. Loja Segura com Exceções.** A loja não pode quebrar. Se você não tem ouro, lança exceção, não trava. Crie `LojaExcecao`, `OuroInsuficienteExcecao`, `MochilaCheia Excecao`. Refatore `Mercador.comprar()` para verificar e lançar exceções ao invés de retornar strings de erro. Na UI, capture exceções e exiba mensagens amigáveis. Teste tentando comprar sem ouro, com mochila cheia, etc. Código mais robusto = jogo mais confiável. Dica: use try/catch na loja.
 
-**Boss Final 23.6. Itens Únicos e Valiosos.** Itens lendários não devem estar sempre em estoque. Implemente: itens marcados como "raro=true" têm estoque máximo 1 por andar. Após vender, volta a 1 no próximo andar. Teste: compre a "Espada Ancestral" do andar 10, vá para andar 11, retorne ao 10, item deve estar de novo disponível. Outros itens normais sempre têm restoque completo. Dica: separe a lógica de restoque para itens raros vs normais.
+**Desafio 23.6. (Desafio): Ofertas do Dia.** Todo dia, a loja tem 3 itens especiais em destaque com 50% de desconto. Use `DateTime.now()` para pegar a data e criar seed determinística (ex: `seed = DateTime.now().year * 10000 + DateTime.now().month * 100 + DateTime.now().day`). Assim, o mesmo dia sempre tem os mesmos deals. Teste: reinicie o jogo 2x no mesmo dia, verá os mesmos deals? Reinicie no dia seguinte, verá offers diferentes? Dica: isso recompensa jogadores diários.
+
+**Boss Final 23.7. Itens Únicos e Valiosos.** Itens lendários não devem estar sempre em estoque. Implemente: itens marcados como "raro=true" têm estoque máximo 1 por andar. Após vender, volta a 1 no próximo andar. Teste: compre a "Espada Ancestral" do andar 10, vá para andar 11, retorne ao 10, item deve estar de novo disponível. Outros itens normais sempre têm restoque completo. Dica: separe a lógica de restoque para itens raros vs normais.
 
 ## Pergaminho do Capítulo
 
@@ -444,7 +429,7 @@ A loja transforma a economia em interface tangível. Não é apenas números: é
 ## Dica Profissional
 
 ::: dica
-A UI é parte do design, não é apenas cosméticos. Uma loja bem desenhada faz o jogador querer entrar, explorar, decidir. Layout em colunas, números claros, feedback visual. Tudo isto é design de produto. Se o jogador não sabe que pode comprar, não vai comprar. Se não sabe se tem ouro, vai ficar frustrado. Investe tempo em feedback, formatação e instruções.
+A UI é parte do design, não é apenas cosméticos. Uma loja bem desenhada faz o jogador querer entrar, explorar, decidir. Layout em colunas, números claros, feedback visual. Tudo isto é design de produto. Se o jogador não sabe que pode comprar, não vai comprar. Se não sabe se tem ouro, vai ficar frustrado. Invista tempo em feedback, formatação e instruções. É a diferença entre bom e ótimo.
 :::
 
 ## Próximo Capítulo

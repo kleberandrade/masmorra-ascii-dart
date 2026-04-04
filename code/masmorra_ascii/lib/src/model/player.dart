@@ -7,10 +7,12 @@ class Player {
     this.hp = 20,
     this.ouro = 12,
     this.roomId = 'praca',
+    this.defesa = 0,
   });
 
   final String name;
   int hp;
+  int defesa;
   int ouro;
   String roomId;
   final List<Item> inventario = [];

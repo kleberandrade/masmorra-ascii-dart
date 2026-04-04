@@ -6,7 +6,7 @@ Neste capítulo você vai aprender o padrão State, transformando comportamento 
 
 ## O Problema: Comportamento Confuso
 
-Sem máquinas de estado, o código fica assim:
+Sem máquinas de estado, o código fica confuso assim:
 
 ```dart
 class Inimigo {
@@ -44,7 +44,7 @@ Problemas:
 
 Defina uma interface abstrata para estados:
 
-Cada estado conhece como atualizar-se (transicionar para outro) e como agir (executar ação). Isso torna cada estado independente e testável. Um teste de "Patrulhando" não precisa saber de "Atacando". Cada um é uma máquina simples com regras claras.
+Cada estado sabe como atualizar-se (transicionar para outro) e como agir (executar ação). Isso torna cada estado independente e testável. Um teste de "Patrulhando" não precisa saber de "Atacando". Cada um é uma máquina simples com regras claras.
 
 ```dart
 abstract class EstadoIA {
@@ -56,7 +56,7 @@ abstract class EstadoIA {
 
 Cada estado retorna um novo estado (ou null se continua). A classe Inimigo muda de estado automaticamente:
 
-Veja como `executarTurno` é simples: atualizar o estado, agir, pronto. O estado decide transições, a classe apenas obedece. Se um novo estado retorna null, o inimigo permanece no estado atual — isso previne mudanças erráticas.
+Veja como `executarTurno` é simples: atualizar o estado, agir, pronto. O estado decide transições, a classe apenas obedece. Se um novo estado retorna null, o inimigo permanece no estado atual; isso previne mudanças erráticas.
 
 ```dart
 class Inimigo {
@@ -118,7 +118,7 @@ class Patrulhando implements EstadoIA {
 
 ### Alerta
 
-Alerta é um estado intermediário. O inimigo viu você, mas não está certo. Aguarda 3 turnos. Se você sair de visão, volta a patrulhar. Se se aproximar, passa para perseguição ou ataque. É como em Zelda quando um inimigo te vê, pisca e fica em guarda antes de atacar.
+Alerta é um estado intermediário. O inimigo viu você, mas não tem certeza. Aguarda 3 turnos. Se você sair de visão, volta a patrulhar. Se se aproximar, passa para perseguição ou ataque. É como em Zelda quando um inimigo te vê, pisca e fica em guarda antes de atacar.
 
 ```dart
 class Alerta implements EstadoIA {
@@ -158,7 +158,7 @@ class Alerta implements EstadoIA {
 
 ### Perseguindo
 
-Perseguindo é comprometido. O inimigo está atrás de você. Se você sair de visão, volta para alerta. Se ficar perto demais, passa para ataque. Se ficar muito ferido, foge. É o "combate em movimento" — nem está descansando, nem atacando diretamente.
+Perseguindo é comprometido. O inimigo está atrás de você. Se você sair de visão, volta para alerta. Se ficar perto demais, passa para ataque. Se ficar muito ferido, foge. É o "combate em movimento": nem está descansando, nem atacando diretamente.
 
 ```dart
 class Perseguindo implements EstadoIA {
@@ -348,7 +348,7 @@ class BossFaseDois implements EstadoIA {
 
 Para o jogador entender em que estado o inimigo está:
 
-O símbolo que renderiza no mapa muda dinamicamente baseado no estado. Um 'z' patrulhando, um 'z!' em alerta, 'Z!!' atacando, 'z...' fugindo. O jogador lê o mapa e instantaneamente entende o estado de cada inimigo. Feedback visual é essencial em jogos — o jogador não consegue ler seu código, mas consegue entender um símbolo.
+O símbolo que renderiza no mapa muda dinamicamente baseado no estado. Um 'z' patrulhando, um 'z!' em alerta, 'Z!!' atacando, 'z...' fugindo. O jogador lê o mapa e instantaneamente entende o estado de cada inimigo. Feedback visual é essencial em jogos; o jogador não consegue ler seu código, mas consegue entender um símbolo.
 
 ```dart
 class Inimigo {
@@ -367,9 +367,9 @@ class Inimigo {
 
 Agora o jogador vê um "z" (patrulhando) virar "Z!!" (atacando) ao ser descoberto.
 
-## Comparação: Antes vs Depois
+## Comparação: Antes vs. Depois
 
-Antes:
+### Antes
 
 O código com if/else aninhados é impossível de seguir. Quantos estados há? Não está claro. Como vai de um para outro? Você tem que ler cada condição, manter na cabeça, rastrear lógica. É mental exaustão.
 
@@ -380,9 +380,9 @@ else if (viu && !perto) aguardar();
 else if (!viu && turnos > 5) patrulhar();
 ```
 
-Depois:
+### Depois
 
-Aqui, a máquina de estados é explícita. Cada estado é uma classe independente. Transições são claras (o método `atualizar` retorna um novo estado ou null). O código de execução não muda — é sempre "atualizar, depois agir". Elegante, testável, extensível.
+Aqui, a máquina de estados é explícita. Cada estado é uma classe independente. Transições são claras (o método `atualizar` retorna um novo estado ou null). O código de execução não muda; é sempre "atualizar, depois agir". Elegante, testável, extensível.
 
 ```dart
 var novoEstado = estado.atualizar(this, alvo, mapa);
@@ -394,10 +394,10 @@ Claro, lógico, testável.
 
 ## Pergaminho do Capítulo
 
-Neste capítulo você aprendeu o padrão State, transformando comportamento complexo e difícil de manter em máquinas de estado finito explícitas e testáveis. Em vez de múltiplas booleans e if/else aninhados, cada inimigo possui um único `estado` que define seu comportamento e transições. Implementou cinco estados (Patrulhando, Alerta, Perseguindo, Atacando, Fugindo) onde cada um sabe quando transicionar para o próximo baseado em condições claras (distância, linha de visão, HP). Viu como o padrão State torna comportamento visual — o símbolo do inimigo no mapa muda conforme muda o estado, dando feedback instantâneo ao jogador. Finalmente, aplicou State a chefes multi-fases para criar adversários adaptativos que mudam tática conforme você os danifica, como em Dark Souls.
+Neste capítulo você aprendeu o padrão State, transformando comportamento complexo e difícil de manter em máquinas de estado finito explícitas e testáveis. Em vez de múltiplos booleanos e if/else aninhados, cada inimigo possui um único `estado` que define seu comportamento e transições. Implementou cinco estados (Patrulhando, Alerta, Perseguindo, Atacando, Fugindo) onde cada um sabe quando transicionar para o próximo baseado em condições claras (distância, linha de visão, HP). Viu como o padrão State torna comportamento visual; o símbolo do inimigo no mapa muda conforme muda o estado, dando feedback instantâneo ao jogador. Finalmente, aplicou State a chefes multi-fases para criar adversários adaptativos que mudam tática conforme você os danifica, como em Dark Souls.
 
 ::: dica
-**Dica do Mestre:** O padrão State é fundamental em qualquer sistema que tem múltiplos modos de operação. Máquinas de vendas, compiladores, games, interfaces de aplicação — todos usam State internamente. A vantagem principal é que cada estado é isolado e testável: você consegue testar o comportamento de "Patrulhando" sem saber de "Atacando". Máquinas de estado são também visualmente debugáveis — você consegue desenhar um diagrama e comparar com o código. Em desenvolvimento profissional, quando você se deparar com uma classe cheia de booleans e condicionais, pense em State. Seu código futuro (e seus colegas de time) vão agradecer a clareza.
+**Dica do Mestre:** O padrão State é fundamental em qualquer sistema que tem múltiplos modos de operação. Máquinas de vendas, compiladores, games, interfaces de aplicação; todos usam State internamente. A vantagem principal é que cada estado é isolado e testável: você consegue testar o comportamento de "Patrulhando" sem saber de "Atacando". Máquinas de estado são também visualmente debugáveis; você consegue desenhar um diagrama e comparar com o código. Em desenvolvimento profissional, quando você se deparar com uma classe cheia de booleans e condicionais, pense em State. Seu código futuro (e seus colegas de time) vão agradecer a clareza.
 :::
 
 ***
@@ -420,6 +420,6 @@ Neste capítulo você aprendeu o padrão State, transformando comportamento comp
 
 O padrão State transformou comportamento complexo em máquinas de estado explícitas. Agora inimigos têm "vidas" que você consegue visualizar e entender. Cada transição é clara. Cada estado é testável isoladamente.
 
-> *"Uma máquina de estado bem feita é como um roteiro bem escrito: cada cena conhece a próxima, cada personagem conhece seu papel nesta cena, e o público acompanha cada passo."*
+> *"Uma máquina de estado bem feita é como um roteiro bem escrito: cada cena conhece a próxima, cada personagem conhece seu papel nesta cena, e a audiência acompanha cada passo."*
 
-No capítulo final, você verá uma visão geral completa de tudo que construiu, polirá a interface, e estará pronto para mostrar seu jogo ao mundo.
+No capítulo final, você verá uma visão geral completa de tudo que construiu, polirá a interface e estará pronto para mostrar seu jogo ao mundo.

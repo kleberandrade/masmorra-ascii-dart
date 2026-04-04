@@ -2,7 +2,6 @@ import 'package:test/test.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:masmorra_ascii/modelos/jogador.dart';
-import 'package:masmorra_ascii/persistencia/gerenciador_salve.dart';
 
 void main() {
   group('GerenciadorSalve', () {

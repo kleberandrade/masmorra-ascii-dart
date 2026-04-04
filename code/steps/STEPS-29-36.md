@@ -313,4 +313,4 @@ Após concluíres o percurso (e explorares `masmorra_ascii/`), você está pront
 
 **Você fez isso. Você construiu um roguelike profissional do zero.**
 
-Não é pouco. É tudo. 🎮
+Não é pouco. É tudo.

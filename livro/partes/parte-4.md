@@ -10,11 +10,11 @@
 \vspace{1em}
 \hrule
 \vspace{1em}
-\large \textit{O Mercador e a Escada}
+\LARGE \textit{O MERCADOR E A ESCADA}
 
 \vspace{5em}
 \small
-\textit{Compra, vende, sobe de nível. Desce mais fundo. O boss espera no último andar.}
+\textit{Cada moeda conquistada é um estado que persiste. O mercador nega o descarte — aqui tudo tem valor, tudo se reusa, tudo se negocia. Conforme sobe de nível, os abismos se aprofundam ainda mais. E na boca da escada que desce, em câmaras cada vez mais obscuras, o boss aguarda — final implacável de toda progressão bem planejada.}
 \vspace*{\fill}
 \end{center}
 \newpage
@@ -22,13 +22,13 @@
 \null
 \newpage
 \pagecolor{white}
-\global\color{black}
+\color{black}
 ```
 
 ```{=html}
 <div class="part-page">
   <div class="part-title">PARTE IV</div>
-  <div class="part-subtitle">O Mercador e a Escada</div>
-  <p class="part-intro">Compra, vende, sobe de nível. Desce mais fundo. O boss espera no último andar.</p>
+  <div class="part-subtitle">O MERCADOR E A ESCADA</div>
+  <p class="part-intro">Cada moeda conquistada é um estado que persiste. O mercador nega o descarte — aqui tudo tem valor, tudo se reusa, tudo se negocia. Conforme sobe de nível, os abismos se aprofundam ainda mais. E na boca da escada que desce, em câmaras cada vez mais obscuras, o boss aguarda — final implacável de toda progressão bem planejada.</p>
 </div>
 ```

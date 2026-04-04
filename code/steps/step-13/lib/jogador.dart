@@ -154,13 +154,13 @@ class Jogador with Combatente {
     // ignore: avoid_print
     print('HP: $hp/$maxHp');
     // ignore: avoid_print
-    print('Dano: $danoTotal (base: 5' +
-        (armaEquipada != null ? ' + ${armaEquipada!.dano} arma' : '') +
-        ')');
+    print(
+      'Dano: $danoTotal (base: 5${armaEquipada != null ? ' + ${armaEquipada!.dano} arma' : ''})',
+    );
     // ignore: avoid_print
-    print('Defesa: $defesaTotal (base: 2' +
-        (armaduraEquipada != null ? ' + ${armaduraEquipada!.defesa} armadura' : '') +
-        ')');
+    print(
+      'Defesa: $defesaTotal (base: 2${armaduraEquipada != null ? ' + ${armaduraEquipada!.defesa} armadura' : ''})',
+    );
     // ignore: avoid_print
     print('Ouro: $_ouro');
   }

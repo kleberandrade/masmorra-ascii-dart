@@ -69,12 +69,12 @@ class Jogador extends Entidade {
 
   Jogador({
     required this.nome,
-    required int x,
-    required int y,
+    required super.x,
+    required super.y,
     required this.hpMax,
     required this.ouro,
   })  : hpAtual = hpMax,
-        super(x: x, y: y, simbolo: '@');
+        super(simbolo: '@');
 
   bool mover(int novoX, int novoY, MapaMasmorra mapa) {
     if (!mapa.ehPassavel(novoX, novoY)) return false;
@@ -108,12 +108,11 @@ class Inimigo extends Entidade {
 
   Inimigo({
     required this.nome,
-    required int x,
-    required int y,
+    required super.x,
+    required super.y,
     required this.hpMax,
-    required String simbolo,
-  })  : hpAtual = hpMax,
-        super(x: x, y: y, simbolo: simbolo);
+    required super.simbolo,
+  })  : hpAtual = hpMax;
 }
 
 class Item extends Entidade {
@@ -121,9 +120,9 @@ class Item extends Entidade {
 
   Item({
     required this.nome,
-    required int x,
-    required int y,
-  }) : super(x: x, y: y, simbolo: '!');
+    required super.x,
+    required super.y,
+  }) : super(simbolo: '!');
 }
 
 class SessaoJogo {

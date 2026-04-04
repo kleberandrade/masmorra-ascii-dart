@@ -10,7 +10,7 @@ Neste capítulo você vai aprender a usar aleatoriedade de forma controlada e pr
 Especificamente:
 - A classe Random de `dart:math`: `nextInt()`, `nextDouble()`, `nextBool()`
 - Sementes (seeds): entender por que reprodutibilidade é essencial
-- Seeded vs unseeded Random. Diferença e quando usar cada uma
+- Seeded vs unseeded `Random`. Diferença e quando usar cada uma
 - Por que sementes importam em roguelikes: debugging, testes, modo replayável
 - Geração aleatória de itens em tiles de chão
 - Colocação aleatória de inimigos (evitando posição inicial do jogador)
@@ -102,7 +102,7 @@ Sementes são a arma secreta para debug e testes em roguelikes. Em vez de "meu j
 void main() {
   // Recriar EXATAMENTE a sessão do jogador
   final random = Random(42);
-  gerarDungeonLevel(3, random);
+  gerarMasmorraLevel(3, random);
 
   // Investigar bug
   // Depois de corrigir, replayteste com semente 42
@@ -234,7 +234,7 @@ class SessaoJogo {
 
 ## Parte 6: Loot Tables . Probabilidades Ponderadas
 
-Loot tables com raridade são essenciais em RPGs. Você define probabilidades (70% comum, 20% raro, etc.) e sorteia aleoriamente qual item o jogador recebe. A técnica é simples: role um número 0-99, e dependendo do resultado, devolva a raridade. Depois, `gerarItemPorRaridade()` escolhe qual item específico dessa raridade. Isso cria variedade realista sem sobrecarga de código.
+Loot tables com raridade são essenciais em RPGs. Você define probabilidades (70% comum, 20% raro, etc.) e sorteia aleatoriamente qual item o jogador recebe. A técnica é simples: role um número 0-99, e dependendo do resultado, devolva a raridade. Depois, `gerarItemPorRaridade()` escolhe qual item específico dessa raridade. Isso cria variedade realista sem sobrecarga de código.
 
 ```dart
 // loot.dart

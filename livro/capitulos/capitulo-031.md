@@ -215,7 +215,7 @@ class EstadoJogo {
   late MapaMasmorra mapa;
   late List<Inimigo> entidades;
   int andarAtual = 0;
-  DateTime ultimoSalve = DateTime.now();
+  DateTime ultimoSalva = DateTime.now();
 
   Map<String, dynamic> toJson() {
     return {
@@ -223,7 +223,7 @@ class EstadoJogo {
       'mapa': mapa.toJson(),
       'entidades': entidades.map((e) => e.toJson()).toList(),
       'andarAtual': andarAtual,
-      'ultimoSalve': ultimoSalve.toIso8601String(),
+      'ultimoSalva': ultimoSalva.toIso8601String(),
     };
   }
 
@@ -239,8 +239,8 @@ class EstadoJogo {
         .map((e) => Inimigo.fromJson(e as Map<String, dynamic>))
         .toList();
     estado.andarAtual = map['andarAtual'] as int;
-    estado.ultimoSalve = DateTime.parse(
-      map['ultimoSalve'] as String,
+    estado.ultimoSalva = DateTime.parse(
+      map['ultimoSalva'] as String,
     );
     return estado;
   }
@@ -361,7 +361,7 @@ class GerenciadorSalve {
           final json = await arquivo.readAsString();
           final map = jsonDecode(json) as Map<String, dynamic>;
           final timestamp = DateTime.parse(
-            map['ultimoSalve'] as String,
+            map['ultimoSalva'] as String,
           );
           slots.add(timestamp);
         } catch (_) {
@@ -400,7 +400,7 @@ class DungeonCrawl {
   }
 
   Future<void> _autoSalvar() async {
-    estado.ultimoSalve = DateTime.now();
+    estado.ultimoSalva = DateTime.now();
     await GerenciadorSalve.salvar(estado, slotAutoSalve);
   }
 }
@@ -508,4 +508,4 @@ Future<EstadoJogo?> carregar(int slot) async {
 ```
 :::
 
-No próximo capítulo você vai organizar ainda mais: projeto com `lib/`, `test/`, `pubspec.yaml`. Persistência é apenas metade da história. Organização é a outra.
+No próximo capítulo você vai organizar ainda mais: projeto com `lib/`, `test/` e `pubspec.yaml`. Persistência é apenas metade da história. Organização é a outra metade.

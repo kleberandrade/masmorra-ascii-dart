@@ -6,6 +6,7 @@
 /// - test/ espelhando lib/
 /// - pubspec.yaml centralizando dependências
 /// - analysis_options.yaml impondo qualidade
+library;
 
 export 'modelos/jogador.dart';
 export 'modelos/inimigo.dart';

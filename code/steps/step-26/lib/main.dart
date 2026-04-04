@@ -1,5 +1,6 @@
 import 'chefao.dart';
 import 'gerenciador_andares.dart';
+import 'jogador.dart';
 import 'tela_fim_jogo.dart';
 
 void main() {
@@ -32,11 +33,12 @@ void main() {
   // Simular dano ao chefão em diferentes fases
   print('Simulando dano ao chefão...\n');
 
+  final alvoDemo = Jogador(nome: 'Herói', nivel: 10, hp: 200, maxHp: 200);
   for (int turno = 0; turno < 5; turno++) {
     final dano = 30 + (turno * 10);
     chefao.sofrerDano(dano);
     print('Turno ${turno + 1}: Chefão sofre $dano dano! HP: ${chefao.hp}');
-    chefao.executarTurno();
+    chefao.executarTurno(alvoDemo);
     print('Fase atual: ${chefao.faseAtual.name}');
     print('');
   }
@@ -45,8 +47,13 @@ void main() {
   print('=== TELA DE DERROTA ===\n');
 
   final telaDerrota = TelaFimJogo(
-    nomeJogador: 'Aventureiro Corajoso',
-    nivelFinal: 12,
+    jogador: Jogador(
+      nome: 'Aventureiro Corajoso',
+      nivel: 12,
+      hp: 0,
+      maxHp: 120,
+      ataque: 18,
+    ),
     andarAlcancado: 4,
     totalTurnos: 247,
     totalInimigosDefeitos: 47,
@@ -60,8 +67,13 @@ void main() {
   print('\n=== TELA DE VITÓRIA ===\n');
 
   final telaVitoria = TelaFimJogo(
-    nomeJogador: 'Campeão Lendário',
-    nivelFinal: 18,
+    jogador: Jogador(
+      nome: 'Campeão Lendário',
+      nivel: 18,
+      hp: 80,
+      maxHp: 200,
+      ataque: 28,
+    ),
     andarAlcancado: 5,
     totalTurnos: 352,
     totalInimigosDefeitos: 89,

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:convert';
 import 'modelos/jogador.dart';
 import 'persistencia/gerenciador_salve.dart';

@@ -14,7 +14,7 @@ class ProcessadorEventos {
       EventoLoot(:final nomeItem, :final quantidade) when quantidade > 1 =>
         '+ $quantidade x $nomeItem',
 
-      EventoLoot(:final nomeItem, :final quantidade) =>
+      EventoLoot(:final nomeItem) =>
         '+ $nomeItem',
 
       EventoMovimento(:final de, :final para) =>
@@ -22,8 +22,6 @@ class ProcessadorEventos {
 
       EventoNivel(:final nivelNovo, :final bonus) =>
         'LEVEL UP! Nível $nivelNovo! +$bonus',
-
-      _ => '? Evento desconhecido',
     };
   }
 
@@ -34,13 +32,13 @@ class ProcessadorEventos {
         print('> $atacante causou $dano dano!');
 
       case EventoCombate(:final dano) when dano < 0:
-        print('! Recebeste ${dano.abs()} dano!');
+        print('! Recebeu ${dano.abs()} dano!');
 
       case EventoLoot(:final itemId, :final quantidade):
-        print('+ Adquiriste: $itemId x$quantidade');
+        print('+ Adquiriu: $itemId x$quantidade');
 
       case EventoNivel(:final nivelAnterior, :final nivelNovo):
-        print('* Sobiste de nível $nivelAnterior → $nivelNovo!');
+        print('* Subiu de nível $nivelAnterior → $nivelNovo!');
 
       case EventoMovimento():
         break;

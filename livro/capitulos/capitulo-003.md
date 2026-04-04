@@ -16,7 +16,7 @@ if (condicao) {
 }
 ```
 
-A condição é uma expressão que resulta em `bool`, `true` ou `false`. Se for `true`, o bloco entre chaves executa. Se for `false`, o programa pula para o próximo bloco.
+A condição é uma expressão que resulta em um `bool`: `true` ou `false`. Se for `true`, o bloco entre chaves executa. Se for `false`, o programa pula para o próximo bloco.
 
 Para múltiplas alternativas, usamos `else if` e `else`:
 
@@ -34,7 +34,7 @@ if (opcao == 1) {
 }
 ```
 
-O Dart avalia as condições de cima para baixo e executa apenas o primeiro bloco cuja condição for verdadeira. O `else` final é a rede de segurança, pega tudo que não combinou com nenhuma condição anterior.
+O Dart avalia as condições de cima para baixo e executa apenas o primeiro bloco cuja condição for verdadeira. O `else` final é a rede de segurança: pega tudo que não combinou com nenhuma condição anterior.
 
 **Operadores de comparação:**
 
@@ -86,7 +86,7 @@ switch (opcao) {
 }
 ```
 
-No Dart 3, o `switch` não precisa de `break`. Cada `case` termina automaticamente. O `default` funciona como o `else`: captura qualquer valor não listado.
+No Dart 3, o `switch` não precisa de `break`: cada `case` termina automaticamente. O `default` funciona como o `else`, captura qualquer valor não listado.
 
 O `switch` também funciona com strings, o que será útil quando construirmos o parser de comandos:
 
@@ -145,7 +145,7 @@ while (true) {
 }
 ```
 
-O `while (true)` roda para sempre, até encontrar um `break`, que sai imediatamente do loop. Esse padrão é limpo e legível: o loop continua rodando, e a condição de saída fica explícita dentro do bloco.
+O `while (true)` roda para sempre até encontrar um `break`, que sai imediatamente do loop. Esse padrão é limpo e legível: o loop continua rodando, e a condição de saída fica explícita dentro do bloco.
 
 O `continue` é o irmão do `break`: em vez de sair do loop, ele pula o resto do bloco e volta ao início da próxima iteração:
 
@@ -221,19 +221,21 @@ import 'dart:io';
 
 void exibirBanner() {
   print('');
-  print('MASMORRA ASCII v0.1');
+  print('╔══════════════════════════════════════╗');
+  print('║        MASMORRA ASCII v0.1           ║');
+  print('╚══════════════════════════════════════╝');
   print('');
 }
 
 void exibirMenu() {
-  print('');
-  print('O QUE DESEJA FAZER?');
-  print('');
-  print('  1, Explorar a masmorra');
-  print('  2, Ver status do herói');
-  print('  3, Ajuda');
-  print('  0, Sair do jogo');
-  print('');
+  print('┌──────────────────────────────────────┐');
+  print('│           O QUE DESEJA FAZER?        │');
+  print('├──────────────────────────────────────┤');
+  print('│  1, Explorar a masmorra             │');
+  print('│  2, Ver status do herói             │');
+  print('│  3, Ajuda                           │');
+  print('│  0, Sair do jogo                    │');
+  print('└──────────────────────────────────────┘');
 }
 
 void explorar(String nome) {
@@ -247,10 +249,12 @@ void explorar(String nome) {
 
 void mostrarStatus(String nome) {
   print('');
-  print('HERÓI: $nome');
-  print('HP: 100/100');
-  print('Ouro: 0');
-  print('Arma: Nenhuma');
+  print('╔══════════════════════════════════╗');
+  print('║  HERÓI: $nome');
+  print('║  HP: 100/100');
+  print('║  Ouro: 0');
+  print('║  Arma: Nenhuma');
+  print('╚══════════════════════════════════╝');
   print('');
 }
 
@@ -326,25 +330,31 @@ Execute e experimente:
 
 ```text
 
-MASMORRA ASCII v0.1
+╔══════════════════════════════════════╗
+║        MASMORRA ASCII v0.1           ║
+╚══════════════════════════════════════╝
 
 Como devo chamá-lo? Aldric
 
 Bem-vindo, Aldric! Sua jornada começa agora.
 
-O QUE DESEJA FAZER?
-
-  1, Explorar a masmorra
-  2, Ver status do herói
-  3, Ajuda
-  0, Sair do jogo
+┌──────────────────────────────────────┐
+│           O QUE DESEJA FAZER?        │
+├──────────────────────────────────────┤
+│  1, Explorar a masmorra             │
+│  2, Ver status do herói             │
+│  3, Ajuda                           │
+│  0, Sair do jogo                    │
+└──────────────────────────────────────┘
 
 > 2
 
-HERÓI: Aldric
-HP: 100/100
-Ouro: 0
-Arma: Nenhuma
+╔══════════════════════════════════════╗
+║  HERÓI: Aldric
+║  HP: 100/100
+║  Ouro: 0
+║  Arma: Nenhuma
+╚══════════════════════════════════════╝
 
 > explorar
 
@@ -360,7 +370,7 @@ Até a próxima aventura, Aldric!
 
 Vamos destacar os pontos mais importantes desse código.
 
-A variável `jogando` é um `bool` que controla o loop. Quando o jogador escolhe sair, `jogando = false` faz com que o `while (jogando)` termine na próxima verificação. Essa é uma alternativa ao `while (true)` com `break`, ambas funcionam.
+A variável `jogando` é um `bool` que controla o loop. Quando o jogador escolhe sair, `jogando = false` faz com que o `while (jogando)` termine na próxima verificação. Essa é uma alternativa ao `while (true)` com `break`: ambas funcionam bem.
 
 O programa aceita tanto números (`1`, `2`, `0`) quanto palavras (`explorar`, `status`, `ajuda`, `sair`). Primeiro tenta usar `int.tryParse()`; se falhar (resultado `null`), tenta casar a palavra com um `switch`. Essa flexibilidade faz o jogo parecer mais inteligente.
 
@@ -368,7 +378,7 @@ O `continue` aparece em dois lugares: quando o input é vazio e quando a palavra
 
 ## Variáveis e escopo
 
-Uma sutileza importante: variáveis declaradas dentro de um bloco (entre `{ }`) só existem dentro dele:
+Uma sutileza importante: variáveis declaradas dentro de um bloco (entre `{ }`) existem apenas dentro dele:
 
 ```dart
 void main() {
@@ -393,7 +403,7 @@ Para condições simples que produzem um valor, existe o operador ternário:
 var mensagem = vida > 0 ? 'Vivo' : 'Morto';
 ```
 
-Lê-se: se `vida > 0`, o resultado é `'Vivo'`; senão, é `'Morto'`. É um `if`/`else` condensado numa expressão. Útil para escolher valores, não para executar lógica complexa:
+Lê-se: se `vida > 0`, o resultado é `'Vivo'`; caso contrário, é `'Morto'`. É um `if`/`else` condensado numa expressão. Útil para escolher valores, não para executar lógica complexa:
 
 ```dart
 print('HP: ${hp}/${maxHp} ${hp < 20 ? "(PERIGO!)" : ""}');
@@ -411,7 +421,9 @@ print('HP: ${hp}/${maxHp} ${hp < 20 ? "(PERIGO!)" : ""}');
 
 **Desafio 3.4. Confirmação ao sair (Dupla verificação).** Quando o jogador escolher sair (opção 0), pergunte "Tem certeza (s/n)?" de forma clara. Se digitar s, sim, ou y (yes), saia de verdade. Caso contrário, volte ao menu. Use um loop interno ou um if para capturar essa confirmação.
 
-**Boss Final 3.5. Painel de estatísticas finais.** Ao final do jogo, após sair confirmado ou morte (HP = 0), exiba um painel com uma tabela mostrando: nome do herói, total de turnos sobrevividos, HP final, dano total sofrido (100 - HP final), e uma nota final (S, A, B, C) baseada em turnos/HP. Use operadores ternários para determinar a nota e box-drawing para tornar o painel visual. Exemplo: se sobreviveu mais de 20 turnos, nota A; entre 10-20 turnos, nota B, etc.
+**Boss Final 3.5. Painel de estatísticas finais.** Ao final do jogo, após sair confirmado ou morte (HP = 0), exiba um painel com uma tabela mostrando: nome do herói, total de turnos sobrevividos, HP final, dano total sofrido (100 − HP final), e uma nota final (S, A, B, C) baseada em turnos/HP. Use operadores ternários para determinar a nota e box-drawing para tornar o painel visual. Exemplo: se sobreviveu mais de 20 turnos, nota A; entre 10 e 20 turnos, nota B, etc.
+
+*Dica do Mestre: Declare uma função `exibirEstatisticasFinais(String nome, int turnos, int hpFinal)` que calcula a nota com operadores ternários aninhados: `var nota = turnos > 20 ? 'A' : turnos > 10 ? 'B' : 'C';`. Depois monta a tabela com `StringBuffer` e box-drawing.*
 
 ## Pergaminho do Capítulo
 

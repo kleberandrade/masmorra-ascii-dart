@@ -1,6 +1,6 @@
 # Capítulo 15 - Da Sala ao Tile: Pensando em 2D
 
-*A masmorra ganha duas dimensões. Até agora, salas eram nomes em um mapa de texto. Agora são tiles em um grid, paredes são `#`, chão é `.`, e o jogador é um `@` que se move com WASD. A névoa de guerra esconde o que você ainda não explorou, e tochas iluminam apenas o que está ao alcance. O mapa se gera sozinho a cada partida, diferente toda vez, porque você escreveu o algoritmo que o cria.*
+*A masmorra ganha duas dimensões. Até agora, salas eram nomes em um mapa de texto. Agora são tiles em um grid, paredes são `#`, chão é `.`, e o jogador é um `@` que se move com WASD. A névoa de guerra esconde o que você ainda não explorou, e tochas iluminam apenas o que está ao alcance. O mapa gera-se sozinho a cada partida, diferente toda vez, porque você escreveu o algoritmo que o cria.*
 
 *Nesta parte, a masmorra finalmente parece uma masmorra. Inimigos patrulham corredores, itens brilham no chão, e escadas levam para andares mais profundos. O terminal vira uma janela para um mundo procedural que responde ao seu código. Quando você compilar e vir o mapa aparecer pela primeira vez, vai entender por que roguelikes são viciantes.*
 
@@ -25,7 +25,7 @@ Especificamente:
 Ao final, você terá o alicerce de toda exploração roguelike. Sem um grid não há mapa. Sem mapa não há jogo.
 
 
-## Parte 1: Do Grafo ao Grid. Mudança Conceptual
+## Parte 1: Do Grafo ao Grid — Mudança Conceitual
 
 ### Por Que Sair das Salas?
 
@@ -66,7 +66,7 @@ Para acessar a célula em (2, 3) na grade:
 final tile = grade[3][2]; // grade[y][x] ... cuidado com a ordem!
 ```
 
-Sempre grid[y][x], nunca grid[x][y]. Essa é a convenção porque iteramos linhas (y) primeiro, colunas (x) segundo.
+Sempre `grid[y][x]`, nunca `grid[x][y]`. Essa é a convenção porque iteramos linhas (y) primeiro, colunas (x) segundo.
 
 
 ## Parte 2: Definindo Tiles. Enum e Typedef
@@ -92,7 +92,7 @@ String tileParaChar(Tile tile) {
   };
 }
 
-bool ehPassavel(Tile tile) {
+bool ehPassavelTile(Tile tile) {
   return tile == Tile.chao || tile == Tile.porta || tile == Tile.escadaDesce;
 }
 ```
@@ -152,8 +152,7 @@ class MapaMasmorra {
   }
 
   bool ehPassavel(int x, int y) {
-    final tile = tileEm(x, y);
-    return tile != Tile.parede;
+    return ehPassavelTile(tileEm(x, y));
   }
 
   void renderizar() {
@@ -171,7 +170,7 @@ class MapaMasmorra {
 Observações importantes:
 - `late Grade _tiles` é inicializada no construtor (inicialização tardia)
 - `_tiles[y][x]` segue a convenção: Y primeiro, depois X
-- `ehPassavel()` encapsula a lógica (tiles passáveis ficam num só lugar)
+- `ehPassavel()` encapsula a lógica (tiles passáveis ficam num único lugar)
 - `renderizar()` itera com loops aninhados: for Y, depois X
 
 
@@ -366,7 +365,6 @@ void main() {
 Execução esperada:
 
 ```text
-
 MAPA DA MASMORRA
 
 ##########
@@ -565,7 +563,7 @@ Neste capítulo você aprendeu:
 - Rendering em loop: itera Y (linhas), depois X (colunas)
 - Colisões: `mapa.ehPassavel()` bloqueia movimento para paredes
 
-Seu jogo agora tem um mapa explorador real. Já não é prosa. É geometria.
+Seu jogo agora tem um mapa explorador real. Já não é prosa, é geometria.
 
 No próximo capítulo (16), você aprenderá a separar modelo e visão com a classe TelaAscii, tornando a renderização muito mais poderosa e flexível para adicionar inimigos, itens e UIs complexas.
 

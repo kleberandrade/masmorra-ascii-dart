@@ -22,7 +22,7 @@ Especificamente:
 Ao final, você terá um sistema de renderização profissional e escalável.
 
 
-## Parte 1: Por Que TelaAscii? . MVC e Separação
+## Parte 1: Por Que TelaAscii? — MVC e Separação
 
 ### O Problema do Enfoque Anterior
 
@@ -52,12 +52,12 @@ Dados do Jogo           Modelo
 └─────────────────────┘
 ```
 
-Benefícios: Modelo não sabe que é renderizado. Pode renderizar em várias "views". Fácil testar lógica sem UI. Pode adicionar efeitos sem mexer no modelo.
+Benefícios: Modelo não sabe que é renderizado. Pode renderizar em várias "views". É fácil testar lógica sem UI. Pode adicionar efeitos sem mexer no modelo.
 
 
-## Parte 2: Classe TelaAscii . Estrutura Base
+## Parte 2: Classe TelaAscii — Estrutura Base
 
-A `TelaAscii` é um buffer 2D simples: uma `List<List<String>>` onde cada célula é um caractere. Em vez de escrever direto em stdout, você desenha no buffer, e depois chama `renderizar()` para enviar tudo de uma vez. Isso é eficiente e permite efeitos como limpar a tela sem pisca. Note os códigos ANSI: `\x1B[2J` limpa, `\x1B[H` posiciona cursor no topo.
+A `TelaAscii` é um buffer 2D simples: uma `List<List<String>>` onde cada célula é um caractere. Em vez de escrever direto em stdout, você desenha no buffer, depois chama `renderizar()` para enviar tudo de uma vez. Isso é eficiente e permite efeitos como limpar a tela sem cintilação. Note os códigos ANSI: `\x1B[2J` limpa, `\x1B[H` posiciona cursor no topo.
 
 ```dart
 // tela_ascii.dart
@@ -99,7 +99,7 @@ class TelaAscii {
     for (int i = 0; i < texto.length; i++) {
       final charX = x + i;
       if (charX >= largura) break;
-      desenharChar(charX, y, texto.substring(i, i + 1));
+      desenharChar(charX, y, texto[i]);
     }
   }
 
@@ -128,13 +128,13 @@ class TelaAscii {
 
 Notas importantes:
 - `\x1B[2J\x1B[H` são códigos de escape ANSI: `\x1B[2J` limpa a tela, `\x1B[H` move cursor para (0, 0)
-- StringBuffer é eficiente para construir strings longas
+- `StringBuffer` é eficiente para construir strings longas
 - `desenharString()` itera caractere por caractere, mais flexível que `print()`
 
 
 ## Parte 3: Renderizando o Mapa
 
-Integrar MapaMasmorra com TelaAscii é simples: o mapa itera sobre seus tiles e chama `tela.desenharChar()` para cada um. Isso desacopla a renderização da lógica: `MapaMasmorra` não sabe (e não precisa saber) que está desenhando num buffer ou escrevendo em stdout. Segue o princípio da injeção de dependência.
+Integrar `MapaMasmorra` com `TelaAscii` é simples: o mapa itera sobre seus tiles e chama `tela.desenharChar()` para cada um. Isto desacopla a renderização da lógica; `MapaMasmorra` não sabe que está desenhando num buffer ou escrevendo em stdout. Segue o princípio da injeção de dependência.
 
 ```dart
 // dungeon.dart (adição)
@@ -243,7 +243,7 @@ class Item extends Entidade {
 ```
 
 
-## Parte 5: HUD . Interface do Usuário
+## Parte 5: HUD — Interface do Usuário
 
 Desenhar uma barra de informações (HUD) abaixo do mapa. A `SessaoJogo` é responsável por renderizar toda a frame: modelo (mapa, jogador, inimigos, itens), depois HUD. O `renderizarFrame()` segue a sequência: limpar buffer, desenhar camadas em ordem, renderizar. Note que `renderizarFrame()` é o loop de renderização em sua forma mais pura.
 
@@ -267,7 +267,7 @@ class SessaoJogo {
     required this.tela,
   });
 
-  String _construirBarraVida(int atual, int maximo) {
+  String _construirBarraHP(int atual, int maximo) {
     const totalBlocos = 10;
     final blocos = (atual / maximo * totalBlocos).toInt();
     final cheios = '█' * blocos;
@@ -280,8 +280,8 @@ class SessaoJogo {
 
     tela.desenharString(0, hudY, '═' * tela.largura);
 
-    final vidaBarra = _construirBarraVida(jogador.hpAtual, jogador.hpMax);
-    final linha1 = 'HP: $vidaBarra ${jogador.hpAtual}/${jogador.hpMax} | '
+    final hpBar = _construirBarraHP(jogador.hpAtual, jogador.hpMax);
+    final linha1 = 'HP: $hpBar ${jogador.hpAtual}/${jogador.hpMax} | '
         'Ouro: ${jogador.ouro} | Turno: $turnoAtual';
     tela.desenharString(0, hudY + 1, linha1);
 
@@ -437,7 +437,7 @@ Neste capítulo você aprendeu:
 - StringBuffer: construir strings longas eficientemente
 - Arquitetura profissional: modelo e visão separados
 
-Seu jogo agora tem uma arquitetura profissional. Modelo e visão estão separados. Você pode testar lógica sem UI e trocar renderização sem afetar jogo.
+Seu jogo agora tem uma arquitetura profissional. Modelo e visão estão separados. Você pode testar lógica sem UI e trocar renderização sem afetar o jogo.
 
 No próximo capítulo (17), você aprenderá aleatoriedade com propósito: usar `Random` para gerar mapas, itens e inimigos variáveis de forma controlada via seeds.
 

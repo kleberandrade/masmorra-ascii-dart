@@ -9,12 +9,12 @@ class Renderizador {
   String renderizarStatus(Jogador jogador) {
     final buffer = StringBuffer();
 
-    buffer.writeln('╔' + '═' * (largura - 2) + '╗');
+    buffer.writeln('╔${'═' * (largura - 2)}╗');
     buffer.writeln('║ ${_centralizar(jogador.nome, largura - 4)} ║');
     buffer
         .writeln('║ HP: [${_barra(jogador.hpAtual, jogador.hpMax, 20)}] │ Nível: ${jogador.nivel} ║');
     buffer.writeln('║ Ataque: ${jogador.ataque} │ XP: ${jogador.xp} ║');
-    buffer.writeln('╚' + '═' * (largura - 2) + '╝');
+    buffer.writeln('╚${'═' * (largura - 2)}╝');
 
     return buffer.toString();
   }
@@ -32,7 +32,7 @@ class Renderizador {
     final vazio = larg - preenchido;
     final pct = (atual / maximo * 100).toInt();
 
-    return '█' * preenchido + '░' * vazio + ' ${pct.toString().padLeft(3)}%';
+    return '${'█' * preenchido}${'░' * vazio} ${pct.toString().padLeft(3)}%';
   }
 
   /// Renderiza banner do jogo

@@ -7,17 +7,15 @@ class Inimigo {
   int hpAtual;
   int ataque;
   int defesa;
-  EstadoIA estadoAtual;
+  late EstadoIA estado;
 
   Inimigo({
     required this.nome,
     required this.hpMax,
     this.ataque = 3,
     this.defesa = 0,
-    required this.estadoAtual,
-  }) {
-    hpAtual = hpMax;
-  }
+    required this.estado,
+  }) : hpAtual = hpMax;
 
   bool get estaVivo => hpAtual > 0;
 
@@ -25,15 +23,19 @@ class Inimigo {
     hpAtual = max(0, hpAtual - dano);
   }
 
-  void atualizarEstado(dynamic alvo, dynamic mapa) {
-    var novoEstado = estadoAtual.atualizar(this, alvo, mapa);
+  void executarTurno(dynamic alvo, dynamic mapa) {
+    var novoEstado = estado.atualizar(this, alvo, mapa);
     if (novoEstado != null) {
-      estadoAtual = novoEstado;
+      print('$nome muda para ${novoEstado.nome}');
+      estado = novoEstado;
     }
+
+    var acao = estado.agir(this, alvo, mapa);
+    acao.executar();
   }
 
   String obterProximaAcao(dynamic alvo, dynamic mapa) {
-    atualizarEstado(alvo, mapa);
-    return estadoAtual.agir(this, alvo, mapa).descricao;
+    var acao = estado.agir(this, alvo, mapa);
+    return acao.descricao;
   }
 }

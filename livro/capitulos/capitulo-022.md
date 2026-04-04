@@ -11,12 +11,12 @@
 Neste capítulo você vai:
 
 - Entender por que a economia importa em roguelikes (como o sistema de Gil em Final Fantasy): tudo tem preço, e o balanceamento decide se o jogo é justo ou quebrado
-- Modelar loot tables com pesos aleatórios (como as drops em Diablo): cada monstro tem uma tabela de probabilidades
+- Modelar loot tables com pesos aleatórios (como as drops em Diablo): cada criatura tem uma tabela de probabilidades
 - Criar a classe `EntradaSaque` e `Economia` para governar preços e recompensas
 - Implementar cascatas de dificuldade: inimigos mais fortes em andares mais profundos
 - Usar constantes de balanceamento para ajustes rápidos de design
 - Simular corridas de teste para validar a curva de dificuldade
-- Integrar drops no combate do universo da Masmorra
+- Integrar drops no combate da Masmorra
 
 Ao final, você terá um sistema econômico coerente que propicia progressão justa e recompensadora.
 
@@ -29,9 +29,9 @@ Antes de código, pense no jogo como um jogador. Por que continuo descendo, tent
 3. Com armas melhores, consigo derrotar inimigos mais fortes
 4. Inimigos mais fortes soltam mais ouro e itens raros
 5. Volto à loja, compro armadura, deço mais fundo
-6. No andar final, enfrento o chefão com tudo que consegui acumular
+6. No andar final, enfrento o chefe com tudo que consegui acumular
 
-Este é o ciclo de progressão. É o coração psicológico do jogo. Se o primeiro inimigo soltar tanto ouro quanto o chefão, o jogo é entediante (sem senso de progressão). Se o primeiro inimigo soltar nada, é frustrante (sem recompensa). A economia bem balanceada é o pulso que mantém o jogo vivo.
+Este é o ciclo de progressão. É o coração psicológico do jogo. Se o primeiro inimigo soltar tanto ouro quanto o chefe, o jogo é entediante (sem senso de progressão). Se o primeiro inimigo soltar nada, é frustrante (sem recompensa). A economia bem balanceada é o pulso que mantém o jogo vivo.
 
 ## Constantes de Balanceamento
 
@@ -62,7 +62,7 @@ class EconomiaConstants {
 }
 ```
 
-Estas constantes são parâmetros de design. Ajuste um deles e observe como o jogo responde. A progressão fica lenta demais? Aumente `kOuroBasePorInimigo`. O primeiro inimigo é muito fácil e entediante? Aumente `kAumentoHpPorAndar`. Isto é iteração de design: números controlam a sensação inteira do jogo.
+Estas constantes são parâmetros de design. Ajuste um deles e observe como o jogo responde. A progressão fica lenta demais? Aumente `kOuroBasePorInimigo`. O primeiro inimigo é muito fácil e entediante? Aumente `kAumentoHpPorAndar`. Isto é iteração de design: números controlam a sensação inteira do jogo. Este é o coração invisível do balanceamento.
 
 ## EntradaSaque: A Tabela de Drops
 
@@ -72,7 +72,7 @@ Cada tipo de inimigo tem uma tabela de drops, uma lista de itens que pode soltar
 - Lobo: 60% moeda de ouro, 30% espada de ferro, 10% poção de vida
 - Orc: 50% moeda de ouro, 40% poção de vida, 10% nada
 
-Loot tables são como as drops em Diablo: cada monstro tem uma probabilidade de soltar cada item. Modelamos isto com a classe `EntradaSaque`, que encapsula item, chance e quantidade mínima/máxima.
+Loot tables são como os drops em Diablo: cada monstro tem uma probabilidade de soltar cada item. Modelamos isto com a classe `EntradaSaque`, que encapsula item, chance e quantidade mínima/máxima.
 
 ```dart
 // lib/entrada_saque.dart
@@ -108,7 +108,7 @@ class EntradaSaque {
   @override
   String toString() =>
       '$nomeItem (${(chance * 100).toStringAsFixed(1)}%): '
-      '$quantidadeMin-$quantidadeMax';
+      '$quantidadeMin—$quantidadeMax';
 }
 ```
 
@@ -314,7 +314,7 @@ void executarCombate(
 
 ## Testando a Curva de Dificuldade
 
-Uma boa economia só se vê após testes. Simule 100 corridas e veja se você sai ganhando ou quebrado. A classe `SimuladorEconomia` roda múltiplas corridas hipotéticas, contando ouro ganho, e mostra estatísticas: média, mínimo, máximo. Se a média é muito alta ou muito baixa, você ajusta as constantes e testa de novo.
+Uma boa economia só se revela após testes. Simule 100 corridas e veja se você sai ganhando ou quebrado. A classe `SimuladorEconomia` roda múltiplas corridas hipotéticas, contando ouro ganho, e mostra estatísticas: média, mínimo, máximo. Se a média é muito alta ou muito baixa, você ajusta as constantes e testa de novo.
 
 ```dart
 // lib/simulador_economia.dart
@@ -429,7 +429,7 @@ A mesma criatura fica progressivamente mais desafiadora.
 
 **Desafio 22.5. (Desafio): Raríssimo.** Nem todo item é igual. Itens raros são mais caros. Crie um enum `Raridade { comum, raro, mitico }` e adicione esse campo em `EntradaSaque`. Depois, multiplique preço de compra: comum (1x), raro (3x), mítico (10x). Crie 3 drops de um inimigo: ouro comum (50 ouro), espada rara (200 ouro), artefato mítico (5000 ouro). Teste o balanceamento: qual é mais comum? Qual mais valioso? Dica: use switch/case no getter `precoCompra()`.
 
-**Boss Final 22.6. A Profundeza Recompensa.** Conforme desce, as recompensas aumentam. Implemente um bônus de +10% de ouro a cada 2 andares (andar 2→+10%, andar 4→+20%, andar 6→+30%). Integre em `getOuroEscalonado()`. Teste descendo 10 andares: o ouro cresce suavemente ou tem saltos? Sinta-se recompensado por sua coragem. Dica: use `(andar ~/ 2) * 0.10` para calcular bônus.
+**Boss Final 22.6. A Profundeza Recompensa.** Conforme desce, as recompensas aumentam. Implemente um bônus de +10% de ouro a cada 2 andares (andar 2→+10%, andar 4→+20%, andar 6→+30%). Integre em `getOuroEscalonado()`. Teste descendo 10 andares: o ouro cresce suavemente ou tem saltos? Sinta-se recompensado pela sua coragem. Dica: use `(andar ~/ 2) * 0.10` para calcular bônus.
 
 ## Pergaminho do Capítulo
 
@@ -447,7 +447,7 @@ A economia é o pulso invisível. Inimigos derrotados alimentam o ciclo: ouro pa
 ## Dica Profissional
 
 ::: dica
-Testes de economia são tão importantes quanto testes de código. Uma simples mudança em `kAumentoOuroPorAndar` (0.3 para 0.5) pode quebrar o balanceamento. Use simulações: rode 1000 corridas, meça ouro médio, morte média, velocidade de progressão. Se a curva não é suave, volta atrás. Economia é iteração contínua, não é "colocar números e esperar".
+Testes de economia são tão importantes quanto testes de código. Uma simples mudança em `kAumentoOuroPorAndar` (0.3 para 0.5) pode quebrar o balanceamento inteiro. Use simulações: rode 1000 corridas, meça ouro médio, morte média, velocidade de progressão. Se a curva não é suave, volta atrás. Economia é iteração contínua, não é "colocar números e esperar". Dados revelam verdades que intuição esconde.
 :::
 
 ## Próximo Capítulo

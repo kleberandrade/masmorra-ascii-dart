@@ -10,11 +10,11 @@
 \vspace{1em}
 \hrule
 \vspace{1em}
-\large \textit{A Primeira Tocha}
+\LARGE \textit{A PRIMEIRA TOCHA}
 
 \vspace{5em}
 \small
-\textit{O terminal é o calabouço. O cursor, a sua tocha. Acenda-a.}
+\textit{O terminal é o calabouço das máquinas. O cursor, a sua única tocha. Mas neste escuro, você descobrirá que toda jornada começa com um primeiro passo — uma atribuição, uma função, uma verdade fundamental. Acenda-a.}
 \vspace*{\fill}
 \end{center}
 \newpage
@@ -22,13 +22,13 @@
 \null
 \newpage
 \pagecolor{white}
-\global\color{black}
+\color{black}
 ```
 
 ```{=html}
 <div class="part-page">
   <div class="part-title">PARTE I</div>
-  <div class="part-subtitle">A Primeira Tocha</div>
-  <p class="part-intro">O terminal é o calabouço. O cursor, a sua tocha. Acenda-a.</p>
+  <div class="part-subtitle">A PRIMEIRA TOCHA</div>
+  <p class="part-intro">O terminal é o calabouço das máquinas. O cursor, a sua única tocha. Mas neste escuro, você descobrirá que toda jornada começa com um primeiro passo — uma atribuição, uma função, uma verdade fundamental. Acenda-a.</p>
 </div>
 ```

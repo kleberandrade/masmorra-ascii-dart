@@ -10,11 +10,11 @@
 \vspace{1em}
 \hrule
 \vspace{1em}
-\large \textit{A Forja do Código}
+\LARGE \textit{A FORJA DO CÓDIGO}
 
 \vspace{5em}
 \small
-\textit{Refatorar é forjar de novo. Testar é provar o fio. O que sobrevive é código que dura.}
+\textit{O código bruto é minério — belo em sua imperfeição, mas frágil. Refatorar é entrar na forja novamente, queimar o supérfluo, temperar o essencial. Testar é provar cada fio contra o peso real do mundo. O que sobrevive ao fogo, ao teste rigoroso, é o código que dura — e toda obra duradoura começa com a coragem de destruir o que já se fez para fazê-lo melhor.}
 \vspace*{\fill}
 \end{center}
 \newpage
@@ -22,13 +22,13 @@
 \null
 \newpage
 \pagecolor{white}
-\global\color{black}
+\color{black}
 ```
 
 ```{=html}
 <div class="part-page">
   <div class="part-title">PARTE V</div>
-  <div class="part-subtitle">A Forja do Código</div>
-  <p class="part-intro">Refatorar é forjar de novo. Testar é provar o fio. O que sobrevive é código que dura.</p>
+  <div class="part-subtitle">A FORJA DO CÓDIGO</div>
+  <p class="part-intro">O código bruto é minério — belo em sua imperfeição, mas frágil. Refatorar é entrar na forja novamente, queimar o supérfluo, temperar o essencial. Testar é provar cada fio contra o peso real do mundo. O que sobrevive ao fogo, ao teste rigoroso, é o código que dura — e toda obra duradoura começa com a coragem de destruir o que já se fez para fazê-lo melhor.</p>
 </div>
 ```

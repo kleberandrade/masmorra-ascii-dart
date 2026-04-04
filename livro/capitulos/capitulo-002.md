@@ -16,7 +16,7 @@ void main() {
 }
 ```
 
-A diferença entre `print()` e `stdout.write()` é sutil mas importante. A função `print()` sempre adiciona uma quebra de linha no final, o cursor vai para a linha seguinte. `stdout.write()` escreve o texto e mantém o cursor na mesma linha. Isso é perfeito para prompts onde queremos que o jogador digite na mesma linha da pergunta:
+A diferença entre `print()` e `stdout.write()` é sutil mas importante. A função `print()` sempre adiciona uma quebra de linha no final; o cursor vai para a linha seguinte. `stdout.write()` escreve o texto e mantém o cursor na mesma linha. Isso é perfeito para prompts onde queremos que o jogador digite na mesma linha da pergunta:
 
 ```text
 Qual é o seu nome? _
@@ -54,7 +54,7 @@ Bem-vindo, Aldric!
 
 O programa parou, esperou você digitar algo e pressionar Enter, capturou o texto, guardou na variável `nome`, e usou interpolação para incluí-lo na mensagem de boas-vindas.
 
-Mas há um detalhe importante aqui. O tipo retornado por `stdin.readLineSync()` não é `String`, é `String?` (**nullable**). Isso significa que o valor pode ser uma string ou pode ser `null` (nada). O Dart nos avisa disso porque existem situações em que `readLineSync()` pode não conseguir ler nada, por exemplo, se a entrada padrão for redirecionada de um arquivo vazio.
+Mas há um detalhe importante. O tipo retornado por `stdin.readLineSync()` não é `String`, é `String?` (**nullable**). Isso significa que o valor pode ser uma string ou `null` (nada). O Dart nos avisa disso porque existem situações em que `readLineSync()` pode não conseguir ler nada; por exemplo, se a entrada padrão for redirecionada de um arquivo vazio.
 
 Para lidar com esse risco de `null`, usamos o operador `??`:
 
@@ -81,7 +81,9 @@ Vamos criar uma função que exibe o banner do jogo:
 ```dart
 void exibirBanner() {
   print('');
-  print('MASMORRA ASCII v0.1.0');
+  print('╔══════════════════════════════════╗');
+  print('║       MASMORRA ASCII v0.1        ║');
+  print('╚══════════════════════════════════╝');
   print('');
 }
 ```
@@ -183,20 +185,20 @@ Que os dados estejam ao seu favor.
 
 ```
 
-Repare como o `main` agora é limpo e legível. Três linhas que contam uma história: mostrar banner, pedir nome, saudar. Os detalhes ficam dentro de cada função. Essa clareza é fundamental num projeto que vai crescer para milhares de linhas.
+Repare como o `main` agora é limpo e legível. Três linhas que contam uma história: mostrar banner, pedir nome, saudar. Os detalhes ficam dentro de cada função. Essa clareza é fundamental num projeto que vai crescer para milhares de linhas de código.
 
 ## Strings em detalhe
 
 Strings são o tipo de dado mais usado num jogo de texto, então vale a pena conhecê-las bem.
 
-**Criação com aspas simples e duplas.** Ambas são equivalentes em Dart. A convenção é usar aspas simples:
+**Criação com aspas simples e duplas.** Ambas são equivalentes em Dart. A convenção em Dart é usar aspas simples:
 
 ```dart
 var a = 'texto com aspas simples';
 var b = "texto com aspas duplas";
 ```
 
-**Interpolação com cifrão (`$`).** O cifrão insere variáveis. Chaves (`` `${}` ``) são necessárias para expressões:
+**Interpolação com cifrão (`$`).** O cifrão insere variáveis. Chaves (`${}`) são necessárias para expressões:
 
 ```dart
 var nome = 'Aldric';
@@ -253,7 +255,7 @@ double vida = 100.0;
 bool estaVivo = true;
 ```
 
-Quando usamos `var`, o Dart determina o tipo automaticamente a partir do valor inicial. O **bool** é o tipo booleano, pode ser `true` ou `false`:
+Quando usamos `var`, o Dart determina o tipo automaticamente a partir do valor inicial. O tipo `bool` é o booleano, pode ser `true` ou `false`:
 
 ```dart
 var nome = 'Aldric';
@@ -322,14 +324,16 @@ String pedirNome() {
 
 void descreverSala(String nome) {
   print('');
-  print('$nome, você está na Praça Central.');
+  print('═══════════════════════════════════');
+  print(' $nome, você está na Praça Central.');
   print('');
-  print('Uma fonte de pedra murmura ao centro');
-  print('da praça. Tochas iluminam três saídas.');
+  print(' Uma fonte de pedra murmura ao centro');
+  print(' da praça. Tochas iluminam três saídas.');
   print('');
-  print('Ao norte: um corredor escuro.');
-  print('A leste: uma porta de madeira.');
-  print('Ao sul: a saída da masmorra.');
+  print(' Ao norte: um corredor escuro.');
+  print(' A leste: uma porta de madeira.');
+  print(' Ao sul: a saída da masmorra.');
+  print('═══════════════════════════════════');
   print('');
 }
 
@@ -392,7 +396,7 @@ O corredor é frio e úmido.
 
 O programa ainda aceita apenas um comando e depois termina. No Capítulo 3, vamos adicionar repetição para que o jogador possa dar vários comandos seguidos.
 
-Repare em dois detalhes importantes no código acima. Primeiro, `pedirComando()` usa `.trim().toLowerCase()`. Isso significa que tanto `"Norte"`, `"NORTE"`, `"  norte  "` quanto `"norte"` funcionam da mesma forma. Sempre normalize a entrada do jogador antes de compará-la. Segundo, a função `responderComando()` trata o caso "não entendi" com uma mensagem clara que lista os comandos válidos. Nunca ignore input inválido. Um bom jogo sempre responde ao jogador, mesmo que seja para dizer que não entendeu.
+Repare em dois detalhes importantes no código acima. Primeiro, `pedirComando()` usa `.trim().toLowerCase()`. Isso significa que `"Norte"`, `"NORTE"`, `"  norte  "` e `"norte"` funcionam da mesma forma. Sempre normalize a entrada do jogador antes de compará-la. Segundo, a função `responderComando()` trata o caso "não entendi" com uma mensagem clara que lista os comandos válidos. Nunca ignore input inválido. Um bom jogo sempre responde ao jogador, mesmo que seja para dizer que não entendeu.
 
 ## Desafios da Masmorra
 
@@ -405,6 +409,8 @@ Repare em dois detalhes importantes no código acima. Primeiro, `pedirComando()`
 **Desafio 2.4. Múltiplas salas com navegação.** Crie três funções: `descreverPraca()`, `descreverCorredor()`, `descreverPorta()`. Dependendo do comando que o jogador digitar na praça, chame a função correspondente. O programa ainda aceita um único comando e termina, mas a ideia de navegar entre descrições já começa a surgir. Observe como a lógica começa a ficar mais complexa.
 
 **Boss Final 2.5. Diálogo com NPC (Velho Sábio).** Adicione um comando especial `"falar"` que inicia uma conversa com um NPC chamado Velho Sábio na Praça Central. O Velho Sábio faz uma pergunta ao jogador (por exemplo: "Qual é a sua maior virtude?" com opções "coragem", "sabedoria", "justiça") e responde com uma observação diferente para cada escolha. Integre isso ao fluxo principal: depois de responder, o programa termina com uma mensagem final do Velho Sábio.
+
+*Dica do Mestre: Crie uma função `iniciarDialogoVelhoSabio()` que encapsula toda a conversa: lê input do jogador, valida a opção, mostra a resposta. A função `main()` fica limpa, apenas chama essa função quando apropriado.*
 
 ## Pergaminho do Capítulo
 

@@ -17,9 +17,7 @@ class Inimigo {
     this.defesa = 0,
     this.xpRecompensa = 50,
     this.ouroRecompensa = 25,
-  }) {
-    hpAtual = hpMax;
-  }
+  }) : hpAtual = hpMax;
 
   /// Verifica se o inimigo está vivo
   bool get estaVivo => hpAtual > 0;

@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'economia.dart';
-import 'tabelas_drops.dart';
 
 /// Simula corridas de teste para validar balanceamento
 class SimuladorEconomia {
