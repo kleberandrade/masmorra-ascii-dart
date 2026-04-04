@@ -8,6 +8,8 @@ O site Flutter (**masmorra.io**) é um repositório à parte; este repositório 
 
 **Diagramas Mermaid (PDF/EPUB/DOCX):** vários capítulos e o Apêndice B usam PNGs em `assets/diagrams/`, gerados a partir dos ficheiros `.mmd` homónimos por [`scripts/render_mermaid_diagrams.sh`](scripts/render_mermaid_diagrams.sh) (invocado no início de [`scripts/build.sh`](scripts/build.sh)). Exemplos: capítulos 21 e 36–37, `apendice-b-camadas-rede`. Para **regenerar** os PNGs é necessário **Node.js** com `npx` (o script executa `npx -y @mermaid-js/mermaid-cli …` para cada `.mmd`). Se não houver Node, o build continua desde que cada PNG referenciado já exista no repositório (versionado).
 
+**Catálogo do site:** o [`scripts/build.sh`](scripts/build.sh) chama em seguida [`scripts/generate_catalog.py`](scripts/generate_catalog.py), que reescreve `site/site_catalog.json` com base nos capítulos, steps e soluções no disco. Depois de adicionar capítulos ou ficheiros em `code/solucoes/`, convém correr `./scripts/build.sh` (ou só o script Python) e **commitar** o JSON atualizado; o CI valida com `generate_catalog.py --check`.
+
 **Dependência Python (DOCX):** o alvo DOCX usa [`scripts/make_reference_docx.py`](scripts/make_reference_docx.py), que precisa do pacote `python-docx`. O [`scripts/build.sh`](scripts/build.sh) usa `python3` do sistema ou, se existir, `.venv/bin/python3` na **raiz do repositório**. Recomendado:
 
 ```bash
@@ -29,7 +31,7 @@ Saídas em `output/`. No Git, só `masmorra-ascii-dart.pdf` e `masmorra-ascii-da
 
 ## Arquivos principais
 
-- `site/site_catalog.json` — catálogo para o site (capítulos e partes); atualizar com `scripts/generate_catalog.py`; o CI valida alinhamento; ver [`site/README.md`](site/README.md)
+- `site/site_catalog.json` — catálogo para o site (capítulos e partes); regenerado por `build.sh` / `scripts/generate_catalog.py`; o CI valida com `--check`; ver [`site/README.md`](site/README.md)
 - `config/chapters.txt` — ordem dos arquivos Markdown
 - `config/metadata.yaml`, `preamble.tex`, `style.css`
 - `livro/` — capítulos e material pré/pós-textual

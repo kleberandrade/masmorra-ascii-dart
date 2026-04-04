@@ -8,9 +8,9 @@ Mudança de layout (antigo vs novo): [`RAW_GITHUB_PATHS.md`](RAW_GITHUB_PATHS.md
 
 ## Geração automática
 
-O catálogo é atualizado manualmente com `generate_catalog.py` ou em PRs; o CI valida alinhamento com [`.github/workflows/validate_site_catalog.yml`](../../.github/workflows/validate_site_catalog.yml). Os títulos dos capítulos são extraídos dos cabeçalhos H1 dos arquivos Markdown; partes e recursos vêm de `catalog_meta.json`.
+O [`scripts/build.sh`](../../scripts/build.sh) na raiz do repositório chama `generate_catalog.py` depois dos diagramas Mermaid, por isso cada build do livro refresca `site_catalog.json`. Também pode correr o script à mão; o CI valida alinhamento com [`.github/workflows/validate_site_catalog.yml`](../../.github/workflows/validate_site_catalog.yml). Os títulos dos capítulos são extraídos dos cabeçalhos H1 dos arquivos Markdown; partes e recursos vêm de `catalog_meta.json`.
 
-Para gerar manualmente:
+Para gerar só o catálogo (sem build completo):
 
 ```bash
 python3 scripts/generate_catalog.py
