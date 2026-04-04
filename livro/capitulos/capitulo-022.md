@@ -426,9 +426,13 @@ A mesma criatura fica progressivamente mais desafiadora.
 
 ## Desafios da Masmorra
 
+### Desafios Básicos
+
 **Desafio 22.1. O Tesouro do Dragão Antigo.** A lenda diz que um dragão guardava uma Chave Dourada nos tempos antigos. Crie uma nova tabela de *drops* onde o Dragão tem 5% de chance de deixar cair essa chave rara. Implemente em `EntradaSaque` com id `'chave_dourada'`, chance `0.05`, quantidade 1, descrição épica. Teste: derrote o dragão 20 vezes, conte quantas vezes recebe a chave. A probabilidade bate com 5%? Dica: use `EntradaSaque` para encapsular cada possível *drop*.
 
 **Desafio 22.2. Ganância do Comerciante.** O comerciante da masmorra cobrava margem de 50%. Você descobriu que ele é ganancioso demais. Reduza a margem de venda para 30% mudando `kMargemVenda` de 0.5 para 0.3. Agora uma Espada de Ferro que custa 50 ouro vale quanto em venda? Calcule manualmente e depois valide em código. Os preços mais justos faz você comprar mais itens? Dica: novo preço = 50 × 0.3.
+
+### Desafios Avançados
 
 **Desafio 22.3. A Maldição dos Cinco Andares.** Você desce 5 andares, cada um com 3 Lobos hostis. Implemente uma simulação: (1) Faça loop dos andares 0-4, (2) em cada andar, gere 3 Lobos com HP escalonado por `getDificuldadeAndar()`, (3) resolva *drops* de cada lobo, (4) some o ouro total. Execute e veja: quantos ouro ganharam? O HP dos lobos aumenta conforme desce? A economia se ajusta naturalmente? Dica: imprima resumo: "Andar X: 3 Lobos, Y ouro, HP variou de Z a W".
 

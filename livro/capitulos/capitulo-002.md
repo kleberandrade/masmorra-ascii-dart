@@ -16,7 +16,7 @@ void main() {
 }
 ```
 
-A diferença entre `print()` e `stdout.write()` é sutil mas importante. A função `print()` sempre adiciona uma quebra de linha no final; o cursor vai para a linha seguinte. `stdout.write()` escreve o texto e mantém o cursor na mesma linha. Isso é perfeito para prompts onde queremos que o jogador digite na mesma linha da pergunta:
+A diferença entre `print()` e `stdout.write()` é sutil mas importante. A função `print()` sempre adiciona uma quebra de linha no final; o cursor vai para a linha seguinte. `stdout.write()` escreve o texto e mantém o cursor na mesma linha. Isso é ideal para mensagens de entrada (prompts) em que queremos que o jogador digite na mesma linha da pergunta:
 
 ```text
 Qual é o seu nome? _

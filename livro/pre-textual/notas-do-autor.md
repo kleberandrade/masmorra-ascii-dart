@@ -55,6 +55,7 @@ Não pule os desafios. Quebre-se neles. Não copie sem ler. Leia o código antes
 As soluções completas de todos os desafios e boss finals propostos neste livro, juntamente com o código-fonte íntegro de todos os 37 passos da jornada de desenvolvimento da Masmorra ASCII, estão disponíveis online. Acesse o site abaixo para acompanhar sua própria evolução, comparar suas implementações com as soluções de referência, aprofundar seu entendimento através de múltiplas abordagens, e continuar aprendendo na criação de jogos com Dart.
 
 **Site:** [https://masmorra.io](https://masmorra.io)
+**Código-fonte no GitHub:** [https://github.com/kleberandrade/masmorra-ascii-dart](https://github.com/kleberandrade/masmorra-ascii-dart)
 
 No site você encontrará muito mais: errata viva e correções sugeridas pela comunidade que estuda conosco, artigos profundos sobre tópicos que o livro toca em superfície, desafios bônus para expandir suas habilidades além dos capítulos, e comunidades onde se conectar com outros desenvolvedores Dart, pessoas que estão na mesma descida que você, construindo seus próprios roguelikes e compartilhando criações.
 

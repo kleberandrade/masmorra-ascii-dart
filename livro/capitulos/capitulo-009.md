@@ -2,7 +2,7 @@
 
 > *O ferreiro não deixa qualquer um enfiar a mão na forja. Há uma porta para pedidos e uma janela para entregas. O que acontece lá dentro (o martelar, o temperar, o polir) é problema dele. Em código, chamamos isso de encapsulamento.*
 
-Trataremos de **construtores** e **encapsulamento**: no capítulo anterior, criamos classes com campos públicos. Qualquer parte do código pode ler e modificar `jogador.hp` diretamente. Isso funciona, mas à medida que o jogo cresce, o acesso irrestrito vira fonte de bugs; alguém pode setar `hp = -50` sem querer, ou mudar `salaAtual` para uma sala que não existe. Neste capítulo, vamos aprender a proteger o estado interno das classes e a criar múltiplas formas de construir objetos.
+Trataremos de **construtores** e **encapsulamento**: no capítulo anterior, criamos classes com campos públicos. Qualquer parte do código pode ler e modificar `jogador.hp` diretamente. Isso funciona, mas quando o jogo cresce o acesso sem restrições causa bugs: alguém pode setar `hp = -50` sem querer, ou mudar `salaAtual` para uma sala que não existe. Neste capítulo, vamos aprender a proteger o estado interno das classes e a criar múltiplas formas de construir objetos.
 
 ## O sublinhado `_`: privacidade em Dart
 

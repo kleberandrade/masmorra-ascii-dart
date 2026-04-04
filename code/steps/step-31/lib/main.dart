@@ -18,7 +18,7 @@ void main() async {
     defesa: 2,
   );
 
-  jogador.ganharXP(150);
+  jogador.ganharXp(150);
   jogador.adicionarItem('Espada');
   jogador.adicionarItem('Pocao');
 

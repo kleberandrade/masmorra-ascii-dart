@@ -58,26 +58,26 @@ void main() {
     });
 
     test('ganhar XP acumula total', () {
-      jogador.ganharXP(50);
+      jogador.ganharXp(50);
       expect(jogador.xp, equals(50));
 
-      jogador.ganharXP(30);
+      jogador.ganharXp(30);
       expect(jogador.xp, equals(80));
     });
 
     test('nao pode ganhar XP negativo', () {
-      jogador.ganharXP(-50);
+      jogador.ganharXp(-50);
       expect(jogador.xp, equals(0));
     });
 
     test('ganhar 100 XP sobe de nivel', () {
-      jogador.ganharXP(100);
+      jogador.ganharXp(100);
       expect(jogador.nivel, equals(2));
     });
 
     test('subir de nivel aumenta HP', () {
       final hpAntes = jogador.hpMax;
-      jogador.ganharXP(100);
+      jogador.ganharXp(100);
       expect(jogador.hpMax, greaterThan(hpAntes));
     });
 

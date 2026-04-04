@@ -451,7 +451,7 @@ Quando você entra na loja e interage com o comerciante, a saída no terminal se
 
 ```text
 ════════════════════════════════════════════════════════════════════════
-║ LOJA DO MESTRE ALDWIN                                              ║
+║ LOJA DO MESTRE ALDWIN                                        ║
 ════════════════════════════════════════════════════════════════════════
 
  COMPRAR NA LOJA

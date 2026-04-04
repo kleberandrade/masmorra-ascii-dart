@@ -12,6 +12,8 @@ No capítulo anterior, você criou `Inimigo` com o método `sofrerDano()`. Agora
 
 Um `mixin` é definido de forma parecida a uma `class`, mas usa a palavra-chave `mixin`:
 
+> **Nota sobre encapsulamento:** Você vai notar que os campos `hp` e `maxHp` aparecem aqui sem sublinhado (`_`), ao contrário do que aprendemos no capítulo 9. Há uma razão técnica: mixins em Dart não podem declarar campos privados que sejam acessados pelas classes que os usam — a privacidade por sublinhado funciona no nível de arquivo. Para manter o código simples enquanto aprendemos o conceito, deixaremos os campos expostos aqui. Nos capítulos seguintes, quando consolidarmos `Jogador` e `Inimigo` como classes concretas, voltaremos a encapsular esses campos atrás de getters públicos e setters controlados. É uma exposição temporária, consciente, não um recuo.
+
 ```dart
 // lib/combatente.dart
 

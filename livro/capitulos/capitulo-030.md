@@ -6,6 +6,12 @@ Até agora, todo o código do jogo executou de forma síncrona: uma instrução 
 
 Neste capítulo você vai aprender os fundamentos da programação assíncrona em Dart: *Future*, *async*, *await*, tratamento de erros assíncronos e *Stream*. No próximo capítulo, você vai aplicar tudo isso para implementar *save*/*load* com *JSON*.
 
+O capítulo está dividido em duas partes. A **Parte A** (da próxima seção até "Tratamento de Erros Assíncronos") foca em `Future` e `async`/`await`: como representar um valor único que chega mais tarde, como esperar por ele sem travar o mundo, e como tratar erros assíncronos com elegância. A **Parte B** (a partir da seção "Stream") muda o foco de um valor único para *muitos* valores ao longo do tempo — *Streams* e o `BusEventos` que será a espinha dorsal do Capítulo 35, quando implementarmos o padrão Observer.
+
+***
+
+## Parte A — Futures e async/await
+
 ## O Problema: Código que Congela
 
 Imagine que seu jogo precisa salvar o progresso. Todo sistema de jogo moderno enfrenta esse desafio: operações de I/O (entrada/saída) como salvar em disco, carregar da rede ou acessar banco de dados são lentas. Se seu código as executa de forma síncrona, o jogo todo trava até terminar. A masmorra congela, o jogador vê uma tela morta. Isso é inaceitável em qualquer aplicação interativa.
@@ -505,6 +511,10 @@ Dados: {"nome": "Herói"}
 Leitura demorou demais!
 Dados: {}
 ```
+
+***
+
+## Parte B — Streams e Fluxos de Eventos
 
 ## Stream: Fluxo Contínuo de Eventos
 

@@ -22,19 +22,19 @@ void main() {
   // Simular ganho de XP
   print('\n=== GANHANDO XP ===\n');
 
-  jogador.ganharXP(50);
+  jogador.ganharXp(50);
   print('Status: ${jogador.barraProgresso()}\n');
 
-  jogador.ganharXP(100);
+  jogador.ganharXp(100);
   print('Status: ${jogador.barraProgresso()}\n');
 
-  jogador.ganharXP(150);
+  jogador.ganharXp(150);
   print('Status: ${jogador.barraProgresso()}\n');
 
-  jogador.ganharXP(200);
+  jogador.ganharXp(200);
   print('Status: ${jogador.barraProgresso()}\n');
 
-  jogador.ganharXP(250);
+  jogador.ganharXp(250);
   print('Status: ${jogador.barraProgresso()}\n');
 
   // Mostrar status final

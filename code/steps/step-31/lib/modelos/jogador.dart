@@ -35,7 +35,7 @@ class Jogador {
   }
 
   /// Ganha XP (não pode ser negativo)
-  void ganharXP(int quantidade) {
+  void ganharXp(int quantidade) {
     if (quantidade > 0) {
       xp += quantidade;
       _verificarSubidaNivel();

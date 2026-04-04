@@ -1,4 +1,5 @@
 livro/pre-textual/00-frontmatter.md
+livro/pre-textual/licenca.md
 livro/pre-textual/dedicatoria.md
 livro/pre-textual/sumario.md
 livro/pre-textual/prefacio.md
@@ -53,4 +54,7 @@ livro/pos-textual/apendice-a-dart-cheatsheet.md
 livro/pos-textual/apendice-b-mud-rede.md
 livro/pos-textual/apendice-c-achievements.md
 livro/pos-textual/apendice-d-glossario.md
+livro/pos-textual/apendice-e-terminal-ansi.md
+livro/pos-textual/apendice-f-records-extensions.md
+livro/pos-textual/bibliografia.md
 livro/pos-textual/sobre-o-autor.md

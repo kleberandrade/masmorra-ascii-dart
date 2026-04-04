@@ -34,28 +34,29 @@ class MenuPrincipal {
     _limpar();  // ← limpa tela para sensação de "novo"
 
     print('''
-╔══════════════════════════════════════════════════════════════════════╗
-║                                                                      ║
-║                         MASMORRA ASCII                               ║
-║                                                                      ║
-║                      Uma Epopeia *Roguelike* em Dart                 ║
-║                                                                      ║
-╠══════════════════════════════════════════════════════════════════════╣
-║                                                                      ║
-║   Bem-vindo, aventureiro! Você está prestes a descer numa masmorra   ║
-║   antiga repleta de perigos, tesouros e poderes esquecidos.          ║
-║                                                                      ║
-║   Preparado para a jornada?                                          ║
-║                                                                      ║
-╠══════════════════════════════════════════════════════════════════════╣
-║                            MENU PRINCIPAL                            ║
-║                                                                      ║
-║   [1]  Novo Jogo                                                     ║
-║   [2]  Como Jogar                                                    ║
-║   [3]  Créditos                                                      ║
-║   [0]  Sair                                                          ║
-║                                                                      ║
-╚══════════════════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║                         MASMORRA ASCII                       ║
+║                                                              ║
+║                      Uma Epopeia *Roguelike* em Dart         ║
+║                                                              ║
+╠══════════════════════════════════════════════════════════════╣
+║                                                              ║
+║   Bem-vindo, aventureiro! Você está prestes a descer         ║
+║   numa masmorra antiga repleta de perigos, tesouros          ║
+║   e poderes esquecidos.                                      ║
+║                                                              ║
+║   Preparado para a jornada?                                  ║
+║                                                              ║
+╠══════════════════════════════════════════════════════════════╣
+║                            MENU PRINCIPAL                    ║
+║                                                              ║
+║   [1]  Novo Jogo                                             ║
+║   [2]  Como Jogar                                            ║
+║   [3]  Créditos                                              ║
+║   [0]  Sair                                                  ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
 
     ''');
 
@@ -74,31 +75,32 @@ class MenuPrincipal {
   /// Tela de instruções (disponível no menu)
   static void mostrarComoJogar() {
     print('''
-╔══════════════════════════════════════════════════════════════════════╗
-║                          COMO JOGAR                                  ║
-╠══════════════════════════════════════════════════════════════════════╣
-║                                                                      ║
-║  MOVIMENTO:                                                          ║
-║    W  - Norte     S  - Sul     A  - Oeste    D  - Leste              ║
-║                                                                      ║
-║  AÇÕES:                                                              ║
-║    >      - Descer escada                                            ║
-║    i      - Inventário                                               ║
-║    status - Ver status                                               ║
-║    quit   - Abandonar jogo                                           ║
-║                                                                      ║
-║  PROGRESSÃO:                                                         ║
-║    • Derrota inimigos para ganhar XP (*experience points*)           ║
-║    • Colete itens e ouro                                             ║
-║    • Suba de nível para desbloquear habilidades (*level up*)         ║
-║    • Chegue ao andar 5 e derrote o Rei da Masmorra (*boss fight*)!   ║
-║                                                                      ║
-║  DIFICULDADES:                                                       ║
-║    Recruta:   +50% XP, inimigos mais fracos (treino)                 ║
-║    Normal:    Balanço perfeito (recomendado)                         ║
-║    Veterano:  -50% XP, inimigos mais fortes (desafio!)               ║
-║                                                                      ║
-╚══════════════════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════════════╗
+║                          COMO JOGAR                          ║
+╠══════════════════════════════════════════════════════════════╣
+║                                                              ║
+║  MOVIMENTO:                                                  ║
+║    W  - Norte     S  - Sul     A  - Oeste    D  - Leste      ║
+║                                                              ║
+║  AÇÕES:                                                      ║
+║    >      - Descer escada                                    ║
+║    i      - Inventário                                       ║
+║    status - Ver status                                       ║
+║    quit   - Abandonar jogo                                   ║
+║                                                              ║
+║  PROGRESSÃO:                                                 ║
+║    • Derrota inimigos para ganhar XP (*experience points*)   ║
+║    • Colete itens e ouro                                     ║
+║    • Suba de nível para desbloquear habilidades (*level up*) ║
+║    • Chegue ao andar 5 e derrote o Rei da Masmorra           ║
+║      (*boss fight*)!                                         ║
+║                                                              ║
+║  DIFICULDADES:                                               ║
+║    Recruta:   +50% XP, inimigos mais fracos (treino)         ║
+║    Normal:    Balanço perfeito (recomendado)                 ║
+║    Veterano:  -50% XP, inimigos mais fortes (desafio!)       ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
 
     ''');
 
@@ -109,37 +111,38 @@ class MenuPrincipal {
   /// Tela de créditos (disponível no menu)
   static void mostrarCreditos() {
     print('''
-╔══════════════════════════════════════════════════════════════════════╗
-║                          CRÉDITOS                                    ║
-╠══════════════════════════════════════════════════════════════════════╣
-║                                                                      ║
-║  MASMORRA ASCII, Uma Epopeia de Aprendizado                          ║
-║                                                                      ║
-║  Desenvolvido com Dart e ensino de programação como foco central     ║
-║                                                                      ║
-║  SISTEMAS IMPLEMENTADOS:                                             ║
-║    • Geração procedural de *dungeon* (algoritmo BSP)                 ║
-║    • Sistema completo de combate por turnos                          ║
-║    • Progressão com XP e habilidades desbloqueáveis                  ║
-║    • 5 andares com dificuldade crescente                             ║
-║    • *Boss* final com sistema de fases                               ║
-║    • Interface ASCII com barras de saúde                             ║
-║    • Sistema de economia (ouro, loja, itens)                         ║
-║                                                                      ║
-║  CONCEITOS DART ENSINADOS:                                           ║
-║    • Programação orientada a objetos (classes, herança)              ║
-║    • Polimorfismo e métodos abstratos                                ║
-║    • Sealed classes e enums                                          ║
-║    • Generics e type parameters                                      ║
-║    • Pattern matching em Dart 3                                      ║
-║    • Event systems e padrões de design                               ║
-║                                                                      ║
-║  DESENVOLVIDO EM: Dart 3.0+                                          ║
-║                                                                      ║
-║  AGRADECIMENTOS:                                                     ║
-║    A todos os aventureiros que jogam, aprendem e criam!              ║
-║                                                                      ║
-╚══════════════════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════════════╗
+║                          CRÉDITOS                            ║
+╠══════════════════════════════════════════════════════════════╣
+║                                                              ║
+║  MASMORRA ASCII, Uma Epopeia de Aprendizado                  ║
+║                                                              ║
+║  Desenvolvido com Dart e ensino de programação               ║
+║  como foco central                                           ║
+║                                                              ║
+║  SISTEMAS IMPLEMENTADOS:                                     ║
+║    • Geração procedural de *dungeon* (algoritmo BSP)         ║
+║    • Sistema completo de combate por turnos                  ║
+║    • Progressão com XP e habilidades desbloqueáveis          ║
+║    • 5 andares com dificuldade crescente                     ║
+║    • *Boss* final com sistema de fases                       ║
+║    • Interface ASCII com barras de saúde                     ║
+║    • Sistema de economia (ouro, loja, itens)                 ║
+║                                                              ║
+║  CONCEITOS DART ENSINADOS:                                   ║
+║    • Programação orientada a objetos (classes, herança)      ║
+║    • Polimorfismo e métodos abstratos                        ║
+║    • Sealed classes e enums                                  ║
+║    • Generics e type parameters                              ║
+║    • Pattern matching em Dart 3                              ║
+║    • Event systems e padrões de design                       ║
+║                                                              ║
+║  DESENVOLVIDO EM: Dart 3.0+                                  ║
+║                                                              ║
+║  AGRADECIMENTOS:                                             ║
+║    A todos os aventureiros que jogam, aprendem e criam!      ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
 
     ''');
 
@@ -223,26 +226,26 @@ class CriacaoPersonagem {
 **Saída esperada ao criar personagem:**
 
 ```text
-╔══════════════════════════════════════════════════════════════════════╗
-║    ESCOLHA SEU NÍVEL DE DIFICULDADE                                  ║
-╠══════════════════════════════════════════════════════════════════════╣
-║ [1]  RECRUTA (recomendado iniciante)                                 ║
-║     +50% XP, inimigos -20% saúde                                     ║
-║                                                                      ║
-║ [2]   NORMAL (balanço perfeito)                                      ║
-║     1x XP, dificuldade média                                         ║
-║                                                                      ║
-║ [3]  VETERANO (para desafiadores)                                    ║
-║     -50% XP, inimigos +30% saúde                                     ║
-╚══════════════════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════════════╗
+║    ESCOLHA SEU NÍVEL DE DIFICULDADE                          ║
+╠══════════════════════════════════════════════════════════════╣
+║ [1]  RECRUTA (recomendado iniciante)                         ║
+║     +50% XP, inimigos -20% saúde                             ║
+║                                                              ║
+║ [2]   NORMAL (balanço perfeito)                              ║
+║     1x XP, dificuldade média                                 ║
+║                                                              ║
+║ [3]  VETERANO (para desafiadores)                            ║
+║     -50% XP, inimigos +30% saúde                             ║
+╚══════════════════════════════════════════════════════════════╝
 
 Escolha (1-3): 2
 
 Dificuldade: NORMAL
 
-╔══════════════════════════════════════════════════════════════════════╗
-║        CRIE SEU PERSONAGEM                                           ║
-╚══════════════════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════════════╗
+║        CRIE SEU PERSONAGEM                                   ║
+╚══════════════════════════════════════════════════════════════╝
 
 Qual é o nome do seu herói? Guerreiro
 
@@ -623,3 +626,14 @@ Cada parte adiciona novas camadas ao jogo. Compare com o início e veja o quanto
 **Boss Final 27.6. Economia Equilibrada.** Conforme desce, itens na loja ficam mais caros (fornecedor remoto cobra mais para trazer itens ao fundo). Implemente: preços aumentam 5% por andar (andar 0 = base, andar 5 = +25%). MAS aumente drops também (+5% ouro por andar, ou itens raros aparecem mais). Teste: descida ao andar 5 deve se sentir viável economicamente, não trapaceado. Dica: cálculo final = `precoBase * (1.0 + andar * 0.05)`, depois balance drops.
 
 ***
+
+## Próximo Capítulo
+
+Aqui termina a Parte IV. Você tem um jogo jogável de ponta a ponta: criação de personagem, descida por cinco andares de masmorra procedural, combate tático, economia funcional, loja, progressão de nível, boss final, tela de vitória e menu principal. É um roguelike completo, que um amigo pode baixar, rodar e jogar até o fim.
+
+Mas o código que construiu esse jogo cresceu orgânico, capítulo a capítulo, feature a feature. Há arquivos grandes demais, funções que fazem coisa demais, duplicações que se acumularam pelo caminho, e quase nenhum teste automatizado para proteger o que já funciona. O jogo *funciona*. O código ainda não é *profissional*.
+
+Na Parte V — **A Forja do Código** — você vai pegar esse mesmo jogo e passá-lo pelo martelo e pela bigorna da engenharia de software: reorganização modular, testes unitários que travam regressões, `async`/`await` para operações não bloqueantes, e persistência com JSON para salvar e carregar a jornada entre sessões. O jogo não ganhará uma única feature nova visível para o jogador — e, ainda assim, vai sair da forja mais forte, mais leve e pronto para durar.
+
+No próximo capítulo, abrimos a forja.
+

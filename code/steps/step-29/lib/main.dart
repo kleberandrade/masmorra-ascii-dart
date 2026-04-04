@@ -52,7 +52,7 @@ void main() {
   print('=== RESULTADO ===');
   if (jogador.estaVivo) {
     print('Vitória! ${jogador.nome} venceu!');
-    jogador.ganharXP(inimigo.xpRecompensa);
+    jogador.ganharXp(inimigo.xpRecompensa);
     print('${jogador.nome} ganhou ${inimigo.xpRecompensa} XP');
   } else {
     print('Derrota! ${inimigo.nome} venceu!');

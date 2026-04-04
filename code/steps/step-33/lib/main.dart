@@ -12,7 +12,7 @@ void main() {
   );
 
   jogador.sofrerDano(5);
-  jogador.ganharXP(150);
+  jogador.ganharXp(150);
 
   print(renderizador.renderizarStatus(jogador));
   print('Execute "dart test" para rodar os golden tests!');

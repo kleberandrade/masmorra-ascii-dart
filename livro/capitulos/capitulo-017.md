@@ -362,9 +362,13 @@ void main() {
 
 ## Desafios da Masmorra
 
+### Desafios Básicos
+
 **Desafio 17.1. Modo Speedrun (Semente escolhida).** Adicione um menu ao iniciar que permite inserir uma semente ou deixar aleatória. Exemplos: "Deixe em branco para aleatório, ou digite um número (ex: 1337)". Use `int.tryParse()`. Depois, mostre a semente na HUD: "Semente: 1337". Isso permite streamers e jogadores compartilharem sementes para replay e speedrun.
 
 **Desafio 17.2. Tabela de Loot.** Ao derrotar inimigos, implemente drops ponderados: 70% comum (50-100 ouro), 20% raro (Poção de Vida), 10% épico (Gema = muito ouro). Use `Random.nextDouble()` para decimalização. Crie uma função `Item? resolverDrop(Random random)` que retorna o item baseado na chance. Teste derrotando 10 inimigos: a distribuição parece razoável?
+
+### Desafios Avançados
 
 **Desafio 17.3. Rolador de Dados (Variação de stats).** Implemente uma classe `Rolador` com métodos: `rolar(int minimo, int maximo)`, `rolarDados(String expressao)` (ex: "2d6+3" = dois d6 mais 3), `chance(int percentual)`. Use para gerar HP variável em inimigos: Goblin fraco (d4+5), normal (d6+10), forte (d8+15). Gere 20 inimigos e verifique a variação.
 

@@ -16,7 +16,7 @@ abstract class Entidade {
     required this.nome,
   });
 
-  bool aoTocada(Jogador jogador) {
+  bool aoTocada(Entidade visitante) {
     return false;
   }
 
@@ -96,9 +96,10 @@ class Item extends Entidade {
   }) : super(simbolo: '!');
 
   @override
-  bool aoTocada(Jogador jogador) {
-    jogador.inventario.add(this);
-    jogador.ouro += 10;
+  bool aoTocada(Entidade visitante) {
+    if (visitante is! Jogador) return false;
+    visitante.inventario.add(this);
+    visitante.ouro += 10;
     return true;
   }
 }
@@ -116,7 +117,7 @@ class EntidadeInimigo extends Entidade {
   );
 
   @override
-  bool aoTocada(Jogador jogador) {
+  bool aoTocada(Entidade visitante) {
     return false;
   }
 }
@@ -134,9 +135,10 @@ class EntidadeItem extends Entidade {
   );
 
   @override
-  bool aoTocada(Jogador jogador) {
-    jogador.inventario.add(item);
-    jogador.ouro += 10;
+  bool aoTocada(Entidade visitante) {
+    if (visitante is! Jogador) return false;
+    visitante.inventario.add(item);
+    visitante.ouro += 10;
     return true;
   }
 }
@@ -154,7 +156,7 @@ class EntidadeEscada extends Entidade {
   );
 
   @override
-  bool aoTocada(Jogador jogador) {
+  bool aoTocada(Entidade visitante) {
     return false;
   }
 }

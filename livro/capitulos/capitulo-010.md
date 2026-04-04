@@ -4,7 +4,7 @@
 
 ## A família de inimigos: onde a herança brilha
 
-Quando você começou a desenhar a `Jogador`, copiou muito código. Linhas iguais: `int hp`, `int maxHp`, `String nome`. Agora vai criar inimigos: `Zumbi`, `Esqueleto`, `Lobo`, e pode parecer que, se copiar a mesma estrutura três vezes, em seis meses quando precisar mudar "calcular dano", vai ter de editar em três lugares. Isso se chama duplicação de código, e é o sintoma clássico de que você precisa de herança.
+Quando você começou a desenhar a `Jogador`, copiou muito código. Linhas iguais: `int hp`, `int maxHp`, `String nome`. Agora vai criar inimigos: `Zumbi`, `Esqueleto`, `Lobo`, e pode parecer que, se copiar a mesma estrutura várias vezes, em seis meses quando precisar mudar "calcular dano", vai ter de editar em múltiplos lugares. Isso se chama duplicação de código, e é o sintoma clássico de que você precisa de herança.
 
 **Herança** em Dart significa: uma `class` "herda" de outra. A classe-mãe (ou superclasse) define o que é comum; a classe-filha (ou subclasse) especifica o que é diferente.
 

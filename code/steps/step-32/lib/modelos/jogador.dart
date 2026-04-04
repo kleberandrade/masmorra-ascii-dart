@@ -32,7 +32,7 @@ class Jogador {
     hpAtual = min(hpMax, hpAtual + quantia);
   }
 
-  void ganharXP(int quantidade) {
+  void ganharXp(int quantidade) {
     if (quantidade > 0) {
       xp += quantidade;
       _verificarSubidaNivel();

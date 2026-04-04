@@ -15,6 +15,14 @@ Neste capítulo você vai:
 
 Ao final, você terá um sistema completo de combate que é o pico emocional desta parte.
 
+## O peso da morte permanente
+
+Antes de codificar a primeira linha, pare um segundo. O que estamos prestes a construir é o que distingue um *roguelike* de todos os outros jogos: o **permadeath**. Quando o jogador cai em combate, não há respawn, não há continue, não há "carregar o último save dez segundos antes da morte". A ficha é descartada. Todo o ouro acumulado, cada item raro, cada ponto de XP suado: tudo se vai. Para começar de novo, é literalmente começar de novo.
+
+Isso pode soar cruel, e é. Mas é essa crueldade que dá sentido a cada decisão. Quando cada ataque pode ser o último, o jogador pesa cada turno. Fugir deixa de ser covardia: vira estratégia. Poções param de ser "itens acumulados no inventário" e viram salva-vidas. A tensão do *roguelike* vive exatamente nesse compromisso: ou você joga com atenção plena, ou reinicia.
+
+No nosso código, o permadeath vai acontecer numa única linha: quando `jogador.hp <= 0`, o loop de combate termina com `_exibirGameOver()` e nenhum save é escrito. O estado do jogador é simplesmente esquecido. Não é nada sofisticado tecnicamente, mas é o contrato mais importante que o jogo faz com quem o joga. Tenha isso em mente enquanto implementa este capítulo: cada linha de código do combate carrega o peso dessa regra.
+
 ## Parte 1: Conceitualizando a luta
 
 Um **combate por turnos** em *roguelike* tem estrutura:
@@ -267,9 +275,15 @@ class Combate {
 
   void _exibirGameOver() {
     print('');
-    print('[GAME OVER]');
-    print('Você caiu em combate.');
-    print('Durou $turno turnos de glória.');
+    print('==========================');
+    print('       [GAME OVER]        ');
+    print('==========================');
+    print('Você caiu em combate após $turno turnos.');
+    print('Sua jornada termina aqui.');
+    print('Todos os itens, todo o XP, todo o ouro:');
+    print('tudo se vai com você.');
+    print('');
+    print('Comece outra vez. A masmorra te espera.');
     print('');
   }
 

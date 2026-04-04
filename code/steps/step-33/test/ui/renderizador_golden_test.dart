@@ -16,7 +16,7 @@ void main() {
       );
 
       jogador.sofrerDano(5);
-      jogador.ganharXP(150);
+      jogador.ganharXp(150);
 
       final output = renderizador.renderizarStatus(jogador);
       final goldenDir = Directory('test/golden');

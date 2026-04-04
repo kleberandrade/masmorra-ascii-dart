@@ -44,7 +44,7 @@ class JogadorModelo {
     hp = (hp + quantidade).clamp(0, hpMax);
   }
 
-  void ganharXP(int quantidade) {
+  void ganharXp(int quantidade) {
     xp += quantidade;
     // Level up a cada 100 XP
     while (xp >= 100) {
@@ -159,9 +159,9 @@ class CombateJogador {
   }
 
   /// Ganha XP e trata level up
-  void ganharXP(int quantidade) {
+  void ganharXp(int quantidade) {
     final nivelAntes = jogador.nivel;
-    jogador.ganharXP(quantidade);
+    jogador.ganharXp(quantidade);
 
     if (jogador.nivel > nivelAntes) {
       RenderizadorJogador.exibirLevelUp(jogador);
@@ -195,7 +195,7 @@ class JogadorGerenciador {
   String atacar() => combate.atacar();
   void sofrerDano(int dano) => combate.sofrerDano(dano);
   void curar(int amount) => combate.curar(amount);
-  void ganharXP(int xp) => combate.ganharXP(xp);
+  void ganharXp(int xp) => combate.ganharXp(xp);
 
   bool get estaVivo => modelo.estaVivo;
 }
@@ -238,12 +238,12 @@ void main() {
   print('───────────────────────────────────────────────────────────────');
 
   print('Jogador ganha XP...');
-  jogador.ganharXP(30);
-  jogador.ganharXP(40);
+  jogador.ganharXp(30);
+  jogador.ganharXp(40);
   print('Faltam ${100 - jogador.modelo.xp} XP para o próximo nível');
 
   print('\nDerrotou boss! +100 XP');
-  jogador.ganharXP(100);
+  jogador.ganharXp(100);
   jogador.mostrarStatus();
 
   // ======================================================================
@@ -294,7 +294,7 @@ void main() {
     print('═ Ronda $ronda');
     print(heroi.atacar());
     heroi.sofrerDano(10);
-    heroi.ganharXP(25);
+    heroi.ganharXp(25);
     print();
   }
 

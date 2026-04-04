@@ -1,11 +1,36 @@
-# step-13 — Cap 13: Inventario
+# step-13 — Capítulo 13: Ouro, Armas e Inventário
 
-Armas, armaduras, equipar.
+Estado do jogo ao final do **Capítulo 13** do livro *Masmorra ASCII em Dart*.
 
-Índice geral: [README.md](../README.md).
+## Conceitos deste step
+
+composição, Item, Inventario
+
+## Como rodar
 
 ```bash
-cd step-13
-dart pub get
-dart lib/main.dart
+cd code/steps/step-13
+dart pub get     # primeira vez
+dart analyze     # verifica erros e warnings
+dart format .    # formata o código
+dart run         # executa
 ```
+
+## O que esperar
+
+Este step contém o código funcional no estado exato em que o leitor o deixa ao terminar o Capítulo 13. Abra os arquivos em `lib/` e compare com os blocos ```dart apresentados no capítulo — as assinaturas de classe, métodos e estruturas de dados batem entre as duas fontes.
+
+## Navegação
+
+- Capítulo correspondente: `livro/capitulos/capitulo-013.md`
+- Solução do Boss Final: `code/solucoes/boss-final-cap13.dart`
+- Step anterior: `step-12/`
+- Próximo step: `step-14/`
+- Índice geral: [../README.md](../README.md)
+
+## Checklist antes de prosseguir
+
+- [ ] O código compila com `dart analyze` sem erros.
+- [ ] `dart run` executa e mostra a saída esperada.
+- [ ] Os conceitos listados acima fazem sentido ao ler o código.
+- [ ] Os desafios do capítulo foram ao menos tentados.

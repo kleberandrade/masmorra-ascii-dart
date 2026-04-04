@@ -28,7 +28,7 @@ class Jogador {
   bool get estaVivo => hp > 0;
 
   /// Ganha XP e verifica se sobe de nível
-  void ganharXP(int quantidade) {
+  void ganharXp(int quantidade) {
     xp += quantidade;
     print('$nome ganhou $quantidade XP (Total: $xp)');
     verificarNivel();

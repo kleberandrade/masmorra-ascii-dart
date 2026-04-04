@@ -163,15 +163,15 @@ void main() {
     });
 
     test('ganhar XP acumula total', () {
-      jogador.ganharXP(50);
+      jogador.ganharXp(50);
       expect(jogador.xp, equals(50));
 
-      jogador.ganharXP(30);
+      jogador.ganharXp(30);
       expect(jogador.xp, equals(80));
     });
 
     test('não pode ganhar XP negativo', () {
-      jogador.ganharXP(-50);
+      jogador.ganharXp(-50);
       expect(jogador.xp, equals(0)); // Ignorado
     });
   });

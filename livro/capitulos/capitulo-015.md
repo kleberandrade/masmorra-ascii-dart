@@ -545,9 +545,13 @@ dart main.dart
 ***
 ## Desafios da Masmorra
 
+### Desafios Básicos
+
 **Desafio 15.1. O Corredor da Perdição (Mapa com segredos).** Crie um mapa 20x15 onde um corredor central horizontal liga uma entrada (esquerda) a uma saída (direita). Adicione duas pequenas salas laterais (uma acima, outra abaixo do corredor), cada uma com uma escada. Teste caminhando: consegue sair? Encontra as escadas? Use loops e lógica para desenhar, não hardcode cada tile.
 
 **Desafio 15.2. Paredes Atmosféricas (Visual).** Modifique `tileParaChar()` para renderizar diferentes símbolos para tipos de parede: `█` para pedra sólida, `╬` para rachaduras, `∿` para umidade. Escolha pelo menos dois. Execute para comparar o visual. Qual versão transmite mais a sensação de masmorra antiga?
+
+### Desafios Avançados
 
 **Desafio 15.3. Teleportes mágicos (Dinâmica).** Adicione um novo tipo de tile `teleporte` que renderiza como `◆`. Quando o jogador pisa nele, é teletransportado para outra posição aleatória do mapa. Crie um mapa com 3-4 teleportes. Dica: use `Random().nextInt(largura)` e `Random().nextInt(altura)` para coordenadas aleatórias válidas (não em paredes).
 

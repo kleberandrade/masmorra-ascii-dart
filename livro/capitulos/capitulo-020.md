@@ -1,6 +1,6 @@
 # Capítulo 20 - Entidades no Mapa: Inimigos, Itens, Escadas
 
-> *Até agora, o mapa era um pano vazio de azulejos. Mas uma masmorra viva está viva porque tem coisas: um goblin à espreita numa esquina, uma poção perdida no chão, uma escada descendente. Sem entidades, não há jogo. Apenas tiles. Agora aprenderá a colocar "coisas" em pontos específicos do mapa e a decidir o que acontece quando o jogador as toca.*
+> *Até agora, o mapa era um pano vazio de azulejos. Uma masmorra viva está viva porque tem coisas: um goblin à espreita numa esquina, uma poção perdida no chão, uma escada descendente. Sem entidades, não há jogo — apenas tiles. Agora você vai colocar "coisas" em pontos específicos do mapa e decidir o que acontece quando o jogador as toca.*
 
 
 ## O Que Vamos Aprender
@@ -41,7 +41,9 @@ abstract class Entidade {
     required this.nome,
   });
 
-  bool aoTocada(Jogador jogador);
+  bool aoTocada(Entidade visitante) {
+    return false;
+  }
 
   @override
   String toString() => '$nome ($simbolo) em ($x, $y)';
@@ -73,7 +75,7 @@ class EntidadeInimigo extends Entidade {
   );
 
   @override
-  bool aoTocada(Jogador jogador) {
+  bool aoTocada(Entidade visitante) {
     return false; // Combate tratado separadamente
   }
 }
@@ -95,8 +97,9 @@ class EntidadeItem extends Entidade {
   );
 
   @override
-  bool aoTocada(Jogador jogador) {
-    jogador.inventario.add(item);
+  bool aoTocada(Entidade visitante) {
+    if (visitante is! Jogador) return false;
+    visitante.inventario.add(item);
     return true; // Remover do mapa
   }
 }
@@ -118,7 +121,7 @@ class EntidadeEscada extends Entidade {
   );
 
   @override
-  bool aoTocada(Jogador jogador) {
+  bool aoTocada(Entidade visitante) {
     return false; // Descida tratada separadamente
   }
 }
@@ -616,9 +619,13 @@ Em engines profissionais como libGDX ou Godot, entidades são frequentemente ato
 
 ## Desafios da Masmorra
 
-**Desafio 20.1. Armadilha (Entidade customizada).** Crie `EntidadeArmadilha`: ao ser tocada, aplica dano ao jogador (5 HP) e dispara mensagem. O símbolo é `^`. Retorna `false` de `aoTocada()`, permanecendo no mapa. Adicione com 20% de chance em cada sala. Dica: passe jogador como parâmetro, aplique dano via `jogador.sofrerDano(5)`.
+### Desafios Básicos
+
+**Desafio 20.1. Armadilha (Entidade customizada).** Crie `EntidadeArmadilha`: ao ser tocada, aplica dano ao jogador (5 HP) e dispara mensagem. O símbolo é `^`. Retorna `false` de `aoTocada()`, permanecendo no mapa. Adicione com 20% de chance em cada sala. Dica: verifique `if (visitante is Jogador)`, depois aplique dano via `visitante.sofrerDano(5)`.
 
 **Desafio 20.2. Tipos de Item.** Estenda Item com propriedades: crie enum `TipoItem` com valores OURO, POCAO_VIDA, POCAO_MANA, GEMA, CHAVE. Cada tipo tem efeito único ao ser coletado. POCAO_VIDA restaura 25 HP, GEMA aumenta ouro, CHAVE abre portas. Implemente efeito em `aoTocada()`.
+
+### Desafios Avançados
 
 **Desafio 20.3. Inimigos por dificuldade.** Estenda `GeradorEntidades` para aceitar `int andar`. Conforme o andar aumenta, inimigos ficam mais fortes (HP += andar * 2), mais raros e variados. Andar 5+: aparece um Orc. Andar 10+: Dragão. Use `random.nextInt(andar)` para verificar se spawna inimigo raro.
 

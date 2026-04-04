@@ -22,6 +22,8 @@ Este glossário reúne os termos técnicos mais importantes usados ao longo do l
 
 **Distância de Manhattan:** método de calcular distância entre dois pontos em grid contando passos horizontais e verticais: `|x1 - x2| + |y1 - y2|`. Mais rápido que distância euclidiana em jogos baseados em grid. Usada em cálculos de FOV, spawn seguro e IA.
 
+**Death Spiral:** situação no jogo em que uma derrota parcial (HP baixo, inventário esvaziado, recursos acabando) torna mais provável a próxima derrota, que por sua vez agrava ainda mais a situação. Roguelikes bem balanceados oferecem saídas do death spiral; roguelikes cruéis não.
+
 **Dungeon Crawler:** tipo de jogo onde o jogador explora um calabouço ou série de andares subterrâneos, enfrentando monstros e coletando tesouro. Exemplos clássicos incluem Rogue e NetHack.
 
 **DRY (Don't Repeat Yourself):** princípio que evita duplicação de código. Código duplicado é mais difícil de manter e mais propenso a bugs.
@@ -33,6 +35,10 @@ Este glossário reúne os termos técnicos mais importantes usados ao longo do l
 **Factory Constructor:** construtor especial em Dart que não necessariamente cria uma nova instância da classe, podendo retornar uma instância existente ou de uma subclasse.
 
 **Field of View (FOV):** área que o jogador pode enxergar do seu ponto de vista atual. Implementada com algoritmos como shadowcasting para criar exploração realista. Diferente de Line of Sight (LOS), que verifica visibilidade entre dois pontos específicos.
+
+**Fog of War (Névoa de Guerra):** técnica que oculta áreas ainda não exploradas pelo jogador ou que saíram do seu campo de visão. No nosso jogo, tiles descobertos ficam "lembrados" em cinza, enquanto áreas nunca visitadas permanecem invisíveis.
+
+**Frame Rate:** número de quadros (frames) renderizados por segundo. Em jogos baseados em turnos como roguelikes, o conceito se aplica apenas à renderização da interface; o loop de jogo em si é pausado à espera do input do jogador.
 
 **Future:** tipo Dart que representa um valor que será disponível no futuro. Retornado por operações assíncronas como leitura de arquivos. Aguardado com `await` ou gerenciado com `.then()`.
 
@@ -51,6 +57,8 @@ Este glossário reúne os termos técnicos mais importantes usados ao longo do l
 **Linha de Visão (Line of Sight / LOS):** algoritmo que determina se um ponto é visível a partir de outro sem obstáculos bloqueando. Diferente de FOV, que calcula múltiplos pontos, LOS verifica uma linha reta entre dois objetos.
 
 **Loot:** itens valiosos encontrados após derrotar inimigos ou explorar áreas. Inclui equipamentos, poções, ouro e outros objetos que melhoram o personagem.
+
+**Loot Table:** tabela de probabilidades que define o que cada inimigo ou baú pode dropar, com pesos por raridade. Permite balancear economia do jogo sem recodificar: basta ajustar números.
 
 **Level Up:** processo pelo qual o personagem do jogador ganha experiência e aumenta de nível, geralmente resultando em aumento de atributos e novas habilidades.
 
@@ -94,7 +102,11 @@ Este glossário reúne os termos técnicos mais importantes usados ao longo do l
 
 **Sealed Class:** classe cuja herança é restrita a classes específicas definidas no mesmo arquivo. Garante que todos os subtipos são conhecidos e gerenciáveis.
 
+**Save Scumming:** prática de salvar o jogo imediatamente antes de momentos críticos e recarregar se algo der errado, efetivamente anulando o risco. Roguelikes clássicos combatem essa prática escrevendo o save apenas ao sair do jogo e apagando-o ao carregar — isso preserva o contrato do permadeath.
+
 **Seed (Semente):** valor inicial que alimenta um gerador de números aleatórios. Mesma seed produz mesma sequência de números, permitindo reproduzir mapas e combates idênticos para debug e testes.
+
+**Spawn Rate:** taxa com que inimigos ou itens aparecem num andar ou sala. Um spawn rate alto lota a masmorra de monstros; baixo demais deixa o jogo vazio. Parâmetro crítico de balanceamento.
 
 **Serialização:** processo de converter objetos em um formato que pode ser armazenado ou transmitido, como JSON. Essencial para sistema de save/load.
 
@@ -121,6 +133,10 @@ Este glossário reúne os termos técnicos mais importantes usados ao longo do l
 **Test-Driven Development (TDD):** metodologia que escreve testes antes do código. Garante cobertura de teste e design orientado a testes.
 
 **Tile:** unidade de grid no mapa, geralmente representado por um caractere ASCII. Cada tile ocupa uma posição [x, y] no dungeon.
+
+**Tactical Combat:** estilo de combate em que cada decisão importa — posicionamento, ordem dos ataques, uso de itens, escolha do alvo. Contrasta com combate puramente mecânico. Roguelikes tendem a forçar combate tático porque permadeath penaliza pressa.
+
+**Tile-based Movement:** movimentação restrita a uma grade de tiles (células). Cada passo leva exatamente de um tile ao adjacente. Simplifica colisão, pathfinding e FOV — e é a base da maioria dos roguelikes clássicos.
 
 **Turn-Based:** sistema de jogo onde ações ocorrem em turnos sequenciais. O jogador faz uma ação, inimigos respondem, e o ciclo continua. Comum em roguelikes.
 

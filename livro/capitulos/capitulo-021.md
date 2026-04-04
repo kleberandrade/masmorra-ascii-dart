@@ -585,9 +585,13 @@ Escalabilidade do loop de jogo em produção: o loop apresentado aqui é funcion
 
 ## Desafios da Masmorra
 
+### Desafios Básicos
+
 **Desafio 21.1. Melhorar o HUD.** Adicione mais informações na HUD: nível atual, XP para próximo nível, quantos inimigos você derrotou neste andar.
 
 **Desafio 21.2. Tela de Pausa.** Implemente um comando `p` (pause) que para o jogo e mostra um menu: continuar, salvar, sair.
+
+### Desafios Avançados
 
 **Desafio 21.3. Animação de Movimento.** Adicione um pequeno delay ao movimento (`Future.delayed()` ou `sleep()`) para que o jogador veja os passos acontecendo lentamente na tela.
 

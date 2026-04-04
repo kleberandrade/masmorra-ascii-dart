@@ -24,7 +24,7 @@ class Jogador {
     hpAtual = max(0, hpAtual - dano);
   }
 
-  void ganharXP(int quantidade) {
+  void ganharXp(int quantidade) {
     if (quantidade > 0) {
       xp += quantidade;
       if (xp >= 100) {

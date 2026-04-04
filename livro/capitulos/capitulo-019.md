@@ -619,9 +619,13 @@ Em jogos profissionais, o *FOV* é frequentemente cacheado e apenas recalculado 
 
 ## Desafios da Masmorra
 
+### Desafios Básicos
+
 **Desafio 19.1. Lanterna dinâmica (Raio variável (*dynamic radius*)).** Implemente um sistema de "lanternas" com raios diferentes. Crie um enum `Luz` com variantes: `Lanterna(raio: 8)`, `Tocha(raio: 5)`, `Escuridão(raio: 1)`. O jogador começa com Tocha. Adicione comando `"lanterna"` para trocar. Cada luz muda o raio do *FOV*. Teste caminhando com diferentes luzes.
 
 **Desafio 19.2. Transparência parcial (Vidro).** Modifique shadowcasting para permitir paredes semitransparentes (vidro, grades). Defina `Tile.paredeTransparente`. Raycast continua através delas (não para), mas marca tiles além como "parcialmente explorado" (símbolo diferente). Permite ver inimigos distante através de vidro, mas com aviso visual.
+
+### Desafios Avançados
 
 **Desafio 19.3. Mapa de densidade visual (Debug).** Crie modo debug que desenha cada tile colorido por distância ao jogador: próximo (1-2 tiles) = verde claro, distante (5-8) = amarelo, muito distante (8+) = cinza. Ajuda visualizar o raio do *FOV*. Use caracteres `▓`, `▒`, `░` ou cores ANSI para gradação.
 

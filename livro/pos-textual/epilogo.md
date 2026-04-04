@@ -1,5 +1,29 @@
 # Epílogo
 
+```text
+┌───────────── MASMORRA ASCII ── Andar 5/5 ────────────┐
+│  ██████████████████████████████████████████████████  │
+│  █..........█...........█......█.........█........█  │
+│  █....@.....█.....D.....█..$...█....Z....█....>...█  │
+│  █..........█...........█......█.........█........█  │
+│  ██████████████.........███████████████████████████  │
+│  █........................█........░░░░░░░░░░░░░░░█  │
+│  █............!...........█....O...░░░░░░░░░░░░░░░█  │
+│  █........................█........░░░░░░░░░░░░░░░█  │
+│  ██████████████████████████████████████████████████  │
+│                                                      │
+│  Aventureiro  Nv 8   HP 42/50   Ouro 1820   Andar 5  │
+│  Ataque 14    Defesa 9          XP 1250/1600         │
+│                                                      │
+│  > O dragão range os dentes. Esta é a última luta.   │
+│  (w/a/s/d) mover   (i) inventário   (q) sair         │
+└──────────────────────────────────────────────────────┘
+```
+
+*A última tela antes do confronto final. O herói (`@`) diante do Dragão (`D`),
+do zumbi (`Z`), do orc (`O`), de ouro (`$`) e da escada (`>`). Um item (`!`)
+aguarda coleta. A névoa (`░`) ainda esconde parte do andar.*
+
 Você pressiona Enter pela última vez. O compilador chora, aceita, compila. A masmorra pisca na tela uma última vez e desaparece. Volta ao vazio. O terminal volta ao normal, aquele terminal que era apenas um retângulo de texto há trinta e sete capítulos, quando você começava sem saber nem o nome da primeira classe que iria escrever. Mas você saiu. Emergiu. A tela está preta outra vez, e você, sentado na cadeira, não é mais quem era quando a descida começou.
 
 Trinta e sete capítulos. Milhares de linhas de código. Você não pode contar quantas vezes refatorou aquele laço que não fazia sentido. Quantas vezes viu o compilador reclamar daquele ponto e vírgula que não deveria estar ali. Quantas vezes você e a máquina tiveram essa conversa silenciosa, onde o erro apontava e você corrigia, corrigia, corrigia até que a lógica virou verdade e funcionou. Era frustrante. Era mágico. Era tudo de uma vez.

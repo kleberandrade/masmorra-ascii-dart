@@ -73,7 +73,7 @@ pandoc "${INPUT_ARGS[@]}" \
     --top-level-division=chapter \
     --toc-depth=1 \
     --resource-path="assets:livro/capitulos:livro/pre-textual:livro/partes:livro/pos-textual" \
-    -V fontsize=11pt \
+    -V fontsize=10pt \
     -V classoption=twoside \
     -o "$OUTPUT_DIR/$BOOK_NAME.pdf"
 

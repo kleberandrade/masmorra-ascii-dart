@@ -106,7 +106,7 @@ void exibirPainelEstatisticas({
       : nota == 'A'
           ? '⚔️'
           : nota == 'B'
-              ? '🗡️'
+              ? '*'
               : '💀';
 
   // Renderizar painel

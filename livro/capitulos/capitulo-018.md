@@ -626,9 +626,13 @@ Neste capítulo você aprendeu:
 
 ## Desafios da Masmorra
 
+### Desafios Básicos
+
 **Desafio 18.1. Comparar algoritmos lado a lado.** Crie um programa que gera dois mapas com mesmos parâmetros de tamanho: um com Random Walk, outro com Rooms & Corridors. Imprima lado a lado usando StringBuffer. Qual parece mais natural? Qual mais estruturado? Qual você preferiria explorar?
 
 **Desafio 18.2. Tuning de Random Walk.** Teste Random Walk com diferentes `numPassos`: 100, 500, 1000, 5000. Para cada valor, imprima o mapa. Em qual ponto fica "supercavado"? Qual balancia exploração com estrutura? Teste em tamanhos diferentes (80x50, 120x60) e identifique valores ideais.
+
+### Desafios Avançados
 
 **Desafio 18.3. Sala Boss.** Modifique o gerador Rooms & Corridors para garantir que a última sala gerada é significativamente maior (ex: 15x15). Use-a como "sala do boss final". Todas as outras salas são menores (6-10 tiles). Imprima o mapa destacando a sala boss com símbolo especial (`B` ou `◆`).
 

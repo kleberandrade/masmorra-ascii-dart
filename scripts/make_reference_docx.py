@@ -3,7 +3,7 @@
 Gera um reference.docx para o Pandoc, para que o DOCX fique mais próximo do PDF.
 
 Motivação:
-- O PDF usa `config/preamble.tex` (XeLaTeX) com tipografia (Georgia, corpo 11pt), margens A5,
+- O PDF usa `config/preamble.tex` (XeLaTeX) com tipografia (DejaVu Serif / TeX Gyre Heros, corpo 10pt), margens A5,
   espaçamento 1,5, recuo de parágrafo etc.
 - O DOCX, sem `--reference-doc`, usa estilos padrão do Word e fica bem diferente.
 
@@ -84,12 +84,12 @@ def build_reference_docx(out_path: Path) -> None:
 
     styles = doc.styles
 
-    # Normal / corpo do texto (Georgia, 1,5, justificado, recuo 0,6cm).
+    # Normal / corpo do texto (Georgia no Word ≈ PDF; 1,5, justificado, recuo 0,6cm).
     normal = styles["Normal"]
-    _set_style_font(normal, "Georgia", 11)
+    _set_style_font(normal, "Georgia", 10)
     pf = normal.paragraph_format
     pf.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-    pf.first_line_indent = Cm(0.6)   # ~1,5em em 11pt
+    pf.first_line_indent = Cm(0.6)   # ~1,5em em 10pt
     pf.space_before = Pt(0)
     pf.space_after = Pt(0)
     pf.line_spacing = 1.5
@@ -123,19 +123,19 @@ def build_reference_docx(out_path: Path) -> None:
 
     # Heading 3 (H3): subseções internas.
     h3 = styles["Heading 3"]
-    _set_style_font(h3, "Georgia", 11, bold=True)
+    _set_style_font(h3, "Georgia", 10, bold=True)
     h3pf = h3.paragraph_format
     h3pf.alignment = WD_ALIGN_PARAGRAPH.LEFT
     h3pf.space_before = Pt(12)
     h3pf.space_after = Pt(6)
     h3pf.keep_with_next = True
 
-    # Bloco de citação (blockquote): estilo de destaque (sem caixa, mas com respiro).
+    # Bloco de citação (blockquote): 9pt, alinhado ao PDF (`preamble.tex`).
     # O Pandoc costuma mapear para "Block Quote".
     for quote_style_name in ("Block Quote", "Quote"):
         if quote_style_name in styles:
             qs = styles[quote_style_name]
-            _set_style_font(qs, "Georgia", 10, bold=False)
+            _set_style_font(qs, "Georgia", 9, bold=False)
             qpf = qs.paragraph_format
             qpf.left_indent = Cm(0.6)
             qpf.right_indent = Cm(0.6)
@@ -150,7 +150,7 @@ def build_reference_docx(out_path: Path) -> None:
     #
     # Criamos explicitamente (mesmo se não existir no DOCX base) para garantir.
     source_code = _ensure_paragraph_style(doc, "Source Code", base="Normal")
-    _set_style_font(source_code, "Courier New", 9)
+    _set_style_font(source_code, "Courier New", 8)
     scpf = source_code.paragraph_format
     scpf.first_line_indent = Cm(0)
     scpf.space_before = Pt(8)
@@ -160,11 +160,11 @@ def build_reference_docx(out_path: Path) -> None:
     source_code.font.color.rgb = RGBColor(0xE8, 0xE8, 0xE8)
 
     verbatim_char = _ensure_character_style(doc, "Verbatim Char")
-    _set_style_font(verbatim_char, "Courier New", 9.5)
+    _set_style_font(verbatim_char, "Courier New", 8)
 
     # Alguns templates usam "Code" como estilo de caractere. Criar também.
     code_char = _ensure_character_style(doc, "Code")
-    _set_style_font(code_char, "Courier New", 9.5)
+    _set_style_font(code_char, "Courier New", 8)
 
     # Não precisamos de conteúdo; o importante é o styles.xml.
     out_path.parent.mkdir(parents=True, exist_ok=True)

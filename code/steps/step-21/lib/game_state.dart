@@ -20,7 +20,7 @@ class GerenciadorEstado {
     return estadoAtual == EstadoJogo.exploracao;
   }
 
-  bool podeAberturaInventario() {
+  bool podeAbrirInventario() {
     return estadoAtual == EstadoJogo.exploracao ||
         estadoAtual == EstadoJogo.inventario;
   }

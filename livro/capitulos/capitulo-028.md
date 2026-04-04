@@ -65,7 +65,7 @@ class DungeonCrawl {
   // Lógica de combate
   void moverJogador(Offset d) { }
   void executarCombate(Inimigo e) { }
-  void ganharXP(int x) { }
+  void ganharXp(int x) { }
 
   // Geração
   void gerarMapa() { }
@@ -392,6 +392,43 @@ Agora cada classe tem UMA razão para mudar:
 - `SalvadorJogador` muda quando muda o formato de save
 
 ## Reorganizar Pastas por Responsabilidade
+
+Antes de ver a estrutura linha a linha, o diagrama abaixo mostra a transformação do projeto de forma visual — a mesma masmorra que funcionava bagunçada agora ganha corredores e salas nomeadas.
+
+```text
+┌────────────────────────┐     ┌────────────────────────┐
+│  ANTES (monolítico)    │     │  DEPOIS (por domínio)  │
+│  25 arquivos, 1 nível  │ ──▶ │  6 pastas temáticas    │
+├────────────────────────┤     ├────────────────────────┤
+│  lib/                  │     │  lib/                  │
+│    jogador.dart        │     │    modelos/            │
+│    inimigo.dart        │     │      jogador.dart      │
+│    item.dart           │     │      inimigo.dart      │
+│    combate.dart        │     │      item.dart         │
+│    calculadorDano.dart │     │    combate/            │
+│    dungeonCrawl.dart   │     │      combate.dart      │
+│    loopJogo.dart       │     │      calculadorDano... │
+│    estadoJogo.dart     │     │    jogo/               │
+│    telaAscii.dart      │     │      dungeonCrawl.dart │
+│    renderizador.dart   │     │      loopJogo.dart     │
+│    mapaMasmorra.dart   │     │      estadoJogo.dart   │
+│    gerador.dart        │     │    ui/                 │
+│    ... (13 outros)     │     │      telaAscii.dart    │
+│                        │     │      renderizador.dart │
+│  ✗ Onde fica combate?  │     │    mundo/              │
+│  ✗ UI mistura regras   │     │      mapaMasmorra.dart │
+│  ✗ Novo dev: 10 min    │     │      gerador.dart      │
+│    para achar arquivo  │     │    config/             │
+│                        │     │      constantes.dart   │
+│                        │     │                        │
+│                        │     │  ✓ Combate → combate/  │
+│                        │     │  ✓ UI isolada de regra │
+│                        │     │  ✓ Novo dev encontra   │
+│                        │     │    em 30 segundos      │
+└────────────────────────┘     └────────────────────────┘
+```
+
+A mesma quantidade de código, a mesma lógica, o mesmo jogo. O que mudou foi a **localização** de cada arquivo — e essa mudança simples transforma a experiência de quem abre o projeto pela primeira vez, de quem vai consertar um bug três meses depois, de quem vai estender o jogo com uma nova feature. Refatorar é reorganizar sem alterar o comportamento.
 
 ### Antes: Caos
 

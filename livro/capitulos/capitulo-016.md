@@ -414,9 +414,13 @@ void main() {
 ***
 ## Desafios da Masmorra
 
+### Desafios Básicos
+
 **Desafio 16.1. Cores para o Caos (ANSI).** Adicione cores ANSI ao TelaAscii: `\x1B[31m` vermelho (inimigos, perigo), `\x1B[32m` verde (jogador, vida), `\x1B[33m` amarelo (ouro), `\x1B[37m` branco (paredes), `\x1B[0m` reset. Crie um método `colorir(String char, String cor)` que envolve o caractere. Renderize o mapa com cores: jogador verde, inimigos vermelhos, ouro amarelo, paredes brancas. Compare antes e depois visualmente.
 
 **Desafio 16.2. HUD do Sobrevivente Expandida.** Expanda a HUD para mostrar: (1) quantos inimigos visíveis, (2) quantos itens próximos (dentro de raio 3), (3) qual andar (ex: "Andar 5 de 10"), (4) efeitos ativos (se envenenado, maldito, etc). Organize como uma coluna de status estruturada. Use `StringBuffer` e cálculos em tempo real dos valores.
+
+### Desafios Avançados
 
 **Desafio 16.3. Minimapa do andador.** No canto superior direito, renderize um minimap 12x8: `@` jogador, `E` inimigos, `$` ouro, `.` chão, `#` parede. Escale o mapa grande para pequeno dividindo coordenadas por 2. Mantenha sincronizado enquanto caminha: o `@` deve se mover no minimap em tempo real.
 
